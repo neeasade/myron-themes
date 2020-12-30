@@ -4,7 +4,7 @@
 
 ;; Author: neeasade <neeasade@gmail.com>
 ;; URL: https://github.com/neeasade/tarps
-;; Package-Requires: (color-tools base16-theme ht s)
+;; Package-Requires: (color-tools base16-theme ht s helpful)
 ;; Version: 0.1
 
 ;;; Commentary:
@@ -123,72 +123,149 @@
               (list label (ht-get theme-table key)))))
     (-flatten)))
 
-(defun tarp/base16-tweaks (theme-table theme-name)
+(defun tarp/get-function-sexp (sym)
+  "get SYM as a quoted list, using helpful.el"
+  (read
+    (helpful--source sym t
+      (first (helpful--definition sym t))
+      (second (helpful--definition sym t)))))
 
+(defun tarp/base16-theme-define (theme-table theme-name)
   ;; get the whitespace face:
   (require 'whitespace)
+  (let*
+    (
+      ;; add our theme colors to the color plist
+      (theme-colors
+        (append
+          (tarp/map-to-base16 theme-table)
+          (ht-to-plist theme-table)))
 
-  (base16-set-faces theme-name
-    (ht-to-plist tarp/theme)
+      ;; steal the list that's hardcoded in base16-theme-define
+      (original-theme (->>
+                        (tarp/get-function-sexp 'base16-theme-define)
+                        (nth 4)
+                        (nth 3)
+                        (second)))
 
-    `(
-       (avy-lead-face :background accent1_)
-       (avy-lead-face-0 :background accent1)
-       (avy-lead-face-2 :background accent2)
+      ;; note individual changes
+      (theme-changes
+        `(
+           (avy-lead-face :background accent1_)
+           (avy-lead-face-0 :background accent1)
+           (avy-lead-face-2 :background accent2)
 
-       ;; face pace-part value
-       ;; value may be a key from ns/theme
-       (font-lock-comment-delimiter-face :foreground foreground_)
-       (isearch :foreground background+)
-       (isearch :background foreground)
-       (comint-highlight-prompt :foreground foreground)
-       (fringe :background nil)
-       ;; (mode-line :background nil)
-       (font-lock-comment-face :background nil)
-       (magit-diff-context-highlight background
-         ,(ct/lessen 4 (ht-get tarp/theme :background)))
-       (window-divider :foreground foreground_)
+           ;; face pace-part value
+           ;; value may be a key from ns/theme
+           (font-lock-comment-delimiter-face :foreground foreground_)
+           (isearch :foreground background+)
+           (isearch :background foreground)
+           (comint-highlight-prompt :foreground foreground)
+           (fringe :background nil)
+           ;; (mode-line :background nil)
+           (font-lock-comment-face :background nil)
+           (magit-diff-context-highlight background
+             ,(ct/lessen 4 (ht-get tarp/theme :background)))
+           (window-divider :foreground foreground_)
 
-       ;; match variables to functions
-       ;; (font-lock-function-name-face :foreground :accent2)
-       (font-lock-variable-name-face :foreground accent1)
-       ;; consider nulling out and using flat newlines org links
-       ;; (org-link :foreground :accent1_)
-       ;; (font-lock-type-face :foreground :accent1)
+           ;; match variables to functions
+           ;; (font-lock-function-name-face :foreground :accent2)
+           (font-lock-variable-name-face :foreground accent1)
+           ;; consider nulling out and using flat newlines org links
+           ;; (org-link :foreground :accent1_)
+           ;; (font-lock-type-face :foreground :accent1)
 
-       (org-todo :background background_)
-       (org-done :background background_)
+           (org-todo :background background_)
+           (org-done :background background_)
 
-       (org-todo :foreground accent2_)
-       (org-done :foreground accent2)
+           (org-todo :foreground accent2_)
+           (org-done :foreground accent2)
 
-       (org-date :underline nil)
-       (org-date :foreground accent1_)
+           (org-date :underline nil)
+           (org-date :foreground accent1_)
 
-       (org-drawer :foreground accent1_)
-       (org-block-begin-line :foreground foreground_)
-       (org-block-end-line :foreground foreground_)
+           (org-drawer :foreground accent1_)
+           (org-block-begin-line :foreground foreground_)
+           (org-block-end-line :foreground foreground_)
 
-       (org-level-1 :foreground foreground)
-       (org-level-2 :foreground foreground)
-       (org-level-3 :foreground foreground)
-       (org-level-4 :foreground foreground)
-       (org-level-5 :foreground foreground)
-       (org-level-6 :foreground foreground)
+           (org-level-1 :foreground foreground)
+           (org-level-2 :foreground foreground)
+           (org-level-3 :foreground foreground)
+           (org-level-4 :foreground foreground)
+           (org-level-5 :foreground foreground)
+           (org-level-6 :foreground foreground)
 
-       (org-headline-done :foreground foreground)
-       (org-headline-done :background nil)
-       (org-special-keyword :foreground foreground_)
+           (org-headline-done :foreground foreground)
+           (org-headline-done :background nil)
+           (org-special-keyword :foreground foreground_)
 
-       (whitespace-space :background nil)
-       (whitespace-tab :background nil)
-       ;; (whitespace-newline background nil)
-       (flycheck-warning :underline nil)
-       (flycheck-info :underline nil)
-       )
+           (whitespace-space :background nil)
+           (whitespace-tab :background nil)
+           ;; (whitespace-newline background nil)
+           (flycheck-warning :underline nil)
+           (flycheck-info :underline nil)
+           ))
+
+      (new-theme
+        ;; apply our individual changes to the original theme (TODO)
+        (-reduce-from
+          (lambda (state theme-change)
+            (cl-destructuring-bind (face key value) theme-change
+              ;; does the face exist?
+              ;; naive
+              (if (-contains-p (-map 'first state)
+                    (first theme-change))
+                ;; change the entry, plist set:
+                (-map
+                  (lambda (entry)
+                    (if (eq (first entry) face)
+                      (append (list (first theme-change))
+                        (plist-put (cdr entry) key value))
+                      entry))
+                  state)
+                (cons theme-change state))))
+          original-theme
+          theme-changes
+          )))
+
+    ;; do the thing
+    (base16-set-faces theme-name theme-colors new-theme)
+
+    ;; other (the rest of the original base16-theme-define):
+
+    ;; Anything leftover that doesn't fall neatly into a face goes here.
+    (let ((base00 (plist-get theme-colors :base00))
+           (base01 (plist-get theme-colors :base01))
+           (base02 (plist-get theme-colors :base02))
+           (base03 (plist-get theme-colors :base03))
+           (base04 (plist-get theme-colors :base04))
+           (base05 (plist-get theme-colors :base05))
+           (base06 (plist-get theme-colors :base06))
+           (base07 (plist-get theme-colors :base07))
+           (base08 (plist-get theme-colors :base08))
+           (base09 (plist-get theme-colors :base09))
+           (base0A (plist-get theme-colors :base0A))
+           (base0B (plist-get theme-colors :base0B))
+           (base0C (plist-get theme-colors :base0C))
+           (base0D (plist-get theme-colors :base0D))
+           (base0E (plist-get theme-colors :base0E))
+           (base0F (plist-get theme-colors :base0F)))
+      (custom-theme-set-variables
+        theme-name
+        `(ansi-color-names-vector
+           ;; black, base08, base0B, base0A, base0D, magenta, cyan, white
+           [,base00 ,base08 ,base0B ,base0A ,base0D ,base0E ,base0D ,base05]))
+
+      ;; Emacs 24.3 changed ’ansi-term-color-vector’ from a vector of colors
+      ;; to a vector of faces.
+      (when (version< emacs-version "24.3")
+        (custom-theme-set-variables
+          theme-name
+          `(ansi-term-color-vector
+             ;; black, base08, base0B, base0A, base0D, magenta, cyan, white
+             [unspecified ,base00 ,base08 ,base0B ,base0A ,base0D ,base0E ,base0D ,base05]))))
 
     )
-
 
   ;; (-map
   ;;   (lambda (triplet)

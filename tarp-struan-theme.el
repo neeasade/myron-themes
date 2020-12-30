@@ -88,10 +88,5 @@
 
 (deftheme tarp-struan)
 
-(base16-theme-define
-  'tarp-struan
-  (tarp/map-to-base16 tarp/theme))
-
-(tarp/base16-tweaks tarp/theme 'tarp-struan)
-
+(tarp/base16-theme-define tarp/theme 'tarp-mcfay)
 (provide-theme 'tarp-struan)

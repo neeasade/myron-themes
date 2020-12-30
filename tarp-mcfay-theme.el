@@ -113,9 +113,6 @@
   )
 
 (deftheme tarp-mcfay)
-(base16-theme-define 'tarp-mcfay
-  (tarp/map-to-base16 tarp/theme))
-
-(tarp/base16-tweaks tarp/theme 'tarp-mcfay)
+(tarp/base16-theme-define tarp/theme 'tarp-mcfay)
 
 (provide-theme 'tarp-mcfay)

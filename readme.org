@@ -26,6 +26,7 @@ Install with [[https://github.com/raxod502/straight.el][straight.el]]:
 - [[https://github.com/belak/base16-emacs][base16-emacs]]
 - [[https://github.com/Wilfred/ht.el/][ht.el]]
 - [[https://github.com/magnars/s.el][s.el]]
+- [[https://github.com/Wilfred/helpful][helpful]]
 
 ** Fishing
 
