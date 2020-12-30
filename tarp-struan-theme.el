@@ -10,8 +10,7 @@
     (ct/rotation-hsluv
       (ct/make-hsluv 265 60 40)
       60)
-
-    (-map (fn (ns/nth <> it))
+    (-map (fn (tarp/nth <> it))
       '(1 -1 2 3))
     (-map
       (fn (ct/tint-ratio <> background 4.5 ))
@@ -24,7 +23,7 @@
     (foreground (ct/tint-ratio background background 8.5))
     (foreground_ (ct/tint-ratio background background 5.5))
 
-    (accents (ns/neeo-get-accents background foreground foreground_))
+    (accents (tarp/struan-get-accents background foreground foreground_))
 
     (accent1  (nth 0 accents))
     (accent1_ (nth 1 accents))
@@ -57,7 +56,7 @@
         (ct/transform-lch-l (ct/get-lch-l foreground))
         ((lambda (c) (ct/tint-ratio foreground c 6))))))
 
-  (setq ns/theme
+  (setq tarp/theme
     (ht
       (:foreground foreground)          ; regular text
       (:foreground_ foreground_)        ; comments
@@ -74,7 +73,7 @@
       (:accent2_ accent2_)              ; strings
       ))
 
-  (ht-set ns/theme :foreground_
+  (ht-set tarp/theme :foreground_
     (ct/tint-ratio
       (ct/transform-hsl accent2 (lambda (h s l) (list h 80 70)))
       background
@@ -82,16 +81,16 @@
       ))
 
   ;; let's play MAX, THAT, CHROMA!
-  (ht-set ns/theme :accent2_ (ct/transform-lch-c accent2_ 100))
+  (ht-set tarp/theme :accent2_ (ct/transform-lch-c accent2_ 100))
 
   ;; shorten all the colors, because they are also used in EG org exports
   )
 
-(deftheme tarp-struan-theme)
+(deftheme tarp-struan)
 
 (base16-theme-define
-  'tarp-struan-theme
-  (ht-with-context ns/theme
+  'tarp-struan
+  (ht-with-context tarp/theme
     (list
       ;; The comments on the sections here are from the base16 styling guidelines, not necessarily
       ;; what the emacs base16 theme package follows.
@@ -140,4 +139,4 @@
       :base0F :foreground_ ;; Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
       )))
 
-(provide-theme 'tarp-struan-theme)
+(provide-theme 'tarp-struan)
