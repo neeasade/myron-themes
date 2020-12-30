@@ -1,3 +1,5 @@
+Themes for emacs.
+
 It's named "tarps" because I picture a man in the middle of a hot summer field throwing shit at tarps.
 
 Namespace prefix: ~tarp/~
@@ -21,6 +23,7 @@ Install with [[https://github.com/raxod502/straight.el][straight.el]]:
 - [[https://github.com/neeasade/color-tools.el][color-tools.el]]
 - [[https://github.com/belak/base16-emacs][base16-emacs]]
 - [[https://github.com/Wilfred/ht.el/][ht.el]]
+- [[https://github.com/magnars/s.el][s.el]]
 
 ** Fishing
 
