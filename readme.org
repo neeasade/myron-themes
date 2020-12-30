@@ -4,7 +4,9 @@ It's named "tarps" because I picture a man in the middle of a hot summer field t
 
 Namespace prefix: ~tarp/~
 
-Screenshots: TODO
+Screenshots:
+
+| mcfay: [[https://i.imgur.com/fQCJvhp.png]] | struan: [[https://i.imgur.com/urf7cag.png]] |
 
 ** Installation
 
