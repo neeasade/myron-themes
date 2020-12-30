@@ -66,6 +66,57 @@
             ))))
     (ht-keys tarp/theme)))
 
+(defun tarp/map-to-base16 (theme-table)
+  (ht-with-context theme-table
+    (list
+      ;; The comments on the sections here are from the base16 styling guidelines, not necessarily
+      ;; what the emacs base16 theme package follows.
+
+      ;; guidelines location: http://chriskempson.com/projects/base16/
+      ;; I've also noted some faces I care about
+
+      :base00 :background ;; Default Background
+
+      ;; ivy-current-match background, isearch match foreground, inactive modeline background
+      :base01 :background+ ;; Lighter Background (Used for status bars)
+      ;; :base01 :background__ ;; Lighter Background (Used for status bars)
+
+      ;; region, active modeline background
+      :base02 :background+ ;; Selection Background
+
+      :base03 :foreground_ ;; Comments, Invisibles, Line Highlighting
+      :base04 :foreground_ ;; Dark Foreground (Used for status bars)
+      :base05 :foreground  ;; Default Foreground, Caret, Delimiters, Operators
+      :base06 :foreground_ ;; Light Foreground (Not often used)
+      :base07 :foreground_ ;; Light Background (Not often used)
+
+      ;; org-todo, variables
+      ;; :base08 :accent2 ;; Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
+      :base08 :accent2 ;; Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
+
+      ;; ivy-current-match foreground
+      :base09 :foreground ;; Integers, Boolean, Constants, XML Attributes, Markup Link Url
+
+      ;; types
+      ;; :base0A :accent1 ;; Classes, Markup Bold, Search Text Background
+      :base0A :accent2 ;; Classes, Markup Bold, Search Text Background
+
+      ;; strings
+      :base0B :accent2_ ;; Strings, Inherited Class, Markup Code, Diff Inserted
+
+      ;; :base0C :foreground_  ;; Support, Regular Expressions, Escape Characters, Markup Quotes
+      :base0C :accent1_ ;; Support, Regular Expressions, Escape Characters, Markup Quotes
+
+      ;; prompt, function-name, search match foreground
+      :base0D :accent1 ;; Functions, Methods, Attribute IDs, Headings
+
+      ;; keyword-face, org-date
+      :base0E :accent1_ ;; Keywords, Storage, Selector, Markup Italic, Diff Changed
+
+      :base0F :foreground_ ;; Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
+      ))
+  )
+
 (and load-file-name
   (boundp 'custom-theme-load-path)
   (add-to-list 'custom-theme-load-path
