@@ -207,26 +207,22 @@
            ))
 
       (new-theme
-        ;; apply our individual changes to the original theme (TODO)
+        ;; apply our individual changes to the original theme
         (-reduce-from
           (lambda (state theme-change)
             (cl-destructuring-bind (face key value) theme-change
-              ;; does the face exist?
-              ;; naive
-              (if (-contains-p (-map 'first state)
-                    (first theme-change))
-                ;; change the entry, plist set:
+              (if (-contains-p (-map 'first state) face)
                 (-map
                   (lambda (entry)
                     (if (eq (first entry) face)
-                      (append (list (first theme-change))
+                      (append
+                        (list face)
                         (plist-put (cdr entry) key value))
                       entry))
                   state)
                 (cons theme-change state))))
           original-theme
-          theme-changes
-          )))
+          theme-changes)))
 
     ;; do the thing
     (base16-set-faces theme-name theme-colors new-theme)
@@ -264,17 +260,7 @@
           `(ansi-term-color-vector
              ;; black, base08, base0B, base0A, base0D, magenta, cyan, white
              [unspecified ,base00 ,base08 ,base0B ,base0A ,base0D ,base0E ,base0D ,base05]))))
-
-    )
-
-  ;; (-map
-  ;;   (lambda (triplet)
-  ;;     (cl-destructuring-bind (face label key) triplet
-  ;;       (list face label (ht-get theme-table key)))))
-
-
-
-  )
+    ))
 
 (and load-file-name
   (boundp 'custom-theme-load-path)

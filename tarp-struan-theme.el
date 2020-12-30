@@ -82,8 +82,6 @@
 
   ;; let's play MAX, THAT, CHROMA!
   (ht-set tarp/theme :accent2_ (ct/transform-lch-c accent2_ 100))
-
-  ;; shorten all the colors, because they are also used in EG org exports
   )
 
 (deftheme tarp-struan)
