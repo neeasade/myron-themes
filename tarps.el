@@ -124,6 +124,10 @@
     (-flatten)))
 
 (defun tarp/base16-tweaks (theme-table theme-name)
+
+  ;; get the whitespace face:
+  (require 'whitespace)
+
   (base16-set-faces theme-name
     (ht-to-plist tarp/theme)
 
