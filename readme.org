@@ -1,0 +1,44 @@
+It's named "tarps" because I picture a man in the middle of a hot summer field throwing shit at tarps.
+
+Namespace prefix: ~tarp/~
+
+Screenshots: TODO
+
+** Installation
+
+Install with [[https://github.com/raxod502/straight.el][straight.el]]:
+
+#+begin_src emacs-lisp
+(straight-use-package
+ '(tarps
+   :host github
+   :repo "neeasade/tarps"
+   :branch "master"))
+#+end_src
+
+*** Dependencies
+
+- [[https://github.com/neeasade/color-tools.el][color-tools.el]]
+- [[https://github.com/belak/base16-emacs][base16-emacs]]
+- [[https://github.com/Wilfred/ht.el/][ht.el]]
+
+** Fishing
+
+After a tarp theme is loaded, it's colors will be accesible in the hash table tarp/theme -- thus, you may use the theme colors in other contexts by EG ~(ht-get tarp/theme :background)~. Current values and vague uses are outlined below:
+
+| label         | meaning                                  | example               |
+|---------------+------------------------------------------+-----------------------|
+| :foreground   | default foreground                       |                       |
+| :foreground_  | faded foreground                         | comments              |
+| :foreground+  | emphasized foreground                    | urgent notification   |
+| :background   | default background                       |                       |
+| :background_  | faded background                         | modeline              |
+| :background__ | alternate background                     | code block background |
+| :background+  | emphasized background                    | highlighted text      |
+| :accent1      | (foreground) identity                    | functions, variables  |
+| :accent1_     | (foreground) assumptions (faded accent1) | builtins              |
+| :accent2      | (foreground) accent2                     | types                 |
+| :accent2_     | (foreground) strings                     | strings               |
+
+
+The goal for this repo is primarily to bootstrap on other kits, and make it easy to enact wide effects with small changes.
