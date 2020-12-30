@@ -1,4 +1,4 @@
-Themes for emacs.
+Themes for GUI Emacs.
 
 It's named "tarps" because I picture a man in the middle of a hot summer field throwing shit at tarps.
 

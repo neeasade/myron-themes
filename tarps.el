@@ -12,6 +12,8 @@
 
 ;;; Code:
 
+(require 'cl-macs)
+
 (defcustom tarp-org-level-resizing t
   "Set to non-nil for `org-level-*' faces to be different larger
   than the default font height."
@@ -67,7 +69,7 @@
     (ht-keys tarp/theme)))
 
 (defun tarp/map-to-base16 (theme-table)
-  (ht-with-context theme-table
+  (->>
     (list
       ;; The comments on the sections here are from the base16 styling guidelines, not necessarily
       ;; what the emacs base16 theme package follows.
@@ -114,7 +116,83 @@
       :base0E :accent1_ ;; Keywords, Storage, Selector, Markup Italic, Diff Changed
 
       :base0F :foreground_ ;; Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
-      ))
+      )
+    (-partition 2)
+    (-map (lambda (pair)
+            (cl-destructuring-bind (label key) pair
+              (list label (ht-get theme-table key)))))
+    (-flatten)))
+
+(defun tarp/base16-tweaks (theme-table theme-name)
+  (base16-set-faces theme-name
+    (ht-to-plist tarp/theme)
+
+    `(
+       (avy-lead-face :background accent1_)
+       (avy-lead-face-0 :background accent1)
+       (avy-lead-face-2 :background accent2)
+
+       ;; face pace-part value
+       ;; value may be a key from ns/theme
+       (font-lock-comment-delimiter-face :foreground foreground_)
+       (isearch :foreground background+)
+       (isearch :background foreground)
+       (comint-highlight-prompt :foreground foreground)
+       (fringe :background nil)
+       ;; (mode-line :background nil)
+       (font-lock-comment-face :background nil)
+       (magit-diff-context-highlight background
+         ,(ct/lessen 4 (ht-get tarp/theme :background)))
+       (window-divider :foreground foreground_)
+
+       ;; match variables to functions
+       ;; (font-lock-function-name-face :foreground :accent2)
+       (font-lock-variable-name-face :foreground accent1)
+       ;; consider nulling out and using flat newlines org links
+       ;; (org-link :foreground :accent1_)
+       ;; (font-lock-type-face :foreground :accent1)
+
+       (org-todo :background background_)
+       (org-done :background background_)
+
+       (org-todo :foreground accent2_)
+       (org-done :foreground accent2)
+
+       (org-date :underline nil)
+       (org-date :foreground accent1_)
+
+       (org-drawer :foreground accent1_)
+       (org-block-begin-line :foreground foreground_)
+       (org-block-end-line :foreground foreground_)
+
+       (org-level-1 :foreground foreground)
+       (org-level-2 :foreground foreground)
+       (org-level-3 :foreground foreground)
+       (org-level-4 :foreground foreground)
+       (org-level-5 :foreground foreground)
+       (org-level-6 :foreground foreground)
+
+       (org-headline-done :foreground foreground)
+       (org-headline-done :background nil)
+       (org-special-keyword :foreground foreground_)
+
+       (whitespace-space :background nil)
+       (whitespace-tab :background nil)
+       ;; (whitespace-newline background nil)
+       (flycheck-warning :underline nil)
+       (flycheck-info :underline nil)
+       )
+
+    )
+
+
+  ;; (-map
+  ;;   (lambda (triplet)
+  ;;     (cl-destructuring-bind (face label key) triplet
+  ;;       (list face label (ht-get theme-table key)))))
+
+
+
   )
 
 (and load-file-name
