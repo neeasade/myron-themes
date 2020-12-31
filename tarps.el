@@ -39,22 +39,6 @@
            (if (= 0 (+ index 1)) nil (+ index 1))))
     (nth index coll)))
 
-(defmacro ht-with-context (table &rest content)
-  (-tree-map
-    (lambda (tree)
-      (-tree-map-nodes (lambda (node) t)
-        (lambda (node)
-          (if (and
-                (s-starts-with-p ":" (prin1-to-string node))
-                ;; if the table doesn't exist, don't sanity check the key
-                (if (boundp table)
-                  (-contains-p (ht-keys (eval table)) node)
-                  t))
-            (list 'ht-get table node)
-            node))
-        tree))
-    (cons 'progn content)))
-
 (defun tarp/show-contrasts ()
   "message the contrast ratios of colors in the loaded theme against it's background"
   (-map

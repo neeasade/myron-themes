@@ -1,4 +1,4 @@
-Themes for GUI Emacs.
+Themes for GUI Emacs, built on top of [[https://github.com/belak/base16-emacs][base16-emacs]].
 
 It's named "tarps" because I picture a man in the middle of a hot summer field throwing shit at tarps.
 
