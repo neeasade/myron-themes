@@ -1,8 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 
 (require 'tarps)
-(require 'base16-theme)
-(require 'color-tools)
 
 (defun tarp/struan-get-accents (background foreground foreground_)
   ;; return a list accent1, accent1_, accent2, accent2_

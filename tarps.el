@@ -14,6 +14,12 @@
 
 (require 'cl-macs)
 
+(require 'helpful)
+(require 'ht)
+(require 'fn)
+(require 'color-tools)
+(require 'base16-theme)
+
 (defcustom tarp-org-level-resizing t
   "Set to non-nil for `org-level-*' faces to be different larger
   than the default font height."

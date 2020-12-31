@@ -1,48 +1,36 @@
 ;; -*- lexical-binding: t; -*-
 
 (require 'tarps)
-(require 'base16-theme)
-(require 'color-tools)
+
+(defun tarp/mcfay-get-accents (background foreground foreground_)
+  ;; return a list accent1, accent1_, accent2, accent2_
+  (-->
+    (ct/make-hsluv 270 75 (ct/get-hsluv-l foreground_))
+    (ct/rotation-lch it -45)
+
+    (-map (fn (tarp/nth <> it))
+      '(-1 1 2 4))
+    ;; (-map (fn (ct/transform-hsluv-l <> (ct/get-hsluv-l foreground_))) it)
+    ;; (-map (fn (ct/tint-ratio <> background 4.5)) it)
+    ))
 
 (let*
   (
     ;; /slightly/ cool
     (background (ct/make-lab 93 -0.5 -1))
 
-
     (foreground (ct/tint-ratio background background 10))
     (foreground_ (ct/tint-ratio background background 6))
 
-    ;; LCH rotate -45 from blue (hue 270)
-    (accent-rotations
-      (let ((color-start
-              (ct/transform-hsluv
-                foreground_
-                (lambda (H S L)
-                  (list 270 75 L))))
-             (interval -45))
-        (-map
-          (lambda (step)
-            (ct/transform-lch-h color-start
-              (fn (+ <> (* step interval)))))
-          (range (/ 360 (abs interval))))))
+    (accents (tarp/mcfay-get-accents background foreground foreground_))
 
-    (accent1  (tarp/nth -1 accent-rotations))
-    (accent1_ (tarp/nth 1 accent-rotations))
-    (accent2  (tarp/nth 2 accent-rotations))
-    (accent2_ (tarp/nth 4 accent-rotations))
+    (accent1  (nth 0 accents))
+    (accent1_ (nth 1 accents))
+    (accent2  (nth 2 accents))
+    (accent2_ (nth 3 accents))
 
-    ;; active BG (selections)
-    ;; take an accent color, fade it until you reach a minimum contrast against foreground_
-    (background+
-      (ct/iterate
-        (ct/transform-lch-c accent2 (-partial '* 0.5))
-        ;; (ct/transform-lch-c accent2 (lambda (_) 33))
-        ;; (fn (ct/lab-lighten <> 0.5))
-        'ct/lab-lighten
-        (fn (> (ct/contrast-ratio <> foreground_)
-              5
-              ))))
+    ;; ignored
+    (background+ "#000000")
 
     ;; new idea: these could be contrast based as well in relation to foreground
     (background_
@@ -85,16 +73,11 @@
         ((or
            (s-starts-with-p ":accent" (prin1-to-string k))
            (s-starts-with-p ":foreground_" (prin1-to-string k)))
-          ;; messing around:
-          ;; don't tweak anything
-          ;; v
 
           ;; ensure all colors have some minimum contrast ratio
           (ct/tint-ratio
             ;; conform lightness -- this lightness was just from a green for strings I liked
             (ct/transform-hsluv-l v 43.596)
-            ;; (ct/transform-hsluv-l v 50)
-            ;; v
 
             ;; against, ratio
             background 4.5))
@@ -103,10 +86,7 @@
   ;; do this transform after messing with accent colors above.
   (ht-set tarp/theme :background+
     (ct/iterate
-      (ct/transform-lch-c
-        (ht-get tarp/theme :accent2)
-        ;; (ht-get tarp/theme :foreground_)
-        (-partial '* 0.5))
+      (ct/transform-lch-c accent2 (-partial '* 0.5))
       ;; (ct/transform-lch-c accent2 (lambda (_) 33))
       'ct/lab-lighten
       (fn (> (ct/contrast-ratio <> foreground_) 5))))
