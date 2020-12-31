@@ -10,9 +10,9 @@
 
     (-map (fn (tarp/nth <> it))
       '(-1 1 2 4))
-    ;; (-map (fn (ct/transform-hsluv-l <> (ct/get-hsluv-l foreground_))) it)
-    ;; (-map (fn (ct/tint-ratio <> background 4.5)) it)
-    ))
+
+    (-map (fn (ct/transform-hsluv-l <> 43.596)) it)
+    (-map (fn (ct/tint-ratio <> background 4.5)) it)))
 
 (let*
   (
@@ -24,13 +24,24 @@
 
     (accents (tarp/mcfay-get-accents background foreground foreground_))
 
+    ;; XXX: order matters (this happens after accent setting)
+    (foreground_ (ct/transform-hsluv-l foreground_ 43.596))
+    (foreground_ (ct/tint-ratio foreground_ background 4.5))
+
     (accent1  (nth 0 accents))
     (accent1_ (nth 1 accents))
     (accent2  (nth 2 accents))
     (accent2_ (nth 3 accents))
 
-    ;; ignored
-    (background+ "#000000")
+    (background+
+      (ct/iterate
+        (ct/transform-lch-c accent2 (-partial '* 0.5))
+        ;; (ct/transform-lch-c accent2 (lambda (_) 33))
+        'ct/lab-lighten
+        (fn (> (ct/contrast-ratio <>
+                 ;; the original foreground_ value:
+                 (ct/tint-ratio background background 6)
+                 ) 5))))
 
     ;; new idea: these could be contrast based as well in relation to foreground
     (background_
@@ -64,32 +75,6 @@
       (:accent2 accent2)                ; types
       (:accent2_ accent2_)              ; strings
       ))
-
-  ;; perform transforms to accent colors:
-
-  (tarp/edit
-    (lambda (k v)
-      (cond
-        ((or
-           (s-starts-with-p ":accent" (prin1-to-string k))
-           (s-starts-with-p ":foreground_" (prin1-to-string k)))
-
-          ;; ensure all colors have some minimum contrast ratio
-          (ct/tint-ratio
-            ;; conform lightness -- this lightness was just from a green for strings I liked
-            (ct/transform-hsluv-l v 43.596)
-
-            ;; against, ratio
-            background 4.5))
-        (t v))))
-
-  ;; do this transform after messing with accent colors above.
-  (ht-set tarp/theme :background+
-    (ct/iterate
-      (ct/transform-lch-c accent2 (-partial '* 0.5))
-      ;; (ct/transform-lch-c accent2 (lambda (_) 33))
-      'ct/lab-lighten
-      (fn (> (ct/contrast-ratio <> foreground_) 5))))
   )
 
 (deftheme tarp-mcfay)
