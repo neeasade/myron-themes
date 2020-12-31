@@ -148,7 +148,7 @@
            (fringe :background nil)
            ;; (mode-line :background nil)
            (font-lock-comment-face :background nil)
-           (magit-diff-context-highlight background
+           (magit-diff-context-highlight :background
              ,(ct/lessen 4 (ht-get tarp/theme :background)))
            (window-divider :foreground foreground_)
 
