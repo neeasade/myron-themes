@@ -36,12 +36,10 @@
     (background+
       (ct/iterate
         (ct/transform-lch-c accent2 (-partial '* 0.5))
-        ;; (ct/transform-lch-c accent2 (lambda (_) 33))
         'ct/lab-lighten
-        (fn (> (ct/contrast-ratio <>
-                 ;; the original foreground_ value:
-                 (ct/tint-ratio background background 6)
-                 ) 5))))
+        (fn (> (ct/contrast-ratio <> foreground_)
+              4.0
+              ))))
 
     ;; new idea: these could be contrast based as well in relation to foreground
     (background_

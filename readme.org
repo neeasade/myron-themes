@@ -48,3 +48,22 @@ After a tarp theme is loaded, it's colors will be accesible in the hash table ta
 
 
 The goal for this repo is primarily to bootstrap on other kits, and make it easy to enact wide effects with small changes.
+
+** Local edits
+
+The function ~tarp/tweak-function~ will be called before base16 is bootstrapped. You may change all the values of the scheme through the hashtable variable ~tarp/theme~ here. An example is shown below. The helper function ~tarp/edit~ can be used to iterate over all values in ~tarp/theme~, and takes a function that acts on keys (eg ~:accent1~) and values (eg ~"#dd88ff"~). You could do things here like enforce preferred contrast constraints, or try to account for your [[https://notes.neeasade.net/color-spaces.html#h-f23b8fe5-37a3-4ead-9d9d-a7139f76d532][viewing setting]].
+
+#+begin_src emacs-lisp
+(setq tarp/tweak-function
+  (lambda ()
+    ;; max out the faded fg color chroma:
+    (let ((faded-fg (ht-get tarp/theme :foreground_)))
+      (ht-set tarp/theme :foreground_
+        (ct/transform-lch-c faded-fg 100)))
+
+    ;; make every color darker by reducing lightness @ 70%:
+    (tarp/edit
+      (lambda (key val)
+        (ct/transform-hsl-l val
+          (lambda (l) (* 0.7 l)))))))
+#+end_src

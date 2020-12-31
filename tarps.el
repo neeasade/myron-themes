@@ -21,13 +21,10 @@
 (require 'color-tools)
 (require 'base16-theme)
 
-(defcustom tarp-org-level-resizing t
-  "Set to non-nil for `org-level-*' faces to be different larger
-  than the default font height."
-  :type 'boolean
+(defcustom tarp/tweak-function nil
+  "A function hook that allows you to tweak the colorscheme before it is mapped to faces"
+  :type 'function
   :group 'tarps)
-
-;; idea for another defcustom: a hook for tarp/edit before it's mapped and set
 
 (defun tarp/edit (transform-function)
   "edit the hashtable tarp/theme with a function taking KEY VALUE that returns VALUE"
@@ -122,8 +119,9 @@
       (second (helpful--definition sym t)))))
 
 (defun tarp/base16-theme-define (theme-table theme-name)
-  ;; get the whitespace face:
-  (require 'whitespace)
+  (when (-non-nil tarp/tweak-function)
+    (funcall tarp/tweak-function))
+
   (let*
     (
       ;; add our theme colors to the color plist
