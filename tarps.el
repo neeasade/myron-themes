@@ -17,6 +17,7 @@
 (require 'helpful)
 (require 'ht)
 (require 'fn)
+(require 's)
 (require 'color-tools)
 (require 'base16-theme)
 
