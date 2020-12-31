@@ -4,7 +4,7 @@
 
 ;; Author: neeasade <neeasade@gmail.com>
 ;; URL: https://github.com/neeasade/tarps
-;; Package-Requires: (color-tools base16-theme ht s helpful)
+;; Package-Requires: (color-tools base16-theme ht s helpful fn)
 ;; Version: 0.1
 
 ;;; Commentary:
@@ -155,6 +155,7 @@
            ;; match variables to functions
            ;; (font-lock-function-name-face :foreground :accent2)
            (font-lock-variable-name-face :foreground accent1)
+
            ;; consider nulling out and using flat newlines org links
            ;; (org-link :foreground :accent1_)
            ;; (font-lock-type-face :foreground :accent1)

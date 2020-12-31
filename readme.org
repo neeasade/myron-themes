@@ -1,6 +1,4 @@
-Themes for GUI Emacs, built on top of [[https://github.com/belak/base16-emacs][base16-emacs]].
-
-It's named "tarps" because I picture a man in the middle of a hot summer field throwing shit at tarps.
+Themes for GUI Emacs, built on top of [[https://github.com/belak/base16-emacs][base16-emacs]], with some tweaks.
 
 Namespace prefix: ~tarp/~
 
@@ -27,6 +25,7 @@ Install with [[https://github.com/raxod502/straight.el][straight.el]]:
 - [[https://github.com/Wilfred/ht.el/][ht.el]]
 - [[https://github.com/magnars/s.el][s.el]]
 - [[https://github.com/Wilfred/helpful][helpful]]
+- [[https://github.com/troyp/fn.el][fn.el]]
 
 ** Fishing
 
