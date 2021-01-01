@@ -67,3 +67,9 @@ The function ~tarp/tweak-function~ will be called before base16 is bootstrapped.
         (ct/transform-hsl-l val
           (lambda (l) (* 0.7 l)))))))
 #+end_src
+
+See also: ~tarp/edit-foregrounds~, ~tarp/edit-backgrounds~
+
+** Contrast dumping
+
+Calling ~tarp/show-contrasts~ will show the contrast ratios of all the foregrounds against all the backgrounds.

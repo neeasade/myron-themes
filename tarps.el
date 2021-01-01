@@ -35,6 +35,24 @@
     (eval `(ht ,@ it))
     (setq tarp/theme it)))
 
+(defun tarp/edit-foregrounds (func)
+  "Apply FUNC to all foreground colors -- func takes one argument, the current color value"
+  (tarp/edit
+    (lambda (k v)
+      (if (-contains-p '(:accent1 :accent1_ :accent2 :accent2_
+                          :foreground :foreground_ :foreground+) k)
+        (funcall func k)
+        v))))
+
+(defun tarp/edit-backgrounds (func)
+  "Apply FUNC to all background colors -- func takes one argument, the current color value"
+  (tarp/edit
+    (lambda (k v)
+      (if (-contains-p '(:background :background_
+                          :background__ :background+) k)
+        (funcall func k)
+        v))))
+
 (defun tarp/nth (index coll)
   "a version of nth that counts from the end if the input is negative"
   ;; this just makes it easier to sort through color collections in real time.
@@ -44,17 +62,30 @@
     (nth index coll)))
 
 (defun tarp/show-contrasts ()
-  "message the contrast ratios of colors in the loaded theme against it's background"
-  (-map
-    (fn
-      (message
-        (format "%s: %s"
-          <>
-          (ct/contrast-ratio
-            (ht-get tarp/theme <>)
-            (ht-get tarp/theme :background)
-            ))))
-    (ht-keys tarp/theme)))
+  (interactive)
+  "message the contrast ratios of colors in the loaded theme against it's backgrounds"
+
+  (defun tarp/show-contrast-against (bg)
+    "show contrast levels of fg colors in tarp/theme against BG."
+    (-map (fn (format "%s: %s" <>
+                (ct/contrast-ratio
+                  (ht-get tarp/theme <>) bg)))
+      '(:accent1 :accent1_ :accent2 :accent2_ :foreground :foreground_ :foreground+)))
+
+  (->>
+    '(:background
+       :background+
+       :background_
+       :background__)
+
+    (-mapcat
+      (fn
+        `(,(format "against background %s %s" <> (ht-get tarp/theme <>))
+           ,@(tarp/show-contrast-against (ht-get tarp/theme <>))
+           "------")))
+    (s-join "\n")
+    (message)))
+
 
 (defun tarp/map-to-base16 (theme-table)
   (->>
