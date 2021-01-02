@@ -185,7 +185,7 @@
            ;; (mode-line :background nil)
            (font-lock-comment-face :background nil)
            (magit-diff-context-highlight :background
-             ,(ct/lessen 4 (ht-get tarp/theme :background)))
+             ,(ct/lessen (ht-get tarp/theme :background) 4))
            (window-divider :foreground foreground_)
 
            ;; match variables to functions

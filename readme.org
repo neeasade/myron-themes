@@ -1,6 +1,5 @@
 Themes for GUI Emacs, built on top of [[https://github.com/belak/base16-emacs][base16-emacs]], with some tweaks.
 
-
 Namespace prefix: ~tarp/~
 
 Screenshots:
@@ -73,3 +72,9 @@ See also: ~tarp/edit-foregrounds~, ~tarp/edit-backgrounds~
 ** Contrast dumping
 
 Calling ~tarp/show-contrasts~ will show the contrast ratios of all the foregrounds against all the backgrounds.
+
+** Thanks/Previous inspo
+
+- [[https://github.com/MetroWind/lab-theme][lab-theme]]
+- [[https://github.com/waymondo/apropospriate-theme][aproprospriate]]
+- [[https://github.com/belak/base16-emacs][base16-emacs]]
