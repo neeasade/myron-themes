@@ -1,4 +1,3 @@
-
 ;; -*- lexical-binding: t; -*-
 
 (require 'tarps)
@@ -7,27 +6,46 @@
   ;; return a list accent1, accent1_, accent2, accent2_
 
   (->>
-    (ct/rotation-hsluv
-      (ct/make-hsluv 346 80 60)
-      180)
-
-    (reverse)
-    (-map
-      (fn
-        (list <>
-          (ct/transform-hsv-v <> (lambda (s) (* .7 s)))
-          )
-        )
+    (list
+      "#f1a0c0"
+      "#5dc4ea"
+      "#bf843e"
+      "#9ec453"
       )
-    (-flatten)
-    (reverse)
-    ))
+    (-map (fn (ct/tint-ratio <> background 3.0)))
+    )
+
+  ;; remnants:
+  ;; (->>
+  ;;   (ct/rotation-hsluv
+  ;;     (ct/make-hsluv 346 80 75)
+  ;;     ;; (ct/make-hsluv 306 80 60)
+  ;;     ;; (ct/make-hsluv 240 80 60)
+  ;;     ;; (ct/make-hsluv 180 80 60)
+  ;;     ;; (ct/make-hsluv 270 80 60)
+  ;;     ;; (ct/make-hsluv 45 80 75)
+  ;;     ;; 180
+  ;;     120
+  ;;     )
+  ;;   (reverse)
+  ;;   ;; (-map
+  ;;   ;;   (fn
+  ;;   ;;     (list <>
+  ;;   ;;       (ct/transform-hsv-v <> (lambda (s) (* .8 s)))
+  ;;   ;;       )
+  ;;   ;;     )
+  ;;   ;;   )
+  ;;   ;; (-flatten)
+  ;;   ;; (reverse)
+  ;;   )
+
+  )
 
 (let*
   (
     (background
-      ;; (ct/make-lab 93 2 4)
-      (ct/make-lab 90 10 -10)
+      ;; (ct/make-lab 95 10 -10)
+      (ct/make-lab 95 -10 10)
       )
 
     (foreground (ct/tint-ratio background background 5.5))
@@ -41,27 +59,17 @@
     (accent2_ (nth 3 accents))
 
     ;; active BG (selections)
-    ;; take an accent color, fade it until you reach a minimum contrast against foreground_
     (background+
-
-      (ct/iterate
-        ;; flip the bg AB values
-        (ct/make-lab 90 -10 10)
-
-        'ct/lab-darken
-        (fn (> (ct/contrast-ratio <> foreground_) 4.0))
-        ;; (fn (> (ct/contrast-ratio <> foreground_) 3.5))
-        )
-
+      (ct/transform-hsv-s background 30)
       )
 
     ;; new idea: these could be contrast based as well in relation to foreground
     (background_
-      (ct/lab-darken 5)
+      (ct/lab-darken background 5)
       )
 
     (background__
-      (ct/lab-darken 10)
+      (ct/lab-darken background 10)
       ))
 
   (setq tarp/theme
