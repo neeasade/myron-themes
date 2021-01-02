@@ -45,7 +45,7 @@
   (
     (background
       ;; (ct/make-lab 95 10 -10)
-      (ct/make-lab 95 -10 10)
+      (ct/make-lab 90 -10 10)
       )
 
     (foreground (ct/tint-ratio background background 5.5))

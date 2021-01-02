@@ -5,7 +5,7 @@ Namespace prefix: ~tarp/~
 
 Screenshots:
 
-| mcfay: [[https://i.imgur.com/fQCJvhp.png]] | struan: [[https://i.imgur.com/urf7cag.png]] | marlowe: [[https://i.imgur.com/m2UuWJW.png]]
+| mcfay: [[https://i.imgur.com/fQCJvhp.png]] | struan: [[https://i.imgur.com/urf7cag.png]] | marlowe: [[https://i.imgur.com/rMTaaKG.png]]
 
 ** Installation
 
