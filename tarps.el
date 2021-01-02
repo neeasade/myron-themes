@@ -57,8 +57,7 @@
   "a version of nth that counts from the end if the input is negative"
   ;; this just makes it easier to sort through color collections in real time.
   (if (< index 0)
-    (car (seq-subseq coll index
-           (if (= 0 (+ index 1)) nil (+ index 1))))
+    (nth (- (abs index) 1) (reverse coll))
     (nth index coll)))
 
 (defun tarp/show-contrasts ()
