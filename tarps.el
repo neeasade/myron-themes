@@ -12,8 +12,6 @@
 
 ;;; Code:
 
-(require 'cl-macs)
-
 (require 'helpful)
 (require 'ht)
 (require 'fn)
@@ -137,8 +135,8 @@
       )
     (-partition 2)
     (-map (lambda (pair)
-            (cl-destructuring-bind (label key) pair
-              (list label (ht-get theme-table key)))))
+            (list (first pair)
+              (ht-get theme-table (second pair)))))
     (-flatten)))
 
 (defun tarp/get-function-sexp (sym)
@@ -230,7 +228,10 @@
         ;; apply our individual changes to the original theme
         (-reduce-from
           (lambda (state theme-change)
-            (cl-destructuring-bind (face key value) theme-change
+            (let
+              ((face (first theme-change))
+                (key (second theme-change))
+                (value (third theme-change)))
               (if (-contains-p (-map 'first state) face)
                 (-map
                   (lambda (entry)
