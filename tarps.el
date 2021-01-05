@@ -248,6 +248,13 @@
     ;; do the thing
     (base16-set-faces theme-name theme-colors new-theme)
 
+    (when (boundp 'evil-normal-state-cursor)
+      (let ((c (plist-get theme-colors :accent1_)))
+        (setq
+          evil-normal-state-cursor `(,c box)
+          evil-insert-state-cursor `(,c bar)
+          evil-visual-state-cursor `(,c box))))
+
     ;; other (the rest of the original base16-theme-define):
 
     ;; Anything leftover that doesn't fall neatly into a face goes here.
