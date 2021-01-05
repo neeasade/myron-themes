@@ -5,28 +5,33 @@
 (defun tarp/mcfay-get-accents (background foreground foreground_)
   ;; return a list accent1, accent1_, accent2, accent2_
   (-->
-    (ct/make-hsluv 270 75 (ct/get-hsluv-l foreground_))
-    (ct/rotation-lch it -45)
+    (ct-make-hsluv 270 75
+      ;; 40
+      (ct-get-hsluv-l foreground_))
 
-    (-map (fn (tarp/nth <> it))
-      '(-1 1 2 4))
+    (ct-rotation-lch it -45)
 
-    (-map (fn (ct/transform-hsluv-l <> 43.596)) it)
-    (-map (fn (ct/tint-ratio <> background 4.5)) it)))
+    (-map (fn (tarp/nth <> it)) '(-1 1 2 4))
+
+    (-map (fn (ct-transform-hsluv-l <> 43.596)) it)
+    (-map (fn (ct-tint-ratio <> background 4.5)) it)
+    )
+
+  )
 
 (let*
   (
     ;; /slightly/ cool
-    (background (ct/make-lab 93 -0.5 -1))
+    (background (ct-make-lab 93 -0.5 -1))
 
-    (foreground (ct/tint-ratio background background 10))
-    (foreground_ (ct/tint-ratio background background 6))
+    (foreground (ct-tint-ratio background background 10))
+    (foreground_ (ct-tint-ratio background background 6))
 
     (accents (tarp/mcfay-get-accents background foreground foreground_))
 
     ;; XXX: order matters (this happens after accent setting)
-    (foreground_ (ct/transform-hsluv-l foreground_ 43.596))
-    (foreground_ (ct/tint-ratio foreground_ background 4.5))
+    (foreground_ (ct-transform-hsluv-l foreground_ 43.596))
+    (foreground_ (ct-tint-ratio foreground_ background 4.5))
 
     (accent1  (nth 0 accents))
     (accent1_ (nth 1 accents))
@@ -34,27 +39,27 @@
     (accent2_ (nth 3 accents))
 
     (background+
-      (ct/iterate
-        (ct/transform-lch-c accent2 (-partial '* 0.5))
-        'ct/lab-lighten
-        (fn (> (ct/contrast-ratio <> foreground_)
+      (ct-iterate
+        (ct-transform-lch-c accent2 (-partial '* 0.5))
+        'ct-lab-lighten
+        (fn (> (ct-contrast-ratio <> foreground_)
               4.0
               ))))
 
     ;; new idea: these could be contrast based as well in relation to foreground
     (background_
       (-> background
-        (ct/transform-lch-h (ct/get-lch-h accent2))
-        (ct/transform-lch-l (ct/get-lch-l foreground))
-        ((lambda (c) (ct/tint-ratio foreground c 9)))))
+        (ct-transform-lch-h (ct-get-lch-h accent2))
+        (ct-transform-lch-l (ct-get-lch-l foreground))
+        ((lambda (c) (ct-tint-ratio foreground c 9)))))
 
     (background__
       (-> background
-        (ct/transform-lch-h (ct/get-lch-h accent2))
-        (ct/transform-lch-l (ct/get-lch-l foreground))
-        ((lambda (c) (ct/tint-ratio foreground c 8)))))
+        (ct-transform-lch-h (ct-get-lch-h accent2))
+        (ct-transform-lch-l (ct-get-lch-l foreground))
+        ((lambda (c) (ct-tint-ratio foreground c 8)))))
 
-    ;; (background__ (-> background_ (ct/transform-hsluv-l (-rpartial '- 6))))
+    ;; (background__ (-> background_ (ct-transform-hsluv-l (-rpartial '- 6))))
     )
 
   (setq tarp/theme

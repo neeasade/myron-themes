@@ -12,18 +12,18 @@
       "#bf843e"
       "#9ec453"
       )
-    (-map (fn (ct/tint-ratio <> background 3.0)))
+    (-map (fn (ct-tint-ratio <> background 3.0)))
     )
 
   ;; remnants:
   ;; (->>
-  ;;   (ct/rotation-hsluv
-  ;;     (ct/make-hsluv 346 80 75)
-  ;;     ;; (ct/make-hsluv 306 80 60)
-  ;;     ;; (ct/make-hsluv 240 80 60)
-  ;;     ;; (ct/make-hsluv 180 80 60)
-  ;;     ;; (ct/make-hsluv 270 80 60)
-  ;;     ;; (ct/make-hsluv 45 80 75)
+  ;;   (ct-rotation-hsluv
+  ;;     (ct-make-hsluv 346 80 75)
+  ;;     ;; (ct-make-hsluv 306 80 60)
+  ;;     ;; (ct-make-hsluv 240 80 60)
+  ;;     ;; (ct-make-hsluv 180 80 60)
+  ;;     ;; (ct-make-hsluv 270 80 60)
+  ;;     ;; (ct-make-hsluv 45 80 75)
   ;;     ;; 180
   ;;     120
   ;;     )
@@ -31,7 +31,7 @@
   ;;   ;; (-map
   ;;   ;;   (fn
   ;;   ;;     (list <>
-  ;;   ;;       (ct/transform-hsv-v <> (lambda (s) (* .8 s)))
+  ;;   ;;       (ct-transform-hsv-v <> (lambda (s) (* .8 s)))
   ;;   ;;       )
   ;;   ;;     )
   ;;   ;;   )
@@ -44,12 +44,12 @@
 (let*
   (
     (background
-      ;; (ct/make-lab 95 10 -10)
-      (ct/make-lab 90 -10 10)
+      ;; (ct-make-lab 95 10 -10)
+      (ct-make-lab 90 -10 10)
       )
 
-    (foreground (ct/tint-ratio background background 5.5))
-    (foreground_ (ct/tint-ratio background background 3.5))
+    (foreground (ct-tint-ratio background background 5.5))
+    (foreground_ (ct-tint-ratio background background 3.5))
 
     (accents (tarp/marlowe-get-accents background foreground foreground_))
 
@@ -60,16 +60,16 @@
 
     ;; active BG (selections)
     (background+
-      (ct/transform-hsv-s background 30)
+      (ct-transform-hsv-s background 30)
       )
 
     ;; new idea: these could be contrast based as well in relation to foreground
     (background_
-      (ct/lab-darken background 5)
+      (ct-lab-darken background 5)
       )
 
     (background__
-      (ct/lab-darken background 10)
+      (ct-lab-darken background 10)
       ))
 
   (setq tarp/theme

@@ -16,7 +16,7 @@
 (require 'ht)
 (require 'fn)
 (require 's)
-(require 'color-tools)
+(require 'ct "colort-tools.el")
 (require 'base16-theme)
 
 (defcustom tarp/tweak-function nil
@@ -65,7 +65,7 @@
   (defun tarp/show-contrast-against (bg)
     "show contrast levels of fg colors in tarp/theme against BG."
     (-map (fn (format "%s: %s" <>
-                (ct/contrast-ratio
+                (ct-contrast-ratio
                   (ht-get tarp/theme <>) bg)))
       '(:accent1 :accent1_ :accent2 :accent2_ :foreground :foreground_ :foreground+)))
 
@@ -182,7 +182,9 @@
            ;; (mode-line :background nil)
            (font-lock-comment-face :background nil)
            (magit-diff-context-highlight :background
-             ,(ct/lessen (ht-get tarp/theme :background) 4))
+             ,(ct-lessen (ht-get tarp/theme :background) 4)
+
+             )
            (window-divider :foreground foreground_)
 
            ;; match variables to functions
