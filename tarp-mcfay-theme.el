@@ -15,9 +15,7 @@
 
     (-map (fn (ct-transform-hsluv-l <> 43.596)) it)
     (-map (fn (ct-tint-ratio <> background 4.5)) it)
-    )
-
-  )
+    ))
 
 (let*
   (
@@ -40,10 +38,10 @@
 
     (background+
       (ct-iterate
-        (ct-transform-lch-c accent2 (-partial '* 0.5))
+        (ct-transform-lch-c accent2 (lambda (_) 20))
         'ct-lab-lighten
         (fn (> (ct-contrast-ratio <> foreground_)
-              4.0
+              3.7
               ))))
 
     ;; new idea: these could be contrast based as well in relation to foreground
