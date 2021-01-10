@@ -16,8 +16,8 @@
 (require 'ht)
 (require 'fn)
 (require 's)
-(require 'ct "colort-tools.el")
 (require 'base16-theme)
+(require 'ct "colort-tools.el")
 
 (defcustom tarp/tweak-function nil
   "A function hook that allows you to tweak the colorscheme before it is mapped to faces"
@@ -106,6 +106,8 @@
       :base04 :foreground_ ;; Dark Foreground (Used for status bars)
       :base05 :foreground  ;; Default Foreground, Caret, Delimiters, Operators
       :base06 :foreground_ ;; Light Foreground (Not often used)
+
+      ;; note: This is just used for company background -- maybe change it to a background value
       :base07 :foreground_ ;; Light Background (Not often used)
 
       ;; org-todo, variables
@@ -182,9 +184,8 @@
            ;; (mode-line :background nil)
            (font-lock-comment-face :background nil)
            (magit-diff-context-highlight :background
-             ,(ct-lessen (ht-get tarp/theme :background) 4)
+             (tarp/get :background :weak))
 
-             )
            (window-divider :foreground foreground_)
 
            ;; match variables to functions
