@@ -76,19 +76,19 @@ Calling ~tarp/show-contrasts~ will show the contrast ratios of all the foregroun
 
 Reflecting after using these the above reference for awhile... Tarp 2.0 will look something like:
 
-| label         | meaning                              | example                                   |
-|---------------+--------------------------------------+-------------------------------------------|
-| :foreground   | default foreground                   |                                           |
-| :background   | default background                   |                                           |
-| :background>  | lightly emphasized background        | magit active section, org-todo background |
-| :background>> | emphasized background                | modeline                                  |
-| :foreground_  | faded foreground                     | comments                                  |
-| :foreground+  | focused foreground                   | seleced list item/search result           |
-| :background+  | focused background                   | highlighted text                          |
-| :accent       | (foreground) identity                | functions, variables                      |
-| :accent_      | (foreground) assumptions/plain stuff | builtins                                  |
-| :accent__     | (foreground) rarely used fg          | types                                     |
-| :strings      | (foreground) strings                 | strings                                   |
+| label         | meaning                             | example                                      |
+|---------------+-------------------------------------+----------------------------------------------|
+| :foreground   | default foreground                  |                                              |
+| :background   | default background                  |                                              |
+| :background>  | lightly emphasized background       | magit active section, org-todo background    |
+| :background>> | emphasized background               | modeline                                     |
+| :foreground+  | focused foreground                  | selected list item/search result             |
+| :background+  | focused background                  | highlighted text                             |
+| :faded        | (foreground) faded                  | comments                                     |
+| :primary      | (foreground) identity               | functions, variables                         |
+| :assumed      | (foreground) assumptions/core stuff | builtins, key words                          |
+| :alt          | (foreground) rarely used fg         | types, matching string within search results |
+| :strings      | (foreground) strings                | strings                                      |
 
 Some thoughts on my general theme opinions here:
 
