@@ -79,38 +79,49 @@
         (ct-transform-lch-l (ct-get-lch-l foreground))
         ((lambda (c) (ct-tint-ratio foreground c 6))))))
 
-  (setq tarp/theme*
+  (setq tarp/theme-against
     (ht
-      (:normal background-parts)
+      ;; focused/selected emphasis
       (:focused
         (ht-merge
           background-parts
           (ht (:background background+))))
 
-      (:medium (tarp/struan-get-colors background>))
-      (:heavy (tarp/struan-get-colors background>>))))
+      ;; normal emphasis
+      (:normal background-parts)
+
+      ;; weak emphasis
+      (:weak (tarp/struan-get-colors background>))
+
+      ;; strong emphasis
+      (:strong (tarp/struan-get-colors background>>))))
+
+  ;; convienence
+  (defun tarp/get (emphasis label)
+    (ht-get* tarp/theme-against emphasis label))
 
   ;; shim:
   (setq tarp/theme
     (ht-merge
       (ht-get tarp/theme* :normal)
       (ht
-        (:foreground+ (ht-get* tarp/theme* :focused :foreground))
-        (:background+ (ht-get* tarp/theme* :focused :background))
-        (:background_ (ht-get* tarp/theme* :medium :background))
-        (:background__ (ht-get* tarp/theme* :heavy :background))
-        (:accent1  (ht-get* tarp/theme* :normal :primary))
-        (:accent1_ (ht-get* tarp/theme* :normal :assumed))
-        (:accent2  (ht-get* tarp/theme* :normal :alt))
-        (:accent2_ (ht-get* tarp/theme* :normal :strings))
-        (:accent2_ (ht-get* tarp/theme* :normal :strings))
+        (:foreground+ (tarp/get :focused :foreground))
+        (:background+ (tarp/get :focused :background))
+        (:background_ (tarp/get :medium :background))
+        (:background__ (tarp/get :heavy :background))
+        (:accent1  (tarp/get :normal :primary))
+        (:accent1_ (tarp/get :normal :assumed))
+        (:accent2  (tarp/get :normal :alt))
+        (:accent2_ (tarp/get :normal :strings))
+        (:accent2_ (tarp/get :normal :strings))
 
-        (:foreground_ (ht-get* tarp/theme* :normal :faded)))))
-  )
+        (:foreground_ (tarp/get :normal :faded))))))
 
-(ht-get* tarp/theme* :medium :background)
+(tarp/get :strong :background)
 
-;; "#dcd3cd"
+"#cdc4be"
+
+"#dcd3cd"
 
 (deftheme tarp-struan-new)
 (tarp/base16-theme-define tarp/theme 'tarp-struan-new)
