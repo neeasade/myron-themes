@@ -84,7 +84,7 @@
 
   ;; convienence
   (defun tarp/get (label &optional emphasis )
-    (ht-get* tarp/theme-against (or emphasis :normal) label))
+    (ht-get* tarp/theme* (or emphasis :normal) label))
 
   ;; shim:
   (setq tarp/theme

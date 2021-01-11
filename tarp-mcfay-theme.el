@@ -34,6 +34,7 @@
 
     (alt (ht-get normal-parts :alt))
     (assumed (ht-get normal-parts :assumed))
+    (primary (ht-get normal-parts :primary))
     (faded (ht-get normal-parts :faded))
     (foreground (ht-get normal-parts :foreground))
 
@@ -45,22 +46,22 @@
       (ct-iterate
         (ct-transform-lch-c alt 20)
         'ct-lab-lighten
-        (fn (> (ct-contrast-ratio <> faded) 3.5))))
+        (fn (> (ct-contrast-ratio <> faded) 4.0))))
 
     ;; new idea: these could be contrast based as well in relation to foreground
     (background>
       (-> background
-        (ct-transform-lch-h (ct-get-lch-h alt))
-        (ct-transform-lch-l (ct-get-lch-l foreground))
-        ((lambda (c) (ct-tint-ratio foreground c 9)))))
+        (ct-iterate
+          'ct-lab-darken
+          (fn (> (ct-name-distance <> background) 4)))
+        (ct-transform-hsl-h (ct-get-hsl-h assumed))))
 
     (background>>
       (-> background
-        (ct-transform-lch-h (ct-get-lch-h alt))
-        (ct-transform-lch-l (ct-get-lch-l foreground))
-        ((lambda (c) (ct-tint-ratio foreground c 8)))))
-
-    )
+        (ct-iterate
+          'ct-lab-darken
+          (fn (> (ct-name-distance <> background) 8)))
+        (ct-transform-hsl-h (ct-get-hsl-h primary)))))
 
   (setq tarp/theme*
     (ht
@@ -82,6 +83,10 @@
 
   (defun tarp/get (label &optional emphasis )
     (ht-get* tarp/theme* (or emphasis :normal) label))
+
+  ;; todo: conform hue of all foregrounds:
+  ;; (let ((h (ct-get-hsl-l (tarp/get :foreground))))
+  ;;   (ht-set tarp/theme* :weak))
 
   ;; shim:
   (setq tarp/theme
