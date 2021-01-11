@@ -33,24 +33,6 @@
     (eval `(ht ,@ it))
     (setq tarp/theme it)))
 
-(defun tarp/edit-foregrounds (func)
-  "Apply FUNC to all foreground colors -- func takes one argument, the current color value"
-  (tarp/edit
-    (lambda (k v)
-      (if (-contains-p '(:accent1 :accent1_ :accent2 :accent2_
-                          :foreground :foreground_ :foreground+) k)
-        (funcall func k)
-        v))))
-
-(defun tarp/edit-backgrounds (func)
-  "Apply FUNC to all background colors -- func takes one argument, the current color value"
-  (tarp/edit
-    (lambda (k v)
-      (if (-contains-p '(:background :background_
-                          :background__ :background+) k)
-        (funcall func k)
-        v))))
-
 (defun tarp/nth (index coll)
   "a version of nth that counts from the end if the input is negative"
   ;; this just makes it easier to sort through color collections in real time.
@@ -85,61 +67,55 @@
 
 
 (defun tarp/map-to-base16 (theme-table)
-  (->>
-    (list
-      ;; The comments on the sections here are from the base16 styling guidelines, not necessarily
-      ;; what the emacs base16 theme package follows.
+  (list
+    ;; The comments on the sections here are from the base16 styling guidelines, not necessarily
+    ;; what the emacs base16 theme package follows.
 
-      ;; guidelines location: http://chriskempson.com/projects/base16/
-      ;; I've also noted some faces I care about
+    ;; guidelines location: http://chriskempson.com/projects/base16/
+    ;; I've also noted some faces I care about
 
-      :base00 :background ;; Default Background
+    :base00 (tarp/get :background) ;; Default Background
 
-      ;; ivy-current-match background, isearch match foreground, inactive modeline background
-      :base01 :background+ ;; Lighter Background (Used for status bars)
-      ;; :base01 :background__ ;; Lighter Background (Used for status bars)
+    ;; ivy-current-match background, isearch match foreground, inactive modeline background
+    :base01 (tarp/get :background :focused) ;; Lighter Background (Used for status bars)
+    ;; :base01 :background__ ;; Lighter Background (Used for status bars)
 
-      ;; region, active modeline background
-      :base02 :background+ ;; Selection Background
+    ;; region, active modeline background
+    :base02 (tarp/get :background :focused) ;; Selection Background
 
-      :base03 :foreground_ ;; Comments, Invisibles, Line Highlighting
-      :base04 :foreground_ ;; Dark Foreground (Used for status bars)
-      :base05 :foreground  ;; Default Foreground, Caret, Delimiters, Operators
-      :base06 :foreground_ ;; Light Foreground (Not often used)
+    :base03 (tarp/get :faded) ;; Comments, Invisibles, Line Highlighting
+    :base04 (tarp/get :faded) ;; Dark Foreground (Used for status bars)
+    :base05 (tarp/get :foreground)  ;; Default Foreground, Caret, Delimiters, Operators
+    :base06 (tarp/get :faded) ;; Light Foreground (Not often used)
 
-      ;; note: This is just used for company background -- maybe change it to a background value
-      :base07 :foreground_ ;; Light Background (Not often used)
+    ;; note: This is just used for company background -- maybe change it to a background value
+    :base07 (tarp/get :faded) ;; Light Background (Not often used)
 
-      ;; org-todo, variables
-      ;; :base08 :accent2 ;; Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
-      :base08 :accent2 ;; Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
+    ;; org-todo, variables
+    ;; :base08 :accent2 ;; Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
+    :base08 (tarp/get :alt) ;; Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
 
-      ;; ivy-current-match foreground
-      :base09 :foreground ;; Integers, Boolean, Constants, XML Attributes, Markup Link Url
+    ;; ivy-current-match foreground
+    :base09 (tarp/get :foreground) ;; Integers, Boolean, Constants, XML Attributes, Markup Link Url
 
-      ;; types
-      ;; :base0A :accent1 ;; Classes, Markup Bold, Search Text Background
-      :base0A :accent2 ;; Classes, Markup Bold, Search Text Background
+    ;; types
+    ;; :base0A :accent1 ;; Classes, Markup Bold, Search Text Background
+    :base0A (tarp/get :alt) ;; Classes, Markup Bold, Search Text Background
 
-      ;; strings
-      :base0B :accent2_ ;; Strings, Inherited Class, Markup Code, Diff Inserted
+    ;; strings
+    :base0B (tarp/get :strings) ;; Strings, Inherited Class, Markup Code, Diff Inserted
 
-      ;; :base0C :foreground_  ;; Support, Regular Expressions, Escape Characters, Markup Quotes
-      :base0C :accent1_ ;; Support, Regular Expressions, Escape Characters, Markup Quotes
+    ;; :base0C :foreground_  ;; Support, Regular Expressions, Escape Characters, Markup Quotes
+    :base0C (tarp/get :assumed) ;; Support, Regular Expressions, Escape Characters, Markup Quotes
 
-      ;; prompt, function-name, search match foreground
-      :base0D :accent1 ;; Functions, Methods, Attribute IDs, Headings
+    ;; prompt, function-name, search match foreground
+    :base0D (tarp/get :primary) ;; Functions, Methods, Attribute IDs, Headings
 
-      ;; keyword-face, org-date
-      :base0E :accent1_ ;; Keywords, Storage, Selector, Markup Italic, Diff Changed
+    ;; keyword-face, org-date
+    :base0E (tarp/get :assumed) ;; Keywords, Storage, Selector, Markup Italic, Diff Changed
 
-      :base0F :foreground_ ;; Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
-      )
-    (-partition 2)
-    (-map (lambda (pair)
-            (list (first pair)
-              (ht-get theme-table (second pair)))))
-    (-flatten)))
+    :base0F (tarp/get :faded) ;; Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
+    ))
 
 (defun tarp/get-function-sexp (sym)
   "get SYM as a quoted list, using helpful.el"
@@ -151,6 +127,14 @@
 (defun tarp/base16-theme-define (theme-table theme-name)
   (when (-non-nil tarp/tweak-function)
     (funcall tarp/tweak-function))
+
+  (defun tarp/theme-face (face back-label &optional fore-label)
+    (list
+      ;; if we're setting intent here, don't inverse
+      (list face :inverse-video nil)
+
+      (list face :background (tarp/get :background back-label))
+      (list face :foreground (tarp/get (or fore-label :foreground) back-label))))
 
   (let*
     (
@@ -176,15 +160,15 @@
 
            ;; face pace-part value
            (font-lock-comment-delimiter-face :foreground foreground_)
-           (isearch :foreground background+)
-           (isearch :background foreground)
+
            (comint-highlight-prompt :foreground foreground)
            (fringe :background nil)
            ;; (mode-line :background nil)
            (font-lock-comment-face :background nil)
 
            (magit-diff-context-highlight :background
-             (tarp/get :background :weak))
+             ,(tarp/get :background :weak)
+             )
 
            (window-divider :foreground foreground_)
 
@@ -195,12 +179,6 @@
            ;; consider nulling out and using flat newlines org links
            ;; (org-link :foreground :accent1_)
            ;; (font-lock-type-face :foreground :accent1)
-
-           (org-todo :background background_)
-           (org-done :background background_)
-
-           (org-todo :foreground accent2_)
-           (org-done :foreground accent2)
 
            (org-date :underline nil)
            (org-date :foreground accent1_)
@@ -225,6 +203,20 @@
            ;; (whitespace-newline background nil)
            (flycheck-warning :underline nil)
            (flycheck-info :underline nil)
+
+           (isearch :inverse-video nil)
+           (lazy-highlight :inverse-video nil)
+
+           ,@(-mapcat
+               (lambda (ok) (apply 'tarp/theme-face ok))
+               '(
+                  (avy-lead-face :normal :alt)
+                  (org-todo :weak :strings)
+                  (org-done :weak :faded)
+
+                  (isearch :focused)
+                  (lazy-highlight :weak)
+                  ))
            ))
 
       (new-theme
