@@ -175,7 +175,6 @@
            (avy-lead-face-2 :background accent2)
 
            ;; face pace-part value
-           ;; value may be a key from ns/theme
            (font-lock-comment-delimiter-face :foreground foreground_)
            (isearch :foreground background+)
            (isearch :background foreground)
@@ -183,6 +182,7 @@
            (fringe :background nil)
            ;; (mode-line :background nil)
            (font-lock-comment-face :background nil)
+
            (magit-diff-context-highlight :background
              (tarp/get :background :weak))
 

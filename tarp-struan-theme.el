@@ -75,7 +75,7 @@
         (ct-transform-lch-l (ct-get-lch-l foreground))
         ((lambda (c) (ct-tint-ratio foreground c 6))))))
 
-  (setq tarp/theme-against
+  (setq tarp/theme*
     (ht
       ;; focused/selected emphasis
       (:focused
@@ -111,32 +111,7 @@
         (:accent2_ (tarp/get :strings))
         (:foreground_ (tarp/get :faded))))))
 
-(-map
-  (fn (tarp/get :faded <>))
-  '(:normal :weak :strong :focused))
+(deftheme tarp-struan)
+(tarp/base16-theme-define tarp/theme 'tarp-struan)
 
-;; :faded
-("#9f5625" "#914817" "#853c0b" "#9f5625")
-
-;; :assumed
-("#3c6369" "#3a6167" "#30575d" "#3c6369")
-
-;; :primary
-("#903f7a" "#8e3d78" "#84336e" "#903f7a")
-
-("#f2e9e3" "#dcd3cd" "#cdc4be" "#ffc1ac")
-
-(tarp/get :foreground :normal)
-
-"#483f39"
-
-(tarp/get :foreground :strong)
-
-"#2f2620"
-
-
-
-(deftheme tarp-struan-new)
-(tarp/base16-theme-define tarp/theme 'tarp-struan-new)
-
-(provide-theme 'tarp-struan-new)
+(provide-theme 'tarp-struan)
