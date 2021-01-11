@@ -27,25 +27,34 @@ Install with [[https://github.com/raxod502/straight.el][straight.el]]:
 - [[https://github.com/Wilfred/helpful][helpful]]
 - [[https://github.com/troyp/fn.el][fn.el]]
 
-** Fishing
+** TODO Fishing
 
-The goal for this repo is primarily to bootstrap on other kits, and make it easy to enact wide effects with small changes - you may see some examples of that in my [[https://notes.neeasade.net/rice.html][screenshot history]].
+# The goal for this repo is primarily to bootstrap on other kits, and make it easy to enact wide effects with small changes - you may see some examples of that in my [[https://notes.neeasade.net/rice.html][screenshot history]].
 
-After a tarp theme is loaded, it's colors will be accesible in the hash table tarp/theme -- thus, you may use the theme colors in other contexts by EG ~(ht-get tarp/theme :background)~. Current values and vague uses are outlined below:
+# Tarp themes provide nested values that maintain contrast levels against differing levels of emphasis.
 
-| label         | meaning                                  | example                         |
-|---------------+------------------------------------------+---------------------------------|
-| :foreground   | default foreground                       |                                 |
-| :foreground_  | faded foreground                         | comments                        |
-| :foreground+  | focused foreground                       | seleced list item/search result |
-| :background   | default background                       |                                 |
-| :background_  | emphasized background                    | code block background           |
-| :background__ | more emphasized background               | modeline                        |
-| :background+  | focused background                       | highlighted text                |
-| :accent1      | (foreground) identity                    | functions, variables            |
-| :accent1_     | (foreground) assumptions (faded accent1) | builtins                        |
-| :accent2      | (foreground) accent2                     | types                           |
-| :accent2_     | (foreground) strings                     | strings                         |
+# After a tarp theme is loaded, it's colors will be accesible in the hash table tarp/theme -- thus, you may use the theme colors in other contexts by EG ~(ht-get tarp/theme :background)~. Current values and vague uses are outlined below:
+
+| label         | meaning                             | example                                      |
+|---------------+-------------------------------------+----------------------------------------------|
+| :foreground   | default foreground                  |                                              |
+| :background   | default background                  |                                              |
+| :background>  | lightly emphasized background       | magit active section, org-todo background    |
+| :background>> | emphasized background               | modeline                                     |
+| :foreground+  | focused foreground                  | selected list item/search result             |
+| :background+  | focused background                  | highlighted text                             |
+| :faded        | (foreground) faded                  | comments                                     |
+| :primary      | (foreground) identity               | functions, variables                         |
+| :assumed      | (foreground) assumptions/core stuff | builtins, key words                          |
+| :alt          | (foreground) rarely used fg         | types, matching string within search results |
+| :strings      | (foreground) strings                | strings                                      |
+
+Some thoughts on general theme opinions:
+
+- Strings are important enough to get their own color for emphasis because they represent the edges or barriers at which things communicate sometimes
+- Identity between functions and variables can be blended (lisp-1 type of feel)
+- There is a need for a "barely different" bg for light emphasis that doesn't interrupt the same set of fg colors
+- "focused" colors should be consistent as an indicator of what's about to be selected/or where the cursor is
 
 ** Local edits
 
@@ -74,35 +83,7 @@ Calling ~tarp/show-contrasts~ will show the contrast ratios of all the foregroun
 
 ** The future
 
-Reflecting after using these the above reference for awhile... Tarp 2.0 will look something like:
-
-| label         | meaning                             | example                                      |
-|---------------+-------------------------------------+----------------------------------------------|
-| :foreground   | default foreground                  |                                              |
-| :background   | default background                  |                                              |
-| :background>  | lightly emphasized background       | magit active section, org-todo background    |
-| :background>> | emphasized background               | modeline                                     |
-| :foreground+  | focused foreground                  | selected list item/search result             |
-| :background+  | focused background                  | highlighted text                             |
-| :faded        | (foreground) faded                  | comments                                     |
-| :primary      | (foreground) identity               | functions, variables                         |
-| :assumed      | (foreground) assumptions/core stuff | builtins, key words                          |
-| :alt          | (foreground) rarely used fg         | types, matching string within search results |
-| :strings      | (foreground) strings                | strings                                      |
-
 Some thoughts on my general theme opinions here:
-
-- Strings are important enough to get their own color for emphasis because they represent the edges or barriers at which things communicate sometimes
-- Identity between functions and variables can be blended (lisp-1 type of feel)
-- There is a need for a "barely different" bg for light emphasis that doesn't interrupt the same set of fg colors
-  - An alternative approach might be multiple sets of foreground colors per background (recompute accents in a nested table with BG as key)
-- "focused" colors should be consistent as an indicator of what's about to be selected/or where the cursor is
-
-That nested bullet point is a cool idea. What if we provide a another table
-
-tarp/theme-dynamic might look something like:
-{:background(>,>>,+)} -> (accent, foreground, foreground_, accent.., strings)
-
 
 
 ** Thanks/Previous inspo

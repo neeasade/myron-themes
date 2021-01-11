@@ -47,16 +47,6 @@
     (faded (ht-get normal-parts :faded))
     (foreground (ht-get normal-parts :foreground))
 
-    ;; old value
-    (background+
-      (ct-iterate
-        (ct-transform-lch-c alt 33)
-        'ct-lab-lighten
-        (fn (> (ct-contrast-ratio <>
-                 (ct-tint-ratio background background 5.5))
-              3.5
-              ))))
-
     (background+
       (ct-iterate
         (ct-transform-lch-c alt 33)
