@@ -53,14 +53,14 @@
       (-> background
         (ct-iterate
           'ct-lab-darken
-          (fn (> (ct-name-distance <> background) 4)))
+          (fn (> (ct-name-distance <> background) 3)))
         (ct-transform-hsl-h (ct-get-hsl-h assumed))))
 
     (background>>
       (-> background
         (ct-iterate
           'ct-lab-darken
-          (fn (> (ct-name-distance <> background) 8)))
+          (fn (> (ct-name-distance <> background) 5)))
         (ct-transform-hsl-h (ct-get-hsl-h primary)))))
 
   (setq tarp/theme*
@@ -79,10 +79,6 @@
 
       ;; strong emphasis
       (:strong (tarp/struan-get-colors background>>))))
-
-
-  (defun tarp/get (label &optional emphasis )
-    (ht-get* tarp/theme* (or emphasis :normal) label))
 
   ;; todo: conform hue of all foregrounds:
   ;; (let ((h (ct-get-hsl-l (tarp/get :foreground))))
@@ -105,6 +101,6 @@
   )
 
 (deftheme tarp-mcfay)
-(tarp/base16-theme-define tarp/theme 'tarp-mcfay)
+(tarp/base16-theme-define 'tarp-mcfay)
 
 (provide-theme 'tarp-mcfay)

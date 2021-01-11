@@ -1,10 +1,10 @@
-Themes for GUI Emacs, built on top of [[https://github.com/belak/base16-emacs][base16-emacs]], with some tweaks.
+A pair of light themes for GUI Emacs, built on top of [[https://github.com/belak/base16-emacs][base16-emacs]], with some tweaks.
 
 Namespace prefix: ~tarp/~
 
 Screenshots:
 
-| mcfay: [[https://i.imgur.com/fQCJvhp.png]] | struan: [[https://i.imgur.com/urf7cag.png]] | marlowe: [[https://i.imgur.com/rMTaaKG.png]] |
+| mcfay: [[https://i.imgur.com/fQCJvhp.png]] | struan: [[https://i.imgur.com/urf7cag.png]] |
 
 ** Installation
 
@@ -27,34 +27,26 @@ Install with [[https://github.com/raxod502/straight.el][straight.el]]:
 - [[https://github.com/Wilfred/helpful][helpful]]
 - [[https://github.com/troyp/fn.el][fn.el]]
 
-** TODO Fishing
+** Fishing
 
-# The goal for this repo is primarily to bootstrap on other kits, and make it easy to enact wide effects with small changes - you may see some examples of that in my [[https://notes.neeasade.net/rice.html][screenshot history]].
+Tarp colorschemes come flavored against different backgrounds, for different levels of emphasis. This is to ensure the same contrast level across different contexts. The schemes are stored in a nested hash table, with a helper to access them -- EG ~(tarp/get :primary :strong)~ to get the primary foreground color meant to be used against the strong background (which you could get with ~(tarp/get :background :strong)~). The available background keys are: ~:normal :weak :strong :focused~. For each of those, the following foregrounds are available:
 
-# Tarp themes provide nested values that maintain contrast levels against differing levels of emphasis.
-
-# After a tarp theme is loaded, it's colors will be accesible in the hash table tarp/theme -- thus, you may use the theme colors in other contexts by EG ~(ht-get tarp/theme :background)~. Current values and vague uses are outlined below:
-
-| label         | meaning                             | example                                      |
-|---------------+-------------------------------------+----------------------------------------------|
-| :foreground   | default foreground                  |                                              |
-| :background   | default background                  |                                              |
-| :background>  | lightly emphasized background       | magit active section, org-todo background    |
-| :background>> | emphasized background               | modeline                                     |
-| :foreground+  | focused foreground                  | selected list item/search result             |
-| :background+  | focused background                  | highlighted text                             |
-| :faded        | (foreground) faded                  | comments                                     |
-| :primary      | (foreground) identity               | functions, variables                         |
-| :assumed      | (foreground) assumptions/core stuff | builtins, key words                          |
-| :alt          | (foreground) rarely used fg         | types, matching string within search results |
-| :strings      | (foreground) strings                | strings                                      |
+| label        | meaning                             | example                                      |
+|--------------+-------------------------------------+----------------------------------------------|
+| :foreground  | default foreground                  |                                              |
+| :foreground+ | focused foreground                  | selected list item/search result             |
+| :faded       | (foreground) faded                  | comments                                     |
+| :primary     | (foreground) identity               | functions, variables                         |
+| :assumed     | (foreground) assumptions/core stuff | builtins, key words                          |
+| :alt         | (foreground) rarely used fg         | types, matching string within search results |
+| :strings     | (foreground) strings                | strings                                      |
 
 Some thoughts on general theme opinions:
 
 - Strings are important enough to get their own color for emphasis because they represent the edges or barriers at which things communicate sometimes
 - Identity between functions and variables can be blended (lisp-1 type of feel)
-- There is a need for a "barely different" bg for light emphasis that doesn't interrupt the same set of fg colors
 - "focused" colors should be consistent as an indicator of what's about to be selected/or where the cursor is
+# - Different levels of BG sets allow for consistent communication across contrasted emphasis contexts
 
 ** Local edits
 
@@ -75,16 +67,9 @@ The function ~tarp/tweak-function~ will be called before base16 is bootstrapped.
           (lambda (l) (* 0.7 l)))))))
 #+end_src
 
-See also: ~tarp/edit-foregrounds~, ~tarp/edit-backgrounds~
-
 ** Contrast dumping
 
 Calling ~tarp/show-contrasts~ will show the contrast ratios of all the foregrounds against all the backgrounds.
-
-** The future
-
-Some thoughts on my general theme opinions here:
-
 
 ** Thanks/Previous inspo
 
