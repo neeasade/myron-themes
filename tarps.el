@@ -119,26 +119,14 @@
       (first (helpful--definition sym t))
       (second (helpful--definition sym t)))))
 
-(defun tarp/base16-theme-define (theme-name)
-  (when (-non-nil tarp/tweak-function)
-    (funcall tarp/tweak-function))
+(defun tarp/theme-face (face back-label &optional fore-label)
+  `((,face :inverse-video nil)
+     (,face :background ,(tarp/get :background back-label))
+     (,face :foreground ,(tarp/get (or fore-label :foreground) back-label))))
 
-  (defun tarp/theme-face (face back-label &optional fore-label)
-    (list
-      ;; if we're setting intent here, don't inverse
-      (list face :inverse-video nil)
-
-      (list face :background (tarp/get :background back-label))
-      (list face :foreground (tarp/get (or fore-label :foreground) back-label))))
-
+(defun tarp/theme-make-faces (theme-colors)
   (let*
     (
-      ;; add our theme colors to the color plist
-      (theme-colors
-        (append
-          (tarp/map-to-base16)
-          (ht-to-plist tarp/theme)))
-
       ;; steal the list that's hardcoded in base16-theme-define
       (original-theme (->>
                         (tarp/get-function-sexp 'base16-theme-define)
@@ -149,34 +137,25 @@
       ;; note individual changes
       (theme-changes
         `(
-           ;; face pace-part value
-           (font-lock-comment-delimiter-face :foreground foreground_)
+           (magit-diff-context-highlight :background
+             ,(tarp/get :background :weak))
+
+           (font-lock-comment-delimiter-face :foreground faded)
 
            (comint-highlight-prompt :foreground foreground)
+
            (fringe :background nil)
 
            (font-lock-comment-face :background nil)
 
-           (magit-diff-context-highlight :background
-             ,(tarp/get :background :weak))
 
-           (window-divider :foreground foreground_)
+           (window-divider :foreground faded)
 
            ;; match variables to functions
-           ;; (font-lock-function-name-face :foreground :accent2)
-           (font-lock-variable-name-face :foreground accent1)
-
-           ;; consider nulling out and using flat newlines org links
-           ;; (org-link :foreground :accent1_)
-           ;; (font-lock-type-face :foreground :accent1)
+           (font-lock-function-name-face :foreground primary)
+           (font-lock-variable-name-face :foreground primary)
 
            (org-date :underline nil)
-           (org-date :foreground accent1_)
-
-           (org-drawer :foreground accent1_)
-           (org-block-begin-line :foreground foreground_)
-           (org-block-end-line :foreground foreground_)
-
            (org-level-1 :foreground foreground)
            (org-level-2 :foreground foreground)
            (org-level-3 :foreground foreground)
@@ -184,7 +163,15 @@
            (org-level-5 :foreground foreground)
            (org-level-6 :foreground foreground)
 
-           (org-special-keyword :foreground foreground_)
+           ;; todo: review:
+
+           ;; (org-block-begin-line :foreground foreground_)
+           ;; (org-block-end-line :foreground foreground_)
+           ;; (org-special-keyword :foreground foreground_)
+
+           ;; (org-date :foreground accent1_)
+           ;; (org-drawer :foreground accent1_)
+           ;; (font-lock-type-face :foreground :accent1)
 
            (whitespace-space :background nil)
            (whitespace-tab :background nil)
@@ -193,10 +180,6 @@
            (flycheck-warning :underline nil)
            (flycheck-info :underline nil)
 
-           (isearch :inverse-video nil)
-           (lazy-highlight :inverse-video nil)
-
-           ;; [[https://google.com]]
            (org-link :box (:line-width 1
                             :color ,(ct-lessen (tarp/get :faded :normal) 30)
                             ;; :style released-button
@@ -247,12 +230,24 @@
                 (cons theme-change state))))
           original-theme
           theme-changes)))
+    new-theme))
 
-    ;; do the thing
-    (base16-set-faces theme-name theme-colors new-theme)
+(defun tarp/base16-theme-define (theme-name)
+  (when (-non-nil tarp/tweak-function)
+    (funcall tarp/tweak-function))
+
+  (let ((theme-colors (append
+                        (tarp/map-to-base16)
+                        (ht-to-plist tarp/theme))))
+
+    (base16-set-faces
+      theme-name
+      theme-colors
+      new-theme
+      (tarp/theme-make-faces theme-colors))
 
     (when (boundp 'evil-normal-state-cursor)
-      (let ((c (plist-get theme-colors :accent1_)))
+      (let ((c (plist-get theme-colors :assumed)))
         (setq
           evil-normal-state-cursor `(,c box)
           evil-insert-state-cursor `(,c bar)
@@ -290,8 +285,7 @@
           theme-name
           `(ansi-term-color-vector
              ;; black, base08, base0B, base0A, base0D, magenta, cyan, white
-             [unspecified ,base00 ,base08 ,base0B ,base0A ,base0D ,base0E ,base0D ,base05]))))
-    ))
+             [unspecified ,base00 ,base08 ,base0B ,base0A ,base0D ,base0E ,base0D ,base05]))))))
 
 (and load-file-name
   (boundp 'custom-theme-load-path)
