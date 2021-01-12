@@ -1,86 +1,105 @@
 ;; -*- lexical-binding: t; -*-
+;; temporary experimental version of struan, while approaching tarp 2.0
 
 (require 'tarps)
 
-(defun tarp/struan-get-accents (background foreground foreground_)
-  ;; return a list accent1, accent1_, accent2, accent2_
-  (-->
-    (ct-rotation-hsluv
-      (ct-make-hsluv 265 60 40)
-      60)
-    (-map (fn (tarp/nth <> it))
-      '(1 -1 2 3))
-    (-map
-      (fn (ct-tint-ratio <> background 4.5 ))
-      it)))
+(defun tarp/struan-get-colors (background)
+  "get the foreground colors against a specific background"
+  (let*
+    (
+      (colors (-->
+                (ct-rotation-hsluv
+                  (ct-make-hsluv 265 60 40) 60)
+                (-map (fn (tarp/nth <> it))
+                  '(1 -1 2 3))
+                (-map
+                  (fn (ct-tint-ratio <> background 4.5 ))
+                  it)))
+
+      (foreground (ct-tint-ratio background background 8.5))
+
+      (faded
+        (ct-tint-ratio
+          (ct-transform-hsl
+            (ct-tint-ratio background background 5.5)
+            ;; (nth 2 colors)
+            (lambda (h s l) (list h 80 70)))
+          background 4.5)
+        ))
+
+    (ht
+      (:background background)
+      (:foreground foreground)
+      (:faded faded)
+
+      (:primary (nth 0 colors))
+      (:assumed (nth 1 colors))
+      (:alt (nth 2 colors))
+      (:strings (ct-transform-lch-c (nth 3 colors) 100)))))
 
 (let*
   (
     (background (ct-make-lab 93 2 4))
+    (normal-parts (tarp/struan-get-colors background))
 
-    (foreground (ct-tint-ratio background background 8.5))
-    (foreground_ (ct-tint-ratio background background 5.5))
+    (alt (ht-get normal-parts :alt))
+    (assumed (ht-get normal-parts :assumed))
+    (faded (ht-get normal-parts :faded))
+    (foreground (ht-get normal-parts :foreground))
 
-    (accents (tarp/struan-get-accents background foreground foreground_))
-
-    (accent1  (nth 0 accents))
-    (accent1_ (nth 1 accents))
-    (accent2  (nth 2 accents))
-    (accent2_ (nth 3 accents))
-
-    ;; active BG (selections)
-    ;; take an accent color, fade it until you reach a minimum contrast against foreground_
     (background+
       (ct-iterate
-        ;; accent2
-        ;; (ct-transform-lch-c accent2 (-partial '* 0.5))
-        (ct-transform-lch-c accent2 (lambda (_) 33))
+        (ct-transform-lch-c alt 33)
         'ct-lab-lighten
-        (fn (> (ct-contrast-ratio <> foreground_) 4.0))
-        ;; (fn (> (ct-contrast-ratio <> foreground_) 3.5))
-        )
-      )
+        (fn (> (ct-contrast-ratio <> faded) 3.5))))
 
-    ;; new idea: these could be contrast based as well in relation to foreground
-    (background_
+    (background>
       (-> background
-        (ct-transform-lch-h (ct-get-lch-h accent2))
+        (ct-transform-lch-h (ct-get-lch-h alt))
         (ct-transform-lch-l (ct-get-lch-l foreground))
         ((lambda (c) (ct-tint-ratio foreground c 7)))))
 
-    (background__
+    (background>>
       (-> background
-        (ct-transform-lch-h (ct-get-lch-h accent2))
+        (ct-transform-lch-h (ct-get-lch-h alt))
         (ct-transform-lch-l (ct-get-lch-l foreground))
         ((lambda (c) (ct-tint-ratio foreground c 6))))))
 
-  (setq tarp/theme
+  (setq tarp/theme*
     (ht
-      (:foreground foreground)          ; regular text
-      (:foreground_ foreground_)        ; comments
-      (:foreground+ foreground)         ; foreground of a focused/highlighted thing
+      ;; focused/selected emphasis
+      (:focused
+        (ht-merge
+          normal-parts
+          (ht (:background background+))))
 
-      (:background background)          ; regular canvas
-      (:background_ background_)        ; emphasis?
-      (:background__ background__)      ; inactive modeline
-      (:background+ background+)  ; background of a focused/highlighted thing (also active modeline)
+      ;; normal emphasis
+      (:normal normal-parts)
 
-      (:accent1 accent1)                ; identifiers
-      (:accent1_ accent1_)              ; builtins
-      (:accent2 accent2)                ; types
-      (:accent2_ accent2_)              ; strings
-      ))
+      ;; weak emphasis
+      (:weak (tarp/struan-get-colors background>))
 
-  (ht-set tarp/theme :foreground_
-    (ct-tint-ratio
-      (ct-transform-hsl accent2 (lambda (h s l) (list h 80 70)))
-      background
-      4.5
-      ))
+      ;; strong emphasis
+      (:strong (tarp/struan-get-colors background>>))))
 
-  ;; let's play MAX, THAT, CHROMA!
-  (ht-set tarp/theme :accent2_ (ct-transform-lch-c accent2_ 100))
-  )
+  ;; convienence
+  (defun tarp/get (label &optional emphasis )
+    (ht-get* tarp/theme* (or emphasis :normal) label))
+
+  ;; shim:
+  (setq tarp/theme
+    (ht-merge
+      (ht-get tarp/theme* :normal)
+      (ht
+        (:foreground+ (tarp/get :foreground :focused))
+        (:background+ (tarp/get :background :focused))
+        (:background_ (tarp/get :background :weak))
+        (:background__ (tarp/get :background :strong))
+        (:accent1  (tarp/get :primary))
+        (:accent1_ (tarp/get :assumed))
+        (:accent2  (tarp/get :alt))
+        (:accent2_ (tarp/get :strings))
+        (:foreground_ (tarp/get :faded))))))
 
 (deftheme tarp-struan)
 (tarp/base16-theme-define tarp/theme 'tarp-struan)
