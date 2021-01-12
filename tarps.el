@@ -203,7 +203,7 @@
                   (org-headline-done :normal :faded)
 
                   (isearch :focused)
-                  (lazy-highlight :weak)
+                  (lazy-highlight :strong)
                   (ivy-match :focused)
                   (org-link :weak :alt)
                   (org-code :weak)
@@ -243,7 +243,6 @@
     (base16-set-faces
       theme-name
       theme-colors
-      new-theme
       (tarp/theme-make-faces theme-colors))
 
     (when (boundp 'evil-normal-state-cursor)
