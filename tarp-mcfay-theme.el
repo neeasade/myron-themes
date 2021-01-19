@@ -67,18 +67,20 @@
     (ht
       ;; focused/selected emphasis
       (:focused
-        (ht-merge
-          normal-parts
-          (ht (:background background+))))
+        (tarp/mcfay-get-colors background+)
+        ;; (ht-merge
+        ;;   normal-parts
+        ;;   (ht (:background background+)))
+        )
 
       ;; normal emphasis
       (:normal normal-parts)
 
       ;; weak emphasis
-      (:weak (tarp/struan-get-colors background>))
+      (:weak (tarp/mcfay-get-colors background>))
 
       ;; strong emphasis
-      (:strong (tarp/struan-get-colors background>>))))
+      (:strong (tarp/mcfay-get-colors background>>))))
 
   ;; todo: conform hue of all foregrounds:
   ;; (let ((h (ct-get-hsl-l (tarp/get :foreground))))

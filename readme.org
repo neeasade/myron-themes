@@ -2,13 +2,11 @@ A pair of light themes for GUI Emacs, built on top of [[https://github.com/belak
 
 Namespace prefix: ~tarp/~
 
-Screenshots:
-
-| mcfay: [[https://i.imgur.com/fQCJvhp.png]] | struan: [[https://i.imgur.com/urf7cag.png]] |
+[[https://notes.neeasade.net/tarps.html][Screenshots]]
 
 ** Installation
 
-Install with [[https://github.com/raxod502/straight.el][straight.el]]:
+First, install [[https://github.com/neeasade/ct.el#installation][ct.el]]. Then, install with [[https://github.com/raxod502/straight.el][straight.el]]:
 
 #+begin_src emacs-lisp
 (straight-use-package
@@ -48,23 +46,25 @@ Some thoughts on general theme opinions:
 - "focused" colors should be consistent as an indicator of what's about to be selected/or where the cursor is
 # - Different levels of BG sets allow for consistent communication across contrasted emphasis contexts
 
-** TODO Local edits
+** Local edits
 
-The function ~tarp/tweak-function~ will be called before base16 is bootstrapped. You may change all the values of the scheme through the hashtable variable ~tarp/theme~ here. An example is shown below. ~tarp/set. You could do things here like enforce preferred contrast constraints, or try to account for your [[https://notes.neeasade.net/color-spaces.html#h-f23b8fe5-37a3-4ead-9d9d-a7139f76d532][viewing setting]].
+The function ~tarp/tweak-function~ will be called before base16 is bootstrapped. You may change all the values of the scheme through the hashtable variable ~tarp/theme~ here. An example is shown below. ~tarp/set~. You could do things here like enforce preferred contrast constraints, or try to account for your [[https://notes.neeasade.net/color-spaces.html#h-f23b8fe5-37a3-4ead-9d9d-a7139f76d532][viewing setting]].
 
 #+begin_src emacs-lisp
 (setq tarp/tweak-function
-  (lambda ()
-    ;; max out the faded fg color chroma:
-    (let ((faded-fg (ht-get tarp/theme :foreground_)))
-      (ht-set tarp/theme :foreground_
-        (ct/transform-lch-c faded-fg 100)))
+      (lambda ()
+        ;; max chroma on the faded foreground
+        (tarp/set :faded :normal
+                  (ct-transform-lch-c
+                   (tarp/get :faded)
+                   100))
 
-    ;; make every color darker by reducing lightness @ 70%:
-    (tarp/edit
-      (lambda (key val)
-        (ct/transform-hsl-l val
-          (lambda (l) (* 0.7 l)))))))
+        ;; ensure a contrast ratio of 3.5:1 on the strings foreground
+        (tarp/set :strings :normal
+                  (ct-tint-ratio
+                   (tarp/get :strings :normal)
+                   (tarp/get :background :normal)
+                   3.5))))
 #+end_src
 
 ** Contrast dumping

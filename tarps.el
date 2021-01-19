@@ -4,7 +4,7 @@
 
 ;; Author: neeasade <neeasade@gmail.com>
 ;; URL: https://github.com/neeasade/tarps
-;; Package-Requires: (color-tools base16-theme ht s helpful fn)
+;; Package-Requires: (ct base16-theme ht s helpful fn)
 ;; Version: 0.1
 
 ;;; Commentary:
@@ -17,7 +17,7 @@
 (require 'fn)
 (require 's)
 (require 'base16-theme)
-(require 'ct "colort-tools.el")
+(require 'ct)
 
 (defcustom tarp/tweak-function nil
   "A function hook that allows you to tweak the colorscheme before it is mapped to faces"
@@ -84,7 +84,8 @@
       :base06 (tarp/get :faded level)      ;; Light Foreground (Not often used)
 
       ;; note: This is just used for company background -- maybe change it to a background value
-      :base07 (tarp/get :faded level) ;; Light Background (Not often used)
+      ;; :base07 (tarp/get :faded level) ;; Light Background (Not often used)
+      :base07 (tarp/get :background :weak) ;; Light Background (Not often used)
 
       ;; org-todo, variables
       ;; :base08 :accent2 ;; Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
@@ -182,6 +183,7 @@
 
            (org-link :box (:line-width 1
                             :color ,(ct-lessen (tarp/get :faded :normal) 30)
+
                             ;; :style released-button
                             :style nil
                             ;; (:line-width -1 :style released-button)
@@ -196,10 +198,13 @@
                   (avy-lead-face-1 :strong :alt)
                   (avy-lead-face-2 :strong :strings)
 
+                  (org-drawer :normal :assumed)
+
                   (org-todo :strong :strings)
                   (org-headline-todo :normal)
 
                   (org-done :weak :faded)
+                  (markdown-blockquote-face :normal :faded)
                   (org-headline-done :normal :faded)
 
                   (isearch :focused)
@@ -229,8 +234,11 @@
                   state)
                 (cons theme-change state))))
           original-theme
+          ;; '()
           theme-changes)))
-    new-theme))
+    new-theme
+    ;; original-theme
+    ))
 
 (defun tarp/base16-theme-define (theme-name)
   (when (-non-nil tarp/tweak-function)

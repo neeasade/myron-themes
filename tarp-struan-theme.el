@@ -102,6 +102,6 @@
         (:foreground_ (tarp/get :faded))))))
 
 (deftheme tarp-struan)
-(tarp/base16-theme-define tarp/theme 'tarp-struan)
+(tarp/base16-theme-define 'tarp-struan)
 
 (provide-theme 'tarp-struan)
