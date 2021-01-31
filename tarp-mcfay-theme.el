@@ -51,17 +51,19 @@
     ;; new idea: these could be contrast based as well in relation to foreground
     (background>
       (-> background
+
         (ct-iterate
           'ct-lab-darken
           (fn (> (ct-name-distance <> background) 3)))
-        (ct-transform-hsl-h (ct-get-hsl-h assumed))))
+        (ct-transform-hsl-h (ct-get-hsl-h assumed))
+        (ct-transform-hsluv-h (ct-get-hsluv-h assumed))))
 
     (background>>
       (-> background
         (ct-iterate
-          'ct-lab-darken
-          (fn (> (ct-name-distance <> background) 5)))
-        (ct-transform-hsl-h (ct-get-hsl-h primary)))))
+          'ct-lab-darken (fn (> (ct-name-distance <> background) 6)))
+        (ct-transform-hsl-h (ct-get-hsl-h primary))
+        (ct-transform-hsluv-h (ct-get-hsluv-h primary)))))
 
   (setq tarp/theme*
     (ht
