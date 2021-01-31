@@ -182,8 +182,7 @@
                             ;; (:line-width -1 :style released-button)
                             ))
 
-           ,@(-mapcat
-               (lambda (ok) (apply 'tarp/theme-face ok))
+           ,@(-mapcat (-applify 'tarp/theme-face)
                '(
                   (avy-lead-face :strong :primary)
                   (avy-lead-face-0 :strong :assumed)
