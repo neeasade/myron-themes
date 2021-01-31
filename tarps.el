@@ -59,7 +59,6 @@
     (s-join "\n")
     (message)))
 
-
 (defun tarp/map-to-base16 (&optional level-in)
   (let ((level (or level-in :normal)))
     (list
@@ -83,9 +82,9 @@
       :base05 (tarp/get :foreground level) ;; Default Foreground, Caret, Delimiters, Operators
       :base06 (tarp/get :faded level)      ;; Light Foreground (Not often used)
 
-      ;; note: This is just used for company background -- maybe change it to a background value
-      ;; :base07 (tarp/get :faded level) ;; Light Background (Not often used)
-      :base07 (tarp/get :background :weak) ;; Light Background (Not often used)
+      ;; this is only used for company scrollbar background
+      :base07 (tarp/get :background :strong) ;; Light Background (Not often used)
+      ;; :base07 (tarp/get :background :weak) ;; Light Background (Not often used)
 
       ;; org-todo, variables
       ;; :base08 :accent2 ;; Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
@@ -121,7 +120,8 @@
       (second (helpful--definition sym t)))))
 
 (defun tarp/theme-face (face back-label &optional fore-label)
-  `((,face :inverse-video nil)
+  `(
+     (,face :inverse-video nil)
      (,face :background ,(tarp/get :background back-label))
      (,face :foreground ,(tarp/get (or fore-label :foreground) back-label))))
 
@@ -129,6 +129,7 @@
   (let*
     (
       ;; steal the list that's hardcoded in base16-theme-define
+      ;; cf https://github.com/belak/base16-emacs/blob/93b1513a9994355492314e809cdbfb0d21f1e30d/base16-theme.el#L186
       (original-theme (->>
                         (tarp/get-function-sexp 'base16-theme-define)
                         (nth 4)
@@ -164,23 +165,15 @@
            (org-level-5 :foreground foreground)
            (org-level-6 :foreground foreground)
 
-           ;; todo: review:
-
-           ;; (org-block-begin-line :foreground foreground_)
-           ;; (org-block-end-line :foreground foreground_)
-           ;; (org-special-keyword :foreground foreground_)
-
-           ;; (org-date :foreground accent1_)
-           ;; (org-drawer :foreground accent1_)
-           ;; (font-lock-type-face :foreground :accent1)
-
            (whitespace-space :background nil)
            (whitespace-tab :background nil)
 
-           ;; (whitespace-newline background nil)
            (flycheck-warning :underline nil)
            (flycheck-info :underline nil)
 
+           (secondary-selection :background ,(tarp/get :background :strong))
+
+           ;; TODO: make this optional, it's pretty aggresive
            (org-link :box (:line-width 1
                             :color ,(ct-lessen (tarp/get :faded :normal) 30)
 
@@ -192,27 +185,36 @@
            ,@(-mapcat
                (lambda (ok) (apply 'tarp/theme-face ok))
                '(
-                  ;; org-headline-done
                   (avy-lead-face :strong :primary)
                   (avy-lead-face-0 :strong :assumed)
                   (avy-lead-face-1 :strong :alt)
                   (avy-lead-face-2 :strong :strings)
 
-                  (org-drawer :normal :assumed)
+                  (tooltip :weak)
+
+                  ;; all the org builtin stuff:
+                  ;; this assumes sort of a soft alt,
+                  ;; faded might be more appropriate,
+                  ;; but then intent gets mixed with commenting
+                  (org-drawer :normal :alt)
+                  (org-meta-line :normal :alt)
+                  (org-document-info-keyword :normal :alt)
 
                   (org-todo :strong :strings)
                   (org-headline-todo :normal)
 
                   (org-done :weak :faded)
-                  (markdown-blockquote-face :normal :faded)
                   (org-headline-done :normal :faded)
 
                   (isearch :focused)
                   (lazy-highlight :strong)
                   (ivy-match :focused)
-                  (org-link :weak :alt)
+
+                  (org-link :weak)
                   (org-code :weak)
                   ))
+
+           ;; TODO: There should be a user option here to override faces with intents if wanted
            ))
 
       (new-theme
