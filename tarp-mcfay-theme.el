@@ -11,13 +11,11 @@
          (ct-rotation-lch it -45)
          (-map (fn (tarp/nth <> it)) '(-1 1 2 4))
          (-map (fn (ct-transform-hsluv-l <> 43.596)) it)
-         (-map (fn (ct-tint-ratio <> background 4.5)) it)
-         )))
+         (-map (fn (ct-tint-ratio <> background 4.5)) it))))
 
     (ht
       (:background background)
 
-      ;; note: original was 10
       (:foreground (ct-tint-ratio background background 8.5))
       (:faded (ct-tint-ratio background background 6))
 
@@ -30,6 +28,7 @@
   (
     ;; /slightly/ cool
     (background (ct-make-lab 93 -0.5 -1))
+
     (normal-parts (tarp/mcfay-get-colors background))
 
     (alt (ht-get normal-parts :alt))
@@ -37,10 +36,6 @@
     (primary (ht-get normal-parts :primary))
     (faded (ht-get normal-parts :faded))
     (foreground (ht-get normal-parts :foreground))
-
-    ;; XXX: order matters (this happens after accent setting)
-    ;; (foreground_ (ct-transform-hsluv-l foreground_ 43.596))
-    ;; (foreground_ (ct-tint-ratio foreground_ background 4.5))
 
     (background+
       (ct-iterate
