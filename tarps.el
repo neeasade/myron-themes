@@ -201,7 +201,7 @@
                   (avy-lead-face-1 :strong :alt)
                   (avy-lead-face-2 :strong :strings)
 
-                  (completions-common-part :normal :alt)
+                  (completions-common-part :normal :primary)
 
                   (tooltip :weak)
 

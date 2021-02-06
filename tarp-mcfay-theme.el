@@ -16,7 +16,7 @@
     (ht
       (:background background)
 
-      (:foreground (ct-tint-ratio background background 6.0))
+      (:foreground (ct-tint-ratio background background 7.0))
       (:faded (ct-tint-ratio background background 4.3))
 
       (:primary (nth 0 colors))
@@ -37,13 +37,6 @@
     (faded (ht-get normal-parts :faded))
     (foreground (ht-get normal-parts :foreground))
 
-    (background+
-      (ct-iterate
-        (ct-transform-lch-c alt 20)
-        'ct-lab-lighten
-        (fn (> (ct-contrast-ratio <> faded) 3.5))))
-
-    ;; new idea: these could be contrast based as well in relation to foreground
     (background>
       (-> background
         (ct-iterate
@@ -56,7 +49,13 @@
         (ct-iterate
           'ct-lab-darken (fn (> (ct-name-distance <> background) 5)))
         (ct-transform-hsluv-h (ct-get-hsluv-h primary))
-        )))
+        ))
+
+    (background+
+      (-> alt
+        (ct-transform-lch-c 20)
+        (ct-transform-hsluv-l (ct-get-hsluv-l background>>))))
+    )
 
   (setq tarp/theme*
     (ht

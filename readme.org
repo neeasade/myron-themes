@@ -23,7 +23,7 @@ Tarp colorschemes come flavored against different backgrounds, for different lev
 | :faded      | faded                  | comments                                     |
 | :primary    | identity               | functions, variables                         |
 | :assumed    | assumptions/core stuff | builtins, key words                          |
-| :alt        | rarely used fg         | types, matching string within search results |
+| :alt        | accent                 | types, matching string within search results |
 | :strings    | strings                | strings                                      |
 
 Some thoughts on general theme opinions:
