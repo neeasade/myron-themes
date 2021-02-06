@@ -11,13 +11,13 @@
          (ct-rotation-lch it -45)
          (-map (fn (tarp/nth <> it)) '(-1 1 2 4))
          (-map (fn (ct-transform-hsluv-l <> 43.596)) it)
-         (-map (fn (ct-tint-ratio <> background 4.5)) it))))
+         (-map (fn (ct-tint-ratio <> background 4.3)) it))))
 
     (ht
       (:background background)
 
-      (:foreground (ct-tint-ratio background background 8.5))
-      (:faded (ct-tint-ratio background background 6))
+      (:foreground (ct-tint-ratio background background 6.0))
+      (:faded (ct-tint-ratio background background 4.3))
 
       (:primary (nth 0 colors))
       (:assumed (nth 1 colors))
@@ -41,24 +41,22 @@
       (ct-iterate
         (ct-transform-lch-c alt 20)
         'ct-lab-lighten
-        (fn (> (ct-contrast-ratio <> faded) 4.0))))
+        (fn (> (ct-contrast-ratio <> faded) 3.5))))
 
     ;; new idea: these could be contrast based as well in relation to foreground
     (background>
       (-> background
-
         (ct-iterate
           'ct-lab-darken
           (fn (> (ct-name-distance <> background) 3)))
-        (ct-transform-hsl-h (ct-get-hsl-h assumed))
-        (ct-transform-hsluv-h (ct-get-hsluv-h assumed))))
+        (ct-transform-hsluv-h (ct-get-hsluv-h alt))))
 
     (background>>
       (-> background
         (ct-iterate
-          'ct-lab-darken (fn (> (ct-name-distance <> background) 6)))
-        (ct-transform-hsl-h (ct-get-hsl-h primary))
-        (ct-transform-hsluv-h (ct-get-hsluv-h primary)))))
+          'ct-lab-darken (fn (> (ct-name-distance <> background) 5)))
+        (ct-transform-hsluv-h (ct-get-hsluv-h primary))
+        )))
 
   (setq tarp/theme*
     (ht
@@ -88,6 +86,7 @@
     (ht-merge
       (ht-get tarp/theme* :normal)
       (ht
+        ;; compat
         (:foreground+ (tarp/get :foreground :focused))
         (:background+ (tarp/get :background :focused))
         (:background_ (tarp/get :background :weak))
