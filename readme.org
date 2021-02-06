@@ -6,38 +6,25 @@ Namespace prefix: ~tarp/~
 
 ** Installation
 
-First, install [[https://github.com/neeasade/ct.el#installation][ct.el]]. Then, install with [[https://github.com/raxod502/straight.el][straight.el]]:
+Install with [[https://github.com/raxod502/straight.el][straight.el]]:
 
 #+begin_src emacs-lisp
-(straight-use-package
- '(tarps
-   :host github
-   :repo "neeasade/tarps"
-   :branch "master"))
+(use-package tarps
+  :straight (tarps :type git :host github :repo "neeasade/tarps")
 #+end_src
-
-*** Dependencies
-
-- [[https://github.com/neeasade/color-tools.el][color-tools.el]]
-- [[https://github.com/belak/base16-emacs][base16-emacs]]
-- [[https://github.com/Wilfred/ht.el/][ht.el]]
-- [[https://github.com/magnars/s.el][s.el]]
-- [[https://github.com/Wilfred/helpful][helpful]]
-- [[https://github.com/troyp/fn.el][fn.el]]
 
 ** Fishing
 
 Tarp colorschemes come flavored against different backgrounds, for different levels of emphasis. This is to ensure the same contrast level across different contexts. The schemes are stored in a nested hash table, with a helper to access them -- EG ~(tarp/get :primary :strong)~ to get the primary foreground color meant to be used against the strong background (which you could get with ~(tarp/get :background :strong)~). The available background keys are: ~:normal :weak :strong :focused~. For each of those, the following foregrounds are available:
 
-| label        | meaning                             | example                                      |
-|--------------+-------------------------------------+----------------------------------------------|
-| :foreground  | default foreground                  |                                              |
-| :foreground+ | focused foreground                  | selected list item/search result             |
-| :faded       | (foreground) faded                  | comments                                     |
-| :primary     | (foreground) identity               | functions, variables                         |
-| :assumed     | (foreground) assumptions/core stuff | builtins, key words                          |
-| :alt         | (foreground) rarely used fg         | types, matching string within search results |
-| :strings     | (foreground) strings                | strings                                      |
+| label       | meaning                | example                                      |
+|-------------+------------------------+----------------------------------------------|
+| :foreground | default foreground     |                                              |
+| :faded      | faded                  | comments                                     |
+| :primary    | identity               | functions, variables                         |
+| :assumed    | assumptions/core stuff | builtins, key words                          |
+| :alt        | rarely used fg         | types, matching string within search results |
+| :strings    | strings                | strings                                      |
 
 Some thoughts on general theme opinions:
 
@@ -48,7 +35,7 @@ Some thoughts on general theme opinions:
 
 ** Local edits
 
-The function ~tarp/tweak-function~ will be called before base16 is bootstrapped. You may change all the values of the scheme through the hashtable variable ~tarp/theme~ here. An example is shown below. ~tarp/set~. You could do things here like enforce preferred contrast constraints, or try to account for your [[https://notes.neeasade.net/color-spaces.html#h-f23b8fe5-37a3-4ead-9d9d-a7139f76d532][viewing setting]].
+The function ~tarp/tweak-function~ will be called before base16 is bootstrapped. You may change all the values of the scheme through the hashtable variable ~tarp/theme~ here. An example is shown below. ~tarp/set~ is a convienence function. You could do things here like enforce preferred contrast constraints, or try to account for your [[https://notes.neeasade.net/color-spaces.html#h-f23b8fe5-37a3-4ead-9d9d-a7139f76d532][viewing setting]].
 
 #+begin_src emacs-lisp
 (setq tarp/tweak-function

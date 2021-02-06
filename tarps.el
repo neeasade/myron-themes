@@ -4,20 +4,20 @@
 
 ;; Author: neeasade <neeasade@gmail.com>
 ;; URL: https://github.com/neeasade/tarps
-;; Package-Requires: (ct base16-theme ht s helpful fn)
+;; Package-Requires: ((emacs "26.1") (ct "0.1") (helpful "0.19") (fn "0.1.2") (s "1.12.0") (ht "2.3") (base16-theme "1.1"))
 ;; Version: 0.1
 
 ;;; Commentary:
-;; This code has evolved "organically" -- tarp/theme* and tarp/theme are mutable globals assumed to be set by the themes.
 
 ;;; Code:
+;; This code has evolved "organically" -- tarp/theme* and tarp/theme are mutable globals assumed to be set by the themes.
 
+(require 'ct)
 (require 'helpful)
 (require 'ht)
 (require 'fn)
 (require 's)
 (require 'base16-theme)
-(require 'ct)
 
 (defcustom tarp/tweak-function nil
   "A function hook that allows you to tweak the colorscheme before it is mapped to faces"
@@ -43,18 +43,19 @@
 
   (defun tarp/show-contrast-against (level)
     "show contrast levels of fg colors in tarp/theme against BG."
-    (-map (fn (format "%s: %s" <>
-                (ct-contrast-ratio
-                  (tarp/get <> level) (tarp/get :background level))))
+    (-map (fn (format "%s: %s %s"
+                <>
+                (ct-contrast-ratio (tarp/get <> level) (tarp/get :background level))
+                (tarp/get <> level)))
       '(:foreground :faded :primary :assumed :alt :strings)))
 
   (->>
     '(:normal :weak :strong :focused)
 
     (-mapcat
-      (fn
-        `(,(format "against background %s %s" <> (tarp/get :background <>))
-           ,@(tarp/show-contrast-against (tarp/get <>))
+      (lambda (level)
+        `(,(format "against background %s %s" level (tarp/get :background level))
+           ,@(tarp/show-contrast-against level)
            "------")))
     (s-join "\n")
     (message)))
@@ -125,6 +126,18 @@
      (,face :background ,(tarp/get :background back-label))
      (,face :foreground ,(tarp/get (or fore-label :foreground) back-label))))
 
+(defun tarp/theme-get-parent (face label theme-faces)
+  ;; search up throught parents of FACE (via :inherit) that firstly has a non-nil LABEL (or return nil)
+  ;; theme-faces looks like ((face <plist spec>) (face <plist-spec>)..)
+  (let* ((match (first (-filter (fn (eq (first <>) face)) theme-faces)))
+          (face (car match))
+          (spec (cdr match)))
+    (if (plist-member spec label)
+      (plist-get spec label)
+      (if (plist-member spec :inherit)
+        (tarp/theme-get-parent (plist-get spec :inherit) label theme-faces)
+        nil))))
+
 (defun tarp/theme-make-faces (theme-colors)
   (let*
     (
@@ -176,7 +189,6 @@
            ;; TODO: make this optional, it's pretty aggresive
            (org-link :box (:line-width 1
                             :color ,(ct-lessen (tarp/get :faded :normal) 30)
-
                             ;; :style released-button
                             :style nil
                             ;; (:line-width -1 :style released-button)
@@ -188,6 +200,8 @@
                   (avy-lead-face-0 :strong :assumed)
                   (avy-lead-face-1 :strong :alt)
                   (avy-lead-face-2 :strong :strings)
+
+                  (completions-common-part :normal :alt)
 
                   (tooltip :weak)
 
@@ -220,25 +234,76 @@
         ;; apply our individual changes to the original theme
         (-reduce-from
           (lambda (state theme-change)
-            (let
-              ((face (first theme-change))
-                (key (second theme-change))
-                (value (third theme-change)))
+            (seq-let (face key value) theme-change
               (if (-contains-p (-map 'first state) face)
                 (-map
                   (lambda (entry)
                     (if (eq (first entry) face)
-                      (append
-                        (list face)
-                        (plist-put (cdr entry) key value))
-                      entry))
+                      `(,face ,@(plist-put (cdr entry) key value))
+                      entry)
+                    )
                   state)
                 (cons theme-change state))))
           original-theme
-          ;; '()
-          theme-changes)))
-    new-theme
+          theme-changes))
+
+      (new-theme-experiment
+        ;; idea: auto-conform foreground faces based on found background
+        ;; this way we don't have to find where to adjust intensity further
+        (-map
+          (lambda (face-spec)
+            (let*
+              ((face (first face-spec))
+                (spec (cdr face-spec))
+
+                (background (tarp/theme-get-parent face :background new-theme))
+                (foreground (tarp/theme-get-parent face :foreground new-theme))
+
+                (background-color
+                  (if (symbolp background)
+                    (plist-get theme-colors (intern (format ":%s" (prin1-to-string background))))
+                    background))
+
+                (background-symbol
+                  (if background-color
+                    (plist-get
+                      (-flatten
+                        (-map
+                          (lambda (level)
+                            (list (intern (tarp/get :background level)) level))
+                          '(:normal :weak :strong :focused)))
+                      (intern background-color))
+                    :normal))
+
+                (foreground-color
+                  (if (symbolp foreground)
+                    (plist-get theme-colors (intern (format ":%s" (prin1-to-string foreground))))
+                    foreground))
+
+                (foreground-symbol
+                  (if foreground-color
+                    (plist-get
+                      (-flatten
+                        (-map
+                          (lambda (kind)
+                            (list (intern (tarp/get kind)) kind))
+                          '(:foreground :faded :primary :alt :assumed :strings)))
+                      (intern foreground-color))
+                    :foreground))
+
+                (new-foreground
+                  (when foreground-symbol
+                    (tarp/get foreground-symbol background-symbol))))
+
+              (if (plist-member spec :background)
+                `(,face ,@(plist-put spec :foreground (or new-foreground (plist-get spec :foreground))))
+                ;; if no background was ever set, just return the OG:
+                face-spec)))
+          new-theme)))
+
     ;; original-theme
+    ;; new-theme
+    new-theme-experiment
     ))
 
 (defun tarp/base16-theme-define (theme-name)
