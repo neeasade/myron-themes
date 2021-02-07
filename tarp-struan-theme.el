@@ -12,6 +12,7 @@
                   (ct-make-hsluv 265 60 40) 60)
                 (-map (fn (tarp/nth <> it))
                   '(1 -1 2 3))
+                (-map (fn (ct-transform-hsluv-l <> 80)) it)
                 (-map
                   (fn (ct-tint-ratio <> background 4.3))
                   it)))
@@ -34,7 +35,11 @@
       (:primary (nth 0 colors))
       (:assumed (nth 1 colors))
       (:alt (nth 2 colors))
-      (:strings (ct-transform-lch-c (nth 3 colors) 100)))))
+      (:strings
+        (-> (nth 3 colors)
+          (ct-transform-lch-l (-partial '+ 10))
+          (ct-transform-lch-c 100)
+          (ct-tint-ratio background 4.3))))))
 
 (let*
   (
@@ -51,19 +56,21 @@
       (-> background
         (ct-iterate
           'ct-lab-darken
-          (fn (> (ct-name-distance <> background) 3)))
+          (fn (> (ct-name-distance <> background) 4)))
         (ct-transform-hsluv-h (ct-get-hsluv-h alt))))
 
     (background>>
       (-> background
         (ct-iterate
-          'ct-lab-darken (fn (> (ct-name-distance <> background) 5)))
+          'ct-lab-darken
+          (fn (> (ct-name-distance <> background) 7)))
         (ct-transform-hsluv-h (ct-get-hsluv-h primary))))
 
     (background+
       (-> alt
         (ct-transform-lch-c 25)
-        (ct-transform-hsluv-l (ct-get-hsluv-l background>>)))))
+        (ct-transform-hsluv-l
+          (ct-get-hsluv-l background>>)))))
 
   (setq tarp/theme*
     (ht

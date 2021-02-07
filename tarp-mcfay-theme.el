@@ -41,20 +41,22 @@
       (-> background
         (ct-iterate
           'ct-lab-darken
-          (fn (> (ct-name-distance <> background) 3)))
+          (fn (> (ct-name-distance <> background) 4)))
         (ct-transform-hsluv-h (ct-get-hsluv-h alt))))
 
     (background>>
       (-> background
         (ct-iterate
-          'ct-lab-darken (fn (> (ct-name-distance <> background) 5)))
+          'ct-lab-darken
+          (fn (> (ct-name-distance <> background) 7)))
         (ct-transform-hsluv-h (ct-get-hsluv-h primary))
         ))
 
     (background+
       (-> alt
         (ct-transform-lch-c 20)
-        (ct-transform-hsluv-l (ct-get-hsluv-l background>>))))
+        (ct-transform-hsluv-l
+          (ct-get-hsluv-l background>>))))
     )
 
   (setq tarp/theme*
