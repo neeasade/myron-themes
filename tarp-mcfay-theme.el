@@ -16,7 +16,7 @@
     (ht
       (:background background)
 
-      (:foreground (ct-tint-ratio background background 7.0))
+      (:foreground (ct-tint-ratio background background 7.7))
       (:faded (ct-tint-ratio background background 4.3))
 
       (:primary (nth 0 colors))
