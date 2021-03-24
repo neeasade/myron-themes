@@ -1,8 +1,14 @@
-A pair of light themes for GUI Emacs, built on top of [[https://github.com/belak/base16-emacs][base16-emacs]], with some tweaks.
+A pair of light themes for GUI Emacs, built on top of [[https://github.com/belak/base16-emacs][base16-emacs]].
 
 Namespace prefix: ~tarp/~
 
-[[https://notes.neeasade.net/tarps.html][Screenshots]]
+[[https://notes.neeasade.net/tarps.html][Screenshots]] (slightly out of date)
+
+** Features
+
+- Bootstraps base16-emacs for wide coverage
+- Constant contrast across different emphasis contexts (see 'Fishing')
+- Conformity of markup texts to look like org mode (markdown, rst, adoc)
 
 ** Installation
 

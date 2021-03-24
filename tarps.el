@@ -244,40 +244,41 @@
                (-partition 2
                  '(
                     ;; HEADINGS
-                    org-level-1 (markup-title-0-face markdown-header-face-1)
-                    org-level-2 (markup-title-1-face markdown-header-face-2)
-                    org-level-3 (markup-title-2-face markdown-header-face-3)
-                    org-level-4 (markup-title-3-face markdown-header-face-4)
-                    org-level-5 (markup-title-4-face markdown-header-face-5)
+                    org-level-1 (markup-title-0-face markdown-header-face-1 rst-level-1)
+                    org-level-2 (markup-title-1-face markdown-header-face-2 rst-level-2)
+                    org-level-3 (markup-title-2-face markdown-header-face-3 rst-level-3)
+                    org-level-4 (markup-title-3-face markdown-header-face-4 rst-level-4)
+                    org-level-5 (markup-title-4-face markdown-header-face-5 rst-level-5)
 
                     ;; the leading #'s of the headings in markdown
                     ;; using org-level-4 so it's not thicc on nested markdown headings
                     org-level-4 markdown-header-delimiter-face
 
                     ;; INLINE CODE
+                    ;; NB: rst-literal applies for both inline-code and blocks of code
                     org-code (markup-typewriter-face markdown-inline-code-face)
 
                     ;; BLOCKS OF CODE
-                    org-block (markup-verbatim-face markdown-code-face)
+                    org-block (markup-verbatim-face markdown-code-face rst-literal)
 
                     ;; BUILTINS/META
-                    bold (markup-strong-face markdown-bold-face)
+                    bold (markup-strong-face markdown-bold-face rst-emphasis2)
+                    italic (markup-emphasis-face rst-emphasis1)
 
-                    ;; this is for like surrounding code stuff
-                    org-block-begin-line
-                    (
-                      ;; in adoc-mode, meta-hide-face is also header leader
-                      ;; markup-meta-hide-face
-                      markdown-markup-face
-                      markup-meta-face
-                      )
+                    org-meta-line (markup-complex-replacement-face
+                                    markup-meta-hide-face
+                                    markdown-markup-face
+                                    markup-meta-face
+                                    rst-directive
+                                    rst-adornment)
 
-                    org-drawer (markup-complex-replacement-face markup-meta-hide-face)
-
-                    org-link (markup-internal-reference-face markdown-link-face)
+                    ;; non-org modes make the distinction between labels and destinations
+                    ;; org mode when showing link markup treats url/dest as default face, so I'm choosing to match that
+                    default (markup-internal-reference-face markdown-url-face)
+                    org-link (markup-reference-face markdown-link-face rst-reference rst-external)
 
                     ;; org list elements have no face
-                    default (markdown-list-face markup-list-face)
+                    default (markdown-list-face markup-list-face rst-block)
 
                     org-checkbox markdown-gfm-checkbox-face
                     )))
