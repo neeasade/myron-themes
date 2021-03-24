@@ -120,14 +120,8 @@
       (first (helpful--definition sym t))
       (second (helpful--definition sym t)))))
 
-(defun tarp/theme-face (face back-label &optional fore-label)
-  `(
-     (,face :inverse-video nil)
-     (,face :background ,(tarp/get :background back-label))
-     (,face :foreground ,(tarp/get (or fore-label :foreground) back-label))))
-
 (defun tarp/theme-get-parent (face label theme-faces)
-  ;; search up throught parents of FACE (via :inherit) that firstly has a non-nil LABEL (or return nil)
+  ;; search up throughout parents of FACE (via :inherit) that firstly has a non-nil LABEL (or return nil)
   ;; theme-faces looks like ((face <plist spec>) (face <plist-spec>)..)
   (let* ((match (first (-filter (fn (eq (first <>) face)) theme-faces)))
           (face (car match))
@@ -137,6 +131,17 @@
       (if (plist-member spec :inherit)
         (tarp/theme-get-parent (plist-get spec :inherit) label theme-faces)
         nil))))
+
+(defun tarp/theme-face-derive (parent face)
+  "Make FACE derive from PARENT."
+  (->> `(:foreground nil
+          :background nil
+          :underline nil
+          :height unspecified
+          :inherit ,parent
+          :box unspecified)
+    (-partition 2)
+    (-map (-partial 'cons face))))
 
 (defun tarp/theme-make-faces (theme-colors)
   (let*
@@ -152,25 +157,17 @@
       ;; note individual changes
       (theme-changes
         `(
-           (magit-diff-context-highlight :background
-             ,(tarp/get :background :weak))
-
-           (font-lock-comment-delimiter-face :foreground faded)
-
-           (comint-highlight-prompt :foreground foreground)
-
            (fringe :background nil)
 
+           (font-lock-comment-delimiter-face :foreground faded)
            (font-lock-comment-face :background nil)
-
 
            (window-divider :foreground faded)
 
-           ;; match variables to functions
+           ;; ｉｄｅｎｔｉｔｙ
            (font-lock-function-name-face :foreground primary)
            (font-lock-variable-name-face :foreground primary)
 
-           (org-date :underline nil)
            (org-level-1 :foreground foreground)
            (org-level-2 :foreground foreground)
            (org-level-3 :foreground foreground)
@@ -181,27 +178,34 @@
            (whitespace-space :background nil)
            (whitespace-tab :background nil)
 
+           (org-date :underline nil)
            (flycheck-warning :underline nil)
            (flycheck-info :underline nil)
 
+           ;; these are outside the below b/c they are just bg emphasis, keep fg color
            (secondary-selection :background ,(tarp/get :background :strong))
+           (magit-diff-context-highlight :background ,(tarp/get :background :weak))
 
-           ;; TODO: make this optional, it's pretty aggresive
-           (org-link :box (:line-width 1
-                            :color ,(ct-lessen (tarp/get :faded :normal) 30)
-                            ;; :style released-button
-                            :style nil
-                            ;; (:line-width -1 :style released-button)
-                            ))
-
-           ,@(-mapcat (-applify 'tarp/theme-face)
-               '(
+           ,@(-mapcat
+               (lambda (args)
+                 (seq-let (face back-label fore-label) args
+                   (->> `(:inverse-video nil
+                           :background ,(tarp/get :background back-label)
+                           :foreground ,(tarp/get (or fore-label :foreground) back-label))
+                     (-partition 2)
+                     (-map (-partial 'cons face)))))
+               `(
                   (avy-lead-face :strong :primary)
                   (avy-lead-face-0 :strong :assumed)
                   (avy-lead-face-1 :strong :alt)
                   (avy-lead-face-2 :strong :strings)
 
+                  (eros-result-overlay-face :strong :foreground)
+                  (cider-result-overlay-face :strong :foreground)
+
                   (completions-common-part :normal :primary)
+
+                  (comint-highlight-prompt :normal :assumed)
 
                   (tooltip :weak)
 
@@ -223,9 +227,60 @@
                   (lazy-highlight :strong)
                   (ivy-match :focused)
 
-                  (org-link :weak)
+                  (org-link :weak :alt)
                   (org-code :weak)
+
+                  (show-paren-match :focused)
+                  (show-paren-match-expression :focused)
                   ))
+
+           ;; inheritors
+           ;; goal here is mostly to theme other markup languages like org
+           ,@(-mapcat
+               (lambda (args)
+                 (seq-let (parent children) args
+                   (-mapcat (-partial #'tarp/theme-face-derive parent)
+                     (if (listp children) children (list children)))))
+               (-partition 2
+                 '(
+                    ;; HEADINGS
+                    org-level-1 (markup-title-0-face markdown-header-face-1)
+                    org-level-2 (markup-title-1-face markdown-header-face-2)
+                    org-level-3 (markup-title-2-face markdown-header-face-3)
+                    org-level-4 (markup-title-3-face markdown-header-face-4)
+                    org-level-5 (markup-title-4-face markdown-header-face-5)
+
+                    ;; the leading #'s of the headings in markdown
+                    ;; using org-level-4 so it's not thicc on nested markdown headings
+                    org-level-4 markdown-header-delimiter-face
+
+                    ;; INLINE CODE
+                    org-code (markup-typewriter-face markdown-inline-code-face)
+
+                    ;; BLOCKS OF CODE
+                    org-block (markup-verbatim-face markdown-code-face)
+
+                    ;; BUILTINS/META
+                    bold (markup-strong-face markdown-bold-face)
+
+                    ;; this is for like surrounding code stuff
+                    org-block-begin-line
+                    (
+                      ;; in adoc-mode, meta-hide-face is also header leader
+                      ;; markup-meta-hide-face
+                      markdown-markup-face
+                      markup-meta-face
+                      )
+
+                    org-drawer (markup-complex-replacement-face markup-meta-hide-face)
+
+                    org-link (markup-internal-reference-face markdown-link-face)
+
+                    ;; org list elements have no face
+                    default (markdown-list-face markup-list-face)
+
+                    org-checkbox markdown-gfm-checkbox-face
+                    )))
 
            ;; TODO: There should be a user option here to override faces with intents if wanted
            ))
@@ -240,8 +295,7 @@
                   (lambda (entry)
                     (if (eq (first entry) face)
                       `(,face ,@(plist-put (cdr entry) key value))
-                      entry)
-                    )
+                      entry))
                   state)
                 (cons theme-change state))))
           original-theme
