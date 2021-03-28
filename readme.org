@@ -6,7 +6,7 @@ Namespace prefix: ~tarp/~
 
 ** Features
 
-- Bootstraps base16-emacs for wide coverage
+- Bootstraps base16-emacs for wide emacs package coverage
 - Constant contrast across different emphasis contexts (see 'Fishing')
 - Conformity of markup texts to look like org mode (markdown, rst, adoc)
 

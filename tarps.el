@@ -259,7 +259,7 @@
                     org-code (markup-typewriter-face markdown-inline-code-face)
 
                     ;; BLOCKS OF CODE
-                    org-block (markup-verbatim-face markdown-code-face rst-literal)
+                    org-block (markup-verbatim-face markdown-code-face rst-literal markup-code-face)
 
                     ;; BUILTINS/META
                     bold (markup-strong-face markdown-bold-face rst-emphasis2)
