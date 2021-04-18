@@ -275,7 +275,7 @@
                     ;; non-org modes make the distinction between labels and destinations
                     ;; org mode when showing link markup treats url/dest as default face, so I'm choosing to match that
                     default (markup-internal-reference-face markdown-url-face)
-                    org-link (markup-reference-face markdown-link-face rst-reference rst-external)
+                    org-link (markup-reference-face markdown-link-face rst-reference rst-external lui-button-face)
 
                     ;; org list elements have no face
                     default (markdown-list-face markup-list-face rst-block)
