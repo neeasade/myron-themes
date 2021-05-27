@@ -163,6 +163,7 @@
            (font-lock-comment-face :background nil)
 
            (window-divider :foreground faded)
+           (vertical-border :foreground faded)
 
            ;; ｉｄｅｎｔｉｔｙ
            (font-lock-function-name-face :foreground primary)
