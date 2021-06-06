@@ -187,6 +187,52 @@
            (secondary-selection :background ,(tarp/get :background :strong))
            (magit-diff-context-highlight :background ,(tarp/get :background :weak))
 
+           ;; magit diff faces aren't included in base16-emacs
+           ,@(when (ct-is-light-p (tarp/get :background))
+               ;; only handling light for now
+               ;; (main motivation for adding these here is terminal emacs
+               ;; failed to detect the light background)
+               ;;
+               ;; theory: steal the hue from the green background used in
+               ;; vanilla magit-diff-added and then apply it to background
+               ;; levels used in theme
+               (let*
+                 (
+                   (og-green "#ddffdd")
+                   (og-green-hue (ct-get-hsluv-h og-green))
+
+                   (bg-green-strong (-> (tarp/get :background :normal)
+                                      (ct-transform-hsluv-h og-green-hue)))
+
+                   (bg-green-weak (ct-transform-hsluv-h (tarp/get :background :strong)
+                                    og-green-hue))
+
+                   (og-red "#ffdddd")
+                   (og-red-hue (ct-get-hsluv-h og-red))
+
+                   (bg-red-strong (ct-transform-hsluv-h (tarp/get :background :weak)
+                                    og-red-hue))
+
+                   (bg-red-weak (ct-transform-hsluv-h (tarp/get :background :strong)
+                                  og-red-hue)))
+                 `(
+                    ;; ignore the above and use the builtin colors for now
+
+                    (magit-diff-added :foreground "#22aa22" )
+                    (magit-diff-added-highlight :foreground  "#22aa22")
+
+                    (magit-diff-added :background "#ddffdd")
+                    (magit-diff-added-highlight :background  "#cceecc")
+
+                    (magit-diff-removed :foreground "#aa2222")
+                    (magit-diff-removed-highlight :foreground "#aa2222")
+
+                    (magit-diff-removed :background "#ffdddd")
+                    (magit-diff-removed-highlight :background "#eecccc")
+                    )))
+
+
+
            ,@(-mapcat
                (lambda (args)
                  (seq-let (face back-label fore-label) args
@@ -282,6 +328,13 @@
                     default (markdown-list-face markup-list-face rst-block)
 
                     org-checkbox markdown-gfm-checkbox-face
+
+
+
+                    ;; make cider inline test faces similar to magit
+                    ;; (abusing for consistency)
+                    magit-diff-removed-highlight (cider-test-failure-face cider-test-error-face)
+
                     )))
 
            ;; TODO: There should be a user option here to override faces with intents if wanted
