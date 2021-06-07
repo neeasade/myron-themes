@@ -334,6 +334,7 @@
                     ;; make cider inline test faces similar to magit
                     ;; (abusing for consistency)
                     magit-diff-removed-highlight (cider-test-failure-face cider-test-error-face)
+                    magit-diff-added-highlight cider-test-success-face
 
                     )))
 
