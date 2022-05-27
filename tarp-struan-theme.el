@@ -1,5 +1,5 @@
 ;; -*- lexical-binding: t; -*-
-;; temporary experimental version of struan, while approaching tarp 2.0
+;; namesake: the Struan family, from James Clavell's Asian Saga series
 
 (require 'tarps)
 
@@ -89,24 +89,7 @@
       ;; strong emphasis
       (:strong (tarp/struan-get-colors background>>))))
 
-  ;; convienence
-  (defun tarp/get (label &optional emphasis )
-    (ht-get* tarp/theme* (or emphasis :normal) label))
-
-  ;; shim:
-  (setq tarp/theme
-    (ht-merge
-      (ht-get tarp/theme* :normal)
-      (ht
-        (:foreground+ (tarp/get :foreground :focused))
-        (:background+ (tarp/get :background :focused))
-        (:background_ (tarp/get :background :weak))
-        (:background__ (tarp/get :background :strong))
-        (:accent1  (tarp/get :primary))
-        (:accent1_ (tarp/get :assumed))
-        (:accent2  (tarp/get :alt))
-        (:accent2_ (tarp/get :strings))
-        (:foreground_ (tarp/get :faded))))))
+  (setq tarp/theme (ht-get tarp/theme* :normal)))
 
 (deftheme tarp-struan)
 (tarp/base16-theme-define 'tarp-struan)

@@ -1,4 +1,5 @@
 ;; -*- lexical-binding: t; -*-
+;; Namesake: Jamie McFay, from the James Clavell novel Gai-Jin
 
 (require 'tarps)
 
@@ -78,26 +79,11 @@
       ;; strong emphasis
       (:strong (tarp/mcfay-get-colors background>>))))
 
-  ;; todo: conform hue of all foregrounds:
+  ;; todo?: conform hue of all foregrounds:
   ;; (let ((h (ct-get-hsl-l (tarp/get :foreground))))
   ;;   (ht-set tarp/theme* :weak))
 
-  ;; shim:
-  (setq tarp/theme
-    (ht-merge
-      (ht-get tarp/theme* :normal)
-      (ht
-        ;; compat
-        (:foreground+ (tarp/get :foreground :focused))
-        (:background+ (tarp/get :background :focused))
-        (:background_ (tarp/get :background :weak))
-        (:background__ (tarp/get :background :strong))
-        (:accent1  (tarp/get :primary))
-        (:accent1_ (tarp/get :assumed))
-        (:accent2  (tarp/get :alt))
-        (:accent2_ (tarp/get :strings))
-        (:foreground_ (tarp/get :faded)))))
-  )
+  (setq tarp/theme (ht-get tarp/theme* :normal)))
 
 (deftheme tarp-mcfay)
 (tarp/base16-theme-define 'tarp-mcfay)
