@@ -4,7 +4,7 @@
 
 ;; Author: neeasade <neeasade@gmail.com>
 ;; URL: https://github.com/neeasade/tarps
-;; Package-Requires: ((emacs "26.1") (ct "0.1") (helpful "0.19") (fn "0.1.2") (s "1.12.0") (ht "2.3") (base16-theme "1.1"))
+;; Package-Requires: ((emacs "26.1") (ct "0.1") (helpful "0.19") (s "1.12.0") (ht "2.3") (base16-theme "3.0"))
 ;; Version: 0.1
 
 ;;; Commentary:
@@ -14,14 +14,9 @@
 
 (require 'base16-theme)
 (require 'ct)
-(require 'fn)
 (require 'helpful)
 (require 'ht)
 (require 's)
-
-;; todo: replace instances of this
-(defalias 'first 'car)
-(defalias 'second 'cadr)
 
 (defcustom tarp/tweak-function nil
   "A function hook that allows you to tweak the colorscheme before it is mapped to faces"
@@ -43,10 +38,12 @@
 
 (defun tarp/show-contrast-against (level)
   "show contrast levels of fg colors in tarp/theme against BG."
-  (-map (fn (format "%s: %s %s"
-              <>
-              (ct-contrast-ratio (tarp/get <> level) (tarp/get :background level))
-              (tarp/get <> level)))
+  (-map (lambda (label)
+          (let ((color (tarp/get label level)))
+            (format "%s: %s %s"
+              label
+              (ct-contrast-ratio color (tarp/get :background level))
+              color)))
     '(:foreground :faded :primary :assumed :alt :strings)))
 
 (defun tarp/show-contrasts ()
@@ -115,17 +112,16 @@
       )))
 
 (defun tarp/get-function-sexp (sym)
-  "get SYM as a quoted list, using helpful.el"
+  "Get SYM as a quoted list, using helpful.el."
   (read
-    (helpful--source sym t
-      (first (helpful--definition sym t))
-      (second (helpful--definition sym t)))))
+    (seq-let (buffer point _) (helpful--definition sym t)
+      (helpful--source sym t buffer point))))
 
 (defun tarp/theme-get-parent (face label theme-faces)
   ;; search up throughout parents of FACE (via :inherit) that firstly has a non-nil LABEL (or return nil)
   ;; theme-faces looks like ((face <plist spec>) (face <plist-spec>)..)
   (let* ((match (-first (lambda (theme-face)
-                          (eq (first theme-face) face))
+                          (eq (-first-item theme-face) face))
                   theme-faces))
           (face (car match))
           (spec (cdr match)))
@@ -151,11 +147,10 @@
     (
       ;; steal the list that's hardcoded in base16-theme-define
       ;; cf https://github.com/belak/base16-emacs/blob/93b1513a9994355492314e809cdbfb0d21f1e30d/base16-theme.el#L186
-      (original-theme (->>
-                        (tarp/get-function-sexp 'base16-theme-define)
+      (original-theme (->> (tarp/get-function-sexp 'base16-theme-define)
                         (nth 4)
                         (nth 3)
-                        (second)))
+                        (-second-item)))
 
       ;; note individual changes
       (theme-changes
@@ -362,10 +357,10 @@
         ;; apply our individual changes to the original theme
         (-reduce-from
           (-lambda (state (face key value))
-            (if (-contains-p (-map 'first state) face)
+            (if (-contains-p (-map #'-first-item state) face)
               (-map
                 (lambda (entry)
-                  (if (eq (first entry) face)
+                  (if (eq (-first-item entry) face)
                     `(,face ,@(plist-put (cdr entry) key value))
                     entry))
                 state)
@@ -379,7 +374,7 @@
         (-map
           (lambda (face-spec)
             (let*
-              ((face (first face-spec))
+              ((face (car face-spec))
                 (spec (cdr face-spec))
 
                 (background (tarp/theme-get-parent face :background new-theme))
@@ -438,9 +433,7 @@
     (funcall tarp/tweak-function))
 
   (let ((theme-colors (append (tarp/map-to-base16) (ht-to-plist tarp/theme))))
-    (funcall
-      ;; this function was renamed base16-set-faces -> base16-theme-set-faces
-      (if (fboundp 'base16-set-faces) 'base16-set-faces 'base16-theme-set-faces)
+    (base16-theme-set-faces
       theme-name theme-colors
       (tarp/theme-make-faces theme-colors))
 
