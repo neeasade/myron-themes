@@ -1,10 +1,10 @@
 ;;; tarps.el --- color themes for emacs -*- coding: utf-8; lexical-binding: t -*-
 
-;; Copyright (C) 2020 neeasade
+;; Copyright (C) 2022 neeasade
 
 ;; Author: neeasade <neeasade@gmail.com>
 ;; URL: https://github.com/neeasade/tarps
-;; Package-Requires: ((emacs "26.1") (ct "0.1") (helpful "0.19") (s "1.12.0") (ht "2.3") (base16-theme "3.0"))
+;; Package-Requires: ((emacs "26.1") (ct "0.2") (fn "0.1.2") (helpful "0.19") (s "1.12.0") (ht "2.3") (base16-theme "3.0"))
 ;; Version: 0.1
 
 ;;; Commentary:
@@ -205,18 +205,18 @@
                    (og-green-hue (ct-get-hsluv-h og-green))
 
                    (bg-green-strong (-> (tarp/get :background :normal)
-                                      (ct-transform-hsluv-h og-green-hue)))
+                                      (ct-edit-hsluv-h og-green-hue)))
 
-                   (bg-green-weak (ct-transform-hsluv-h (tarp/get :background :strong)
+                   (bg-green-weak (ct-edit-hsluv-h (tarp/get :background :strong)
                                     og-green-hue))
 
                    (og-red "#ffdddd")
                    (og-red-hue (ct-get-hsluv-h og-red))
 
-                   (bg-red-strong (ct-transform-hsluv-h (tarp/get :background :weak)
+                   (bg-red-strong (ct-edit-hsluv-h (tarp/get :background :weak)
                                     og-red-hue))
 
-                   (bg-red-weak (ct-transform-hsluv-h (tarp/get :background :strong)
+                   (bg-red-weak (ct-edit-hsluv-h (tarp/get :background :strong)
                                   og-red-hue)))
                  `(
                     ;; ignore the above and use the builtin colors for now

@@ -1,13 +1,11 @@
-A pair of light themes for GUI Emacs, built on top of [[https://github.com/belak/base16-emacs][base16-emacs]].
+🟠 🔴 🟡 🟤 🟢 🟣 🔵
 
-Namespace prefix: ~tarp/~
-
-[[https://notes.neeasade.net/tarps.html][Screenshots]] (slightly out of date)
+TODO: Screenshots/screenshot generation
 
 ** Features
 
-- Bootstraps base16-emacs for wide emacs package coverage
-- Constant contrast across different emphasis contexts (see 'Fishing')
+- Bootstraps [[https://github.com/base16-project/base16-emacs][base16-emacs]] for wide emacs package coverage
+- Constant contrast across different emphasis contexts
 - Conformity of markup texts to look like org mode (markdown, rst, adoc)
 
 ** Installation
@@ -15,8 +13,7 @@ Namespace prefix: ~tarp/~
 Install with [[https://github.com/raxod502/straight.el][straight.el]]:
 
 #+begin_src emacs-lisp
-(use-package tarps
-  :straight (tarps :type git :host github :repo "neeasade/tarps")
+(straight-use-package '(tarps :host github :repo "neeasade/tarps" :branch "master"))
 #+end_src
 
 ** Fishing
@@ -32,12 +29,11 @@ Tarp colorschemes come flavored against different backgrounds, for different lev
 | :alt        | accent                 | types, matching string within search results |
 | :strings    | strings                | strings                                      |
 
-Some thoughts on general theme opinions:
+Some thoughts on my general theme opinions:
 
 - Strings are important enough to get their own color for emphasis because they represent the edges or barriers at which things communicate sometimes
 - Identity between functions and variables can be blended (lisp-1 type of feel)
 - "focused" colors should be consistent as an indicator of what's about to be selected/or where the cursor is
-# - Different levels of BG sets allow for consistent communication across contrasted emphasis contexts
 
 ** Local edits
 
@@ -48,7 +44,7 @@ The function ~tarp/tweak-function~ will be called before base16 is bootstrapped.
       (lambda ()
         ;; max chroma on the faded foreground
         (tarp/set :faded :normal
-                  (ct-transform-lch-c
+                  (ct-edit-lch-c
                    (tarp/get :faded)
                    100))
 

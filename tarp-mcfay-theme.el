@@ -11,7 +11,7 @@
          (ct-make-hsluv 270 75 43.596)
          (ct-rotation-lch it -45)
          (-map (fn (tarp/nth <> it)) '(-1 1 2 4))
-         (-map (fn (ct-transform-hsluv-l <> 43.596)) it)
+         (-map (fn (ct-edit-hsluv-l <> 43.596)) it)
          (-map (fn (ct-tint-ratio <> background 4.3)) it))))
 
     (ht
@@ -23,7 +23,7 @@
       (:primary (nth 0 colors))
       (:assumed (nth 1 colors))
       (:alt (nth 2 colors))
-      (:strings (ct-transform-lch-c (nth 3 colors) 100)))))
+      (:strings (ct-edit-lch-c (nth 3 colors) 100)))))
 
 (let*
   (
@@ -40,23 +40,21 @@
 
     (background>
       (-> background
-        (ct-iterate
-          'ct-lab-darken
+        (ct-iterate 'ct-edit-lab-l-dec
           (fn (> (ct-name-distance <> background) 4)))
-        (ct-transform-hsluv-h (ct-get-hsluv-h alt))))
+        (ct-edit-hsluv-h (ct-get-hsluv-h alt))))
 
     (background>>
       (-> background
-        (ct-iterate
-          'ct-lab-darken
+        (ct-iterate 'ct-edit-lab-l-dec
           (fn (> (ct-name-distance <> background) 7)))
-        (ct-transform-hsluv-h (ct-get-hsluv-h primary))
+        (ct-edit-hsluv-h (ct-get-hsluv-h primary))
         ))
 
     (background+
       (-> alt
-        (ct-transform-lch-c 20)
-        (ct-transform-hsluv-l
+        (ct-edit-lch-c 20)
+        (ct-edit-hsluv-l
           (ct-get-hsluv-l background>>))))
     )
 
