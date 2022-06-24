@@ -6,16 +6,12 @@
 (defun tarp/struan-get-colors (background)
   "get the foreground colors against a specific background"
   (let*
-    (
-      (colors (-->
-                (ct-rotation-hsluv
-                  (ct-make-hsluv 265 60 40) 60)
-                (-map (fn (tarp/nth <> it))
-                  '(1 -1 2 3))
-                (-map (fn (ct-edit-hsluv-l <> 80)) it)
-                (-map
-                  (fn (ct-tint-ratio <> background 4.3))
-                  it)))
+    ((colors (--> (ct-make-hsluv 265 60 40)
+               (ct-rotation-hsluv it 60)
+               (-map (fn (tarp/nth <> it))
+                 '(1 -1 2 3))
+               (-map (fn (ct-edit-hsluv-l <> 80)) it)
+               (-map (fn (ct-tint-ratio <> background 4.3)) it)))
 
       (foreground (ct-tint-ratio background background 7))
 
@@ -41,16 +37,10 @@
           (ct-edit-lch-c 100)
           (ct-tint-ratio background 4.3))))))
 
-(let*
-  (
-    (background (ct-make-lab 93 2 4))
+(-let*
+  ((background (ct-make-lab 93 2 4))
     (normal-parts (tarp/struan-get-colors background))
-
-    (alt (ht-get normal-parts :alt))
-    (assumed (ht-get normal-parts :assumed))
-    (primary (ht-get normal-parts :primary))
-    (faded (ht-get normal-parts :faded))
-    (foreground (ht-get normal-parts :foreground))
+    ((&hash :alt :assumed :primary :faded :foreground) normal-parts)
 
     (background>
       (-> background
@@ -85,9 +75,7 @@
       (:weak (tarp/struan-get-colors background>))
 
       ;; strong emphasis
-      (:strong (tarp/struan-get-colors background>>))))
-
-  (setq tarp/theme (ht-get tarp/theme* :normal)))
+      (:strong (tarp/struan-get-colors background>>)))))
 
 (deftheme tarp-struan)
 (tarp/base16-theme-define 'tarp-struan)

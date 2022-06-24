@@ -10,7 +10,7 @@
 ;;; Commentary:
 
 ;;; Code:
-;; This code has evolved "organically" -- tarp/theme* and tarp/theme are mutable globals assumed to be set by the themes.
+;; This code has evolved "organically" -- tarp/theme* is a mutable global assumed to be set by the themes.
 
 (require 'base16-theme)
 (require 'ct)
@@ -36,24 +36,24 @@
     (nth (- (abs index) 1) (reverse coll))
     (nth index coll)))
 
-(defun tarp/show-contrast-against (level)
-  "show contrast levels of fg colors in tarp/theme against BG."
-  (-map (lambda (label)
-          (let ((color (tarp/get label level)))
-            (format "%s: %s %s"
-              label
-              (ct-contrast-ratio color (tarp/get :background level))
-              color)))
+(defun tarp/show-contrast-against (bg-level)
+  "Show contrast levels of fg colors in tarp/theme* against BG."
+  (-map (lambda (fg-label)
+          (-let* ((foreground (tarp/get fg-label bg-level))
+                   (background (tarp/get :background bg-level))
+                   (contrast-ratio (ct-contrast-ratio foreground background)))
+            (format "%s %s %s" contrast-ratio foreground fg-label)))
     '(:foreground :faded :primary :assumed :alt :strings)))
 
 (defun tarp/show-contrasts ()
   (interactive)
   "message the contrast ratios of colors in the loaded theme against it's backgrounds"
   (->> '(:normal :weak :strong :focused)
+    (-map (-juxt 'identity (-partial 'tarp/get :background)))
     (-mapcat
-      (lambda (level)
-        `(,(format "against background %s %s" level (tarp/get :background level))
-           ,@(tarp/show-contrast-against level)
+      (-lambda ((bg-level bg-color))
+        `(,(format "Against background %s %s" bg-level bg-color)
+           ,@(tarp/show-contrast-against bg-level)
            "------")))
     (s-join "\n")
     (message)))
@@ -431,6 +431,8 @@
   "Implementation of `base16-theme-define` with tarp face list"
   (when (-non-nil tarp/tweak-function)
     (funcall tarp/tweak-function))
+
+  (setq tarp/theme (ht-get tarp/theme* :normal))
 
   (let ((theme-colors (append (tarp/map-to-base16) (ht-to-plist tarp/theme))))
     (base16-theme-set-faces

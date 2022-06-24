@@ -6,13 +6,12 @@
 (defun tarp/mcfay-get-colors (background)
   "get the foreground colors against a specific background"
   (let*
-    ((colors
-       (-->
-         (ct-make-hsluv 270 75 43.596)
-         (ct-rotation-lch it -45)
-         (-map (fn (tarp/nth <> it)) '(-1 1 2 4))
-         (-map (fn (ct-edit-hsluv-l <> 43.596)) it)
-         (-map (fn (ct-tint-ratio <> background 4.3)) it))))
+    ((colors (-->
+               (ct-make-hsluv 270 75 43.596)
+               (ct-rotation-lch it -45)
+               (-map (fn (tarp/nth <> it)) '(-1 1 2 4))
+               (-map (fn (ct-edit-hsluv-l <> 43.596)) it)
+               (-map (fn (ct-tint-ratio <> background 4.3)) it))))
 
     (ht
       (:background background)
@@ -25,18 +24,12 @@
       (:alt (nth 2 colors))
       (:strings (ct-edit-lch-c (nth 3 colors) 100)))))
 
-(let*
+(-let*
   (
     ;; /slightly/ cool
     (background (ct-make-lab 93 -0.5 -1))
-
     (normal-parts (tarp/mcfay-get-colors background))
-
-    (alt (ht-get normal-parts :alt))
-    (assumed (ht-get normal-parts :assumed))
-    (primary (ht-get normal-parts :primary))
-    (faded (ht-get normal-parts :faded))
-    (foreground (ht-get normal-parts :foreground))
+    ((&hash :alt :assumed :primary :faded :foreground) normal-parts)
 
     (background>
       (-> background
@@ -48,25 +41,18 @@
       (-> background
         (ct-iterate 'ct-edit-lab-l-dec
           (fn (> (ct-name-distance <> background) 7)))
-        (ct-edit-hsluv-h (ct-get-hsluv-h primary))
-        ))
+        (ct-edit-hsluv-h (ct-get-hsluv-h primary))))
 
     (background+
       (-> alt
         (ct-edit-lch-c 20)
         (ct-edit-hsluv-l
-          (ct-get-hsluv-l background>>))))
-    )
+          (ct-get-hsluv-l background>>)))))
 
   (setq tarp/theme*
     (ht
       ;; focused/selected emphasis
-      (:focused
-        (tarp/mcfay-get-colors background+)
-        ;; (ht-merge
-        ;;   normal-parts
-        ;;   (ht (:background background+)))
-        )
+      (:focused (tarp/mcfay-get-colors background+))
 
       ;; normal emphasis
       (:normal normal-parts)
@@ -75,13 +61,7 @@
       (:weak (tarp/mcfay-get-colors background>))
 
       ;; strong emphasis
-      (:strong (tarp/mcfay-get-colors background>>))))
-
-  ;; todo?: conform hue of all foregrounds:
-  ;; (let ((h (ct-get-hsl-l (tarp/get :foreground))))
-  ;;   (ht-set tarp/theme* :weak))
-
-  (setq tarp/theme (ht-get tarp/theme* :normal)))
+      (:strong (tarp/mcfay-get-colors background>>)))))
 
 (deftheme tarp-mcfay)
 (tarp/base16-theme-define 'tarp-mcfay)
