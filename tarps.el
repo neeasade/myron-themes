@@ -440,7 +440,7 @@
       (tarp/theme-make-faces theme-colors))
 
     (when (boundp 'evil-normal-state-cursor)
-      (let ((c (plist-get theme-colors :assumed)))
+      (let ((c (plist-get theme-colors :primary)))
         (setq
           evil-normal-state-cursor `(,c box)
           evil-insert-state-cursor `(,c bar)
