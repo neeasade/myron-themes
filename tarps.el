@@ -16,6 +16,7 @@
 (require 'ct)
 (require 'helpful)
 (require 'ht)
+(require 'fn)
 (require 's)
 
 (defcustom tarp/tweak-function nil
