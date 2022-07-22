@@ -256,6 +256,9 @@
 
                   (tooltip :weak)
 
+                  (lsp-ui-sideline-global :weak :alt)
+                  (lsp-ui-sideline-current-symbol :weak :alt)
+
                   ;; all the org builtin stuff:
                   ;; this assumes sort of a soft alt,
                   ;; faded might be more appropriate,
