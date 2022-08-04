@@ -30,6 +30,9 @@
 (defun tarp/set (label emphasis value)
   (ht-set! (ht-get tarp/theme* emphasis) label value))
 
+(defun tarp/take (indices colors)
+  (-map (lambda (i) (nth i colors)) indices))
+
 (defun tarp/nth (index coll)
   "a version of nth that counts from the end if the input is negative"
   ;; this just makes it easier to sort through color collections in real time.
@@ -112,12 +115,6 @@
       :base0F (tarp/get :faded level) ;; Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
       )))
 
-(defun tarp/get-function-sexp (sym)
-  "Get SYM as a quoted list, using helpful.el."
-  (read
-    (seq-let (buffer point _) (helpful--definition sym t)
-      (helpful--source sym t buffer point))))
-
 (defun tarp/theme-get-parent (face label theme-faces)
   ;; search up throughout parents of FACE (via :inherit) that firstly has a non-nil LABEL (or return nil)
   ;; theme-faces looks like ((face <plist spec>) (face <plist-spec>)..)
@@ -142,6 +139,12 @@
           :box unspecified)
     (-partition 2)
     (-map (-partial 'cons face))))
+
+(defun tarp/get-function-sexp (sym)
+  "Get SYM as a quoted list, using helpful.el."
+  (read
+    (seq-let (buffer point _) (helpful--definition sym t)
+      (helpful--source sym t buffer point))))
 
 (defun tarp/theme-make-faces (theme-colors)
   (let*
@@ -431,7 +434,7 @@
     new-theme-experiment
     ))
 
-(defun tarp/base16-theme-define (theme-name)
+(defun tarp/base16-theme-define (theme-name &optional overrides)
   "Implementation of `base16-theme-define` with tarp face list"
   (when (-non-nil tarp/tweak-function)
     (funcall tarp/tweak-function))
@@ -441,7 +444,8 @@
   (let ((theme-colors (append (tarp/map-to-base16) (ht-to-plist tarp/theme))))
     (base16-theme-set-faces
       theme-name theme-colors
-      (tarp/theme-make-faces theme-colors))
+      (tarp/theme-make-faces theme-colors)
+      )
 
     (when (boundp 'evil-normal-state-cursor)
       (let ((c (plist-get theme-colors :primary)))
@@ -458,10 +462,12 @@
             (-map (lambda (key) (plist-get theme-colors key)))
             (apply 'vector))))))
 
-(and load-file-name
-  (boundp 'custom-theme-load-path)
-  (add-to-list 'custom-theme-load-path
-    (file-name-as-directory
-      (file-name-directory load-file-name))))
+(when (and (boundp 'custom-theme-load-path) load-file-name)
+  (let* ((base (file-name-directory load-file-name))
+          (dir (expand-file-name "themes/" base)))
+    (add-to-list 'custom-theme-load-path
+      (or (and (file-directory-p dir) dir)
+        base))))
 
 (provide 'tarps)
+;;; tarps.el ends here
