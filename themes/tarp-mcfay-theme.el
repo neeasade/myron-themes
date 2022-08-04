@@ -66,4 +66,15 @@
 (deftheme tarp-mcfay)
 (tarp/base16-theme-define 'tarp-mcfay)
 
+(when (boundp 'evil-normal-state-cursor)
+  (let ((c (tarp/get :alt)))
+    (setq
+      evil-normal-state-cursor `(,c box)
+      evil-insert-state-cursor `(,c bar)
+      evil-visual-state-cursor `(,c box))))
+
 (provide-theme 'tarp-mcfay)
+
+(provide 'tarp-mcfay-theme)
+
+;;; tarp-mcfay-theme.el ends here
