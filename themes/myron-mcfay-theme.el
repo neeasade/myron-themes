@@ -1,15 +1,15 @@
 ;; -*- lexical-binding: t; -*-
 ;; Namesake: Jamie McFay, from the James Clavell novel Gai-Jin
 
-(require 'tarps)
+(require 'myron)
 
-(defun tarp/mcfay-get-colors (background)
+(defun myron-mcfay-colors (background)
   "get the foreground colors against a specific background"
   (let*
     ((colors (-->
                (ct-make-hsluv 270 75 43.596)
                (ct-rotation-lch it -45)
-               (-map (fn (tarp/nth <> it)) '(-1 1 2 4))
+               (-select-by-indices '(7 1 2 4) it)
                (-map (fn (ct-edit-hsluv-l <> 43.596)) it)
                (-map (fn (ct-tint-ratio <> background 4.3)) it))))
 
@@ -28,7 +28,7 @@
   (
     ;; /slightly/ cool
     (background (ct-make-lab 93 -0.5 -1))
-    (normal-parts (tarp/mcfay-get-colors background))
+    (normal-parts (myron-mcfay-colors background))
     ((&hash :alt :assumed :primary :faded :foreground) normal-parts)
 
     (background>
@@ -49,32 +49,24 @@
         (ct-edit-hsluv-l
           (ct-get-hsluv-l background>>)))))
 
-  (setq tarp/theme*
+  (setq myron-theme*
     (ht
       ;; focused/selected emphasis
-      (:focused (tarp/mcfay-get-colors background+))
+      (:focused (myron-mcfay-colors background+))
 
       ;; normal emphasis
       (:normal normal-parts)
 
       ;; weak emphasis
-      (:weak (tarp/mcfay-get-colors background>))
+      (:weak (myron-mcfay-colors background>))
 
       ;; strong emphasis
-      (:strong (tarp/mcfay-get-colors background>>)))))
+      (:strong (myron-mcfay-colors background>>)))))
 
-(deftheme tarp-mcfay)
-(tarp/base16-theme-define 'tarp-mcfay)
+(deftheme myron-mcfay)
+(myron-theme-define 'myron-mcfay)
+(myron-evil-cursor-color (myron-get :alt))
 
-(when (boundp 'evil-normal-state-cursor)
-  (let ((c (tarp/get :alt)))
-    (setq
-      evil-normal-state-cursor `(,c box)
-      evil-insert-state-cursor `(,c bar)
-      evil-visual-state-cursor `(,c box))))
-
-(provide-theme 'tarp-mcfay)
-
-(provide 'tarp-mcfay-theme)
-
-;;; tarp-mcfay-theme.el ends here
+(provide-theme 'myron-mcfay)
+(provide 'myron-mcfay-theme)
+;;; myron-mcfay-theme.el ends here

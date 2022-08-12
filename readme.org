@@ -1,28 +1,36 @@
-🟠 🔴 🟡 🟤 🟢 🟣 🔵
+#+html: <p align="center"><img align=right width=200px src="./discobolus.png" /></p>
+
+* Myron Themes 🟠 🔴 🟡 🟤 🟢 🟣 🔵
+
+Yet more *ａｒｔｉｓａｎａｌ* themes for [[https://emacs.sexy/][emacs]].
+
+- Bootstraps [[https://github.com/base16-project/base16-emacs][base16-emacs]] for wide emacs package coverage
+- Constant contrast across different [[#Emphasis][emphasis]] contexts
+- Conformity of markup texts to look like org mode (markdown, rst, adoc)
+- Built with [[https://github.com/neeasade/ct.el][ct.el]] (macro technology!!)
+
+** Screenshots
 
 TODO: Screenshots/screenshot generation
 
-** Features
-
-- Bootstraps [[https://github.com/base16-project/base16-emacs][base16-emacs]] for wide emacs package coverage
-- Constant contrast across different emphasis contexts
-- Conformity of markup texts to look like org mode (markdown, rst, adoc)
+|lorem|ipsum|
+|[[https://picsum.photos/300/]]|[[https://picsum.photos/300/]] |
 
 ** Installation
 
 Install with [[https://github.com/raxod502/straight.el][straight.el]]:
 
 #+begin_src emacs-lisp
-(straight-use-package '(tarps :host github :repo "neeasade/tarps" :branch "master"))
+(straight-use-package '(myron-themes :host github :repo "neeasade/myron-themes"))
 #+end_src
 
-** Fishing
+** Emphasis
 
-Tarp colorschemes come flavored against different backgrounds, for different levels of emphasis. This is to ensure the same contrast level across different contexts. The schemes are stored in a nested hash table, with a helper to access them -- EG ~(tarp/get :primary :strong)~ to get the primary foreground color meant to be used against the strong background (which you could get with ~(tarp/get :background :strong)~). The available background keys are: ~:normal :weak :strong :focused~. For each of those, the following foregrounds are available:
+Myron colorschemes come flavored against different backgrounds, for different levels of emphasis. This can be used to ensure the same contrast level across different contexts. The schemes are stored in a nested hash table, with a helper to access them -- EG ~(myron-get :primary :strong)~ to get the primary foreground color meant to be used against the strong background (which you could get with ~(myron-get :background :strong)~). The available background keys are: ~:normal :weak :strong :focused~. For each of those, the following foregrounds are available:
 
-| label       | meaning                | example                                      |
+| label       | meaning (foreground)   | example                                      |
 |-------------+------------------------+----------------------------------------------|
-| :foreground | default foreground     |                                              |
+| :foreground | default                |                                              |
 | :faded      | faded                  | comments                                     |
 | :primary    | identity               | functions, variables                         |
 | :assumed    | assumptions/core stuff | builtins, key words                          |
@@ -31,34 +39,18 @@ Tarp colorschemes come flavored against different backgrounds, for different lev
 
 Some thoughts on my general theme opinions:
 
-- Strings are important enough to get their own color for emphasis because they represent the edges or barriers at which things communicate sometimes
+- Strings are important enough to get their own color for emphasis because they often represent the edges or barriers at which things communicate
 - Identity between functions and variables can be blended (lisp-1 type of feel)
-- "focused" colors should be consistent as an indicator of what's about to be selected/or where the cursor is
+- The focused background is important/should be used to show what's highlighted or where interactive focus is
 
 ** Local edits
 
-The function ~tarp/tweak-function~ will be called before base16 is bootstrapped. You may change all the values of the scheme through the hashtable variable ~tarp/theme~ here. An example is shown below. ~tarp/set~ is a convienence function. You could do things here like enforce preferred contrast constraints, or try to account for your [[https://notes.neeasade.net/color-spaces.html#h-f23b8fe5-37a3-4ead-9d9d-a7139f76d532][viewing setting]].
 
-#+begin_src emacs-lisp
-(setq tarp/tweak-function
-      (lambda ()
-        ;; max chroma on the faded foreground
-        (tarp/set :faded :normal
-                  (ct-edit-lch-c
-                   (tarp/get :faded)
-                   100))
-
-        ;; ensure a contrast ratio of 3.5:1 on the strings foreground
-        (tarp/set :strings :normal
-                  (ct-tint-ratio
-                   (tarp/get :strings :normal)
-                   (tarp/get :background :normal)
-                   3.5))))
-#+end_src
+TODO
 
 ** Contrast dumping
 
-Calling ~tarp/show-contrasts~ will show the contrast ratios of all the foregrounds against all the backgrounds.
+Calling ~myron-show-contrasts~ will show the contrast ratios of all the foregrounds against all the backgrounds.
 
 ** Thanks/Previous inspo
 

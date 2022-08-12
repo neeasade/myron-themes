@@ -1,9 +1,9 @@
 ;; ; -*- lexical-binding: t; -*-
 
-(require 'tarps)
+(require 'myron)
 
-(defun tarp/storm-get-colors (bg)
-  (let ((fg-ratio 2.5)
+(defun myron-storm-colors (bg)
+  (let ((fg-ratio 4)
          (return (ht)))
 
     (ht-set return :background bg)
@@ -16,8 +16,8 @@
                 (-compose 'ct-edit-hsluv-l-dec 'ct-edit-hsluv-s-inc)
                 (lambda (step) (> (ct-contrast-ratio step bg) fg-ratio)))))
       ;; todo: revisit assumed color
-      (tarp/take '(2 1 0 4))
-      ;; (tarp/take '(3 2 1 0))
+      (-select-by-indices '(2 1 0 4))
+      ;; (myron-take '(3 2 1 0))
       (-interleave '(:primary :assumed :strings :alt))
       (-partition 2)
       (-map (-lambda ((k v)) (ht-set return k v))))
@@ -33,19 +33,21 @@
     (background>> (ct-iterate background 'ct-edit-hsluv-l-dec
                     (fn (> (ct-name-distance <> background) 7))))
 
-    (normal-parts (tarp/storm-get-colors background))
+    (normal-parts (myron-storm-colors background))
     ((&hash :alt :assumed :primary :faded :foreground) normal-parts)
 
     (background+ (ct-edit-hsluv-l primary (ct-get-hsluv-l background>))))
 
-  (setq tarp/theme*
+  (setq myron-theme*
     (ht
       (:normal normal-parts)
-      (:weak (tarp/storm-get-colors background>))
-      (:strong (tarp/storm-get-colors background>>))
-      (:focused (tarp/storm-get-colors background+)))))
+      (:weak (myron-storm-colors background>))
+      (:strong (myron-storm-colors background>>))
+      (:focused (myron-storm-colors background+)))))
 
-(deftheme tarp-storm)
-(tarp/base16-theme-define 'tarp-storm)
+(deftheme myron-storm)
+(myron-theme-define 'myron-storm)
 
-(provide-theme 'tarp-storm)
+(provide-theme 'myron-storm)
+(provide 'myron-storm-theme)
+;;; myron-storm-theme.el ends here
