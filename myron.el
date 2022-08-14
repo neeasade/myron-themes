@@ -61,16 +61,6 @@
     (s-join "\n")
     (message)))
 
-(defun myron--take (indices colors)
-  (-map (lambda (i) (nth i colors)) indices))
-
-(defun myron--nth (index coll)
-  "a version of nth that counts from the end if the input is negative"
-  ;; this just makes it easier to sort through color collections in real time.
-  (if (< index 0)
-    (nth (- (abs index) 1) (reverse coll))
-    (nth index coll)))
-
 (defun myron-theme-to-base16 (&optional emphasis)
   "Turn myron-theme* into a base16 plist using EMPHASIS (default :normal)."
   (-let [emphasis (or emphasis :normal)]
