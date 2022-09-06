@@ -1,14 +1,6 @@
 ;;; myron.el --- color themes for emacs -*- coding: utf-8; lexical-binding: t -*-
-;; Copyright (C) 2022 neeasade
-
-;; Author: neeasade <neeasade@gmail.com>
-;; URL: https://github.com/neeasade/myron-themes
-;; Package-Requires: ((emacs "26.1") (ct "0.2") (fn "0.1.2") (helpful "0.19") (s "1.12.0") (ht "2.3") (base16-theme "3.0"))
-;; Version: 0.1
-
 ;;; Commentary:
 ;; A set of color themes built on top of the base16-themes.
-
 ;;; Code:
 
 (require 'base16-theme)
@@ -181,7 +173,12 @@
      ;; non-org modes make the distinction between labels and destinations
      ;; org mode when showing link markup treats url/dest as default face, so I'm choosing to match that
      default (markup-internal-reference-face markdown-url-face)
-     org-link (markup-reference-face markdown-link-face rst-reference rst-external lui-button-face)
+     org-link (markup-reference-face
+                markdown-link-face
+                rst-reference
+                rst-external
+                lui-button-face
+                button)
 
      ;; org list elements have no face
      default (markdown-list-face markup-list-face rst-block)
