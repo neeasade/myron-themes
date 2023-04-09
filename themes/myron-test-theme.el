@@ -11,17 +11,17 @@
 
                    (ct-rotation-hsv it 72)
                    ;; eh?
-                   (--map (ct-tint-ratio it background 4.3) it)
-                   (--map (ct-tint-ratio-reverse it background 4.3) it)
+                   (--map (ct-tint-ratio> it background 4.3) it)
+                   (--map (ct-tint-ratio< it background 4.3) it)
                    )))
 
     (ht<-plist
       `(:background ,background
-         :foreground ,(ct-tint-ratio background background 7.7)
+         :foreground ,(ct-tint-ratio> background background 7.7)
 
          :assumed ,(-> (nth 1 colors)
                      (ct-edit-lch-c 90)
-                     (ct-tint-ratio-reverse background 2.6))
+                     (ct-tint-ratio< background 2.6))
 
          ,@(-interleave
              '(:primary :faded :alt :strings)
