@@ -42,6 +42,7 @@ Some thoughts on my general theme opinions:
 - Strings are important enough to get their own color for emphasis because they often represent the edges or barriers at which things communicate
 - Identity between functions and variables can be blended (lisp-1 type of feel)
 - The focused background is important/should be used to show what's highlighted or where interactive focus is
+- It appears I hate the color red generally (in thin lines it looks the same as black to me), except magenta/pinkish tones for the identity foreground
 
 ** Local edits
 
