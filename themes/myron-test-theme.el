@@ -1,6 +1,5 @@
 ;; -*- lexical-binding: t; -*-
-;; name: this theme came so naturally, late at night, in an escape
-;; dogman
+;; placeholder for themes being developed
 
 (require 'myron)
 
@@ -10,18 +9,16 @@
                    (ct-make-hsl 240 80 43.596)
 
                    (ct-rotation-hsv it 72)
-                   ;; eh?
-                   (--map (ct-tint-ratio> it background 4.3) it)
-                   (--map (ct-tint-ratio< it background 4.3) it)
-                   )))
+
+                   (--map (ct-contrast-clamp it background 4.1) it))))
 
     (ht<-plist
       `(:background ,background
-         :foreground ,(ct-tint-ratio> background background 7.7)
+         :foreground ,(ct-contrast-min background background 6.0)
 
          :assumed ,(-> (nth 1 colors)
                      (ct-edit-lch-c 90)
-                     (ct-tint-ratio< background 2.6))
+                     (ct-contrast-max background 2.6))
 
          ,@(-interleave
              '(:primary :faded :alt :strings)
@@ -63,16 +60,9 @@
   (setq myron-theme*
     (ht<-plist
       (list
-        ;; focused/selected emphasis
         :focused (myron-test-colors background+)
-
-        ;; normal emphasis
         :normal normal-parts
-
-        ;; weak emphasis
         :weak (myron-test-colors background>)
-
-        ;; strong emphasis
         :strong (myron-test-colors background>>)))))
 
 (deftheme myron-test)

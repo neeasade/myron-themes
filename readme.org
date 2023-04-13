@@ -13,8 +13,8 @@ Yet more *ａｒｔｉｓａｎａｌ* themes for [[https://emacs.sexy/][emacs]]
 
 TODO: Screenshots/screenshot generation
 
-|lorem|ipsum|
-|[[https://picsum.photos/300/]]|[[https://picsum.photos/300/]] |
+| lorem                      | ipsum                      |
+| [[https://picsum.photos/300/]] | [[https://picsum.photos/300/]] |
 
 ** Installation
 

@@ -1,4 +1,5 @@
-;; ; -*- lexical-binding: t; -*-
+;; -*- lexical-binding: t; -*-
+;; authored during a storm -- was getting a feel for ct.el in a "reasoned" way. didn't really pan out.
 
 (require 'myron)
 

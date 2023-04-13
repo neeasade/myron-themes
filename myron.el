@@ -232,7 +232,7 @@
            (parenthesis :foreground ,(myron-get :assumed))
 
            ;; todo: revisit this
-           ,@(when (ct-is-light-p (myron-get :background))
+           ,@(when (ct-light-p (myron-get :background))
                ;; only handling light for now
                ;; (main motivation for adding these here is terminal emacs
                ;; failed to detect the light background)
