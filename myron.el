@@ -313,6 +313,9 @@
                   (org-done :weak :faded)
                   (org-headline-done :normal :faded)
 
+                  (mode-line-inactive :weak)
+                  (mode-line :strong)
+
                   (isearch :focused)
                   (lazy-highlight :strong)
                   (ivy-match :focused)
