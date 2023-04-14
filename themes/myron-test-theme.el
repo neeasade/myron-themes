@@ -66,8 +66,9 @@
         :strong (myron-test-colors background>>)))))
 
 (deftheme myron-test)
-(myron-theme-define 'myron-test)
-(myron-evil-cursor-color (myron-get :assumed))
+(myron-theme-define 'myron-test (lambda () myron-theme*) myron-theme*)
+
+;; (myron-evil-cursor-color (myron-get :assumed))
 
 (provide-theme 'myron-test)
 (provide 'myron-test-theme)

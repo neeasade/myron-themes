@@ -16,13 +16,8 @@
   :prefix "myron-")
 
 (defcustom myron-use-cache t
-  "Toggle usage of cached colors, or generate them on your local machine."
-  :type 'function
-  :group 'myron)
-
-(defcustom myron-tweak-function nil
-  "A function hook that allows you to tweak the colorscheme before it is mapped to faces."
-  :type 'function
+  "Using the cache means you get the colors as authored -- turning it off means compute them on your machine."
+  :type 'boolean
   :group 'myron)
 
 (defun myron-get (label &optional emphasis)
@@ -432,32 +427,26 @@
 
 (defun myron-evil-cursor-color (color)
   "Syncronize the the evil cursor COLOR across cursor states."
-  (when (boundp 'evil-normal-state-cursor)
-    (setq
-      evil-normal-state-cursor `(,color box)
-      evil-insert-state-cursor `(,color bar)
-      evil-visual-state-cursor `(,color box))))
+  (setq evil-normal-state-cursor `(,color box)
+    evil-insert-state-cursor `(,color bar)
+    evil-visual-state-cursor `(,color box)))
 
-(defun myron-theme-define (theme-name &optional overrides)
+(defun myron-theme-define (theme-name create-fn cached-colors)
   "Implementation of `base16-theme-define` with myron face list"
-  (when (-non-nil myron-tweak-function)
-    (funcall myron-tweak-function))
+  (setq myron-theme* (if myron-use-cache cached-colors (funcall create-fn)))
 
-  (setq myron-theme (ht-get myron-theme* :normal))
+  (-let* ((colors (append (myron-theme-to-base16) (ht-to-plist (ht-get myron-theme* :normal))))
+           (faces (myron-theme-make-faces colors)))
 
-  (let ((theme-colors (append (myron-theme-to-base16) (ht-to-plist myron-theme))))
-    (base16-theme-set-faces
-      theme-name theme-colors
-      (myron-theme-make-faces theme-colors))
-
-    (myron-evil-cursor-color (plist-get theme-colors :primary))
+    (base16-theme-set-faces theme-name colors faces)
+    (myron-evil-cursor-color (plist-get colors :primary))
 
     ;; Anything leftover that doesn't fall neatly into a face goes here.
     (custom-theme-set-variables theme-name
       `(ansi-color-names-vector
          ;; black, base08, base0B, base0A, base0D, magenta, cyan, white
          ,(->> '(:base00 :base08 :base0B :base0A :base0D :base0E :base0D :base05)
-            (-map (-partial #'plist-get theme-colors))
+            (-map (-partial #'plist-get colors))
             (apply 'vector))))))
 
 ;;;###autoload

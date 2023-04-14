@@ -43,11 +43,8 @@ Some thoughts on my general theme opinions:
 - Identity between functions and variables can be blended (lisp-1 type of feel)
 - The focused background is important/should be used to show what's highlighted or where interactive focus is
 - It appears I hate the color red generally (in thin lines it looks the same as black to me), except magenta/pinkish tones for the identity foreground
-
-** Local edits
-
-
-TODO
+- I generally lean higher contrast
+- note: I'm colorblind
 
 ** Contrast dumping
 
