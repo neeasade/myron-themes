@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 ;; placeholder for themes being developed
 
-(require 'myron)
+(require 'myron-themes)
 
 (defun myron-test-colors (background)
   "get the foreground colors against a specific background"

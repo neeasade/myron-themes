@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 ;; namesake: the Struan family, from James Clavell's Asian Saga series
 
-(require 'myron)
+(require 'myron-themes)
 
 (defun myron-struan-colors (background)
   "get the foreground colors against a specific background"

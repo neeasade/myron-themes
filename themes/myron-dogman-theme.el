@@ -3,7 +3,7 @@
 ;; the main colors of this theme came so naturally, late at night, in an escape
 ;; the backgrounds (weak/strong/focused) took more time
 
-(require 'myron)
+(require 'myron-themes)
 
 (defun myron-dogman-colors (background)
   "get the foreground colors against a specific background"

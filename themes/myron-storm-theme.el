@@ -3,7 +3,7 @@
 ;; lower contrast
 ;; todo: revisit assumed color in this theme
 
-(require 'myron)
+(require 'myron-themes)
 
 (defun myron-storm-colors (bg)
   (let ((fg-ratio 4)

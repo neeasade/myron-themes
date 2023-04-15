@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 ;; Namesake: Jamie McFay, from the James Clavell novel Gai-Jin
 
-(require 'myron)
+(require 'myron-themes)
 
 (defun myron-mcfay-colors (background)
   "get the foreground colors against a specific background"

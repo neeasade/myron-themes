@@ -21,7 +21,7 @@ TODO: Screenshots/screenshot generation
 Install with [[https://github.com/raxod502/straight.el][straight.el]]:
 
 #+begin_src emacs-lisp
-(straight-use-package '(myron-themes :host github :repo "neeasade/myron-themes"))
+(straight-use-package '(myron-themes :host github :repo "neeasade/myron-themes" :files ("*.el" "themes/*.el")))
 #+end_src
 
 ** Emphasis
