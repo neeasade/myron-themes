@@ -2,7 +2,7 @@
 
 * Myron Themes 🟠 🔴 🟡 🟤 🟢 🟣 🔵
 
-Yet more *ａｒｔｉｓａｎａｌ* themes for [[https://emacs.sexy/][emacs]].
+Yet more *ａｒｔｉｓａｎａｌ* light themes for [[https://emacs.sexy/][emacs]].
 
 - Bootstraps [[https://github.com/base16-project/base16-emacs][base16-emacs]] for wide emacs package coverage
 - Constant contrast across different [[#Emphasis][emphasis]] contexts
@@ -11,10 +11,10 @@ Yet more *ａｒｔｉｓａｎａｌ* themes for [[https://emacs.sexy/][emacs]]
 
 ** Screenshots
 
-TODO: Screenshots/screenshot generation
-
-| lorem                      | ipsum                      |
-| [[https://picsum.photos/300/]] | [[https://picsum.photos/300/]] |
+- mcfay: https://i.imgur.com/Fk4VBkP.png
+- struan: https://i.imgur.com/xxCuyoT.png
+- dogman: https://i.imgur.com/RlpnKZe.png
+- storm: https://i.imgur.com/Nblkd03.png
 
 ** Installation
 
@@ -49,6 +49,14 @@ Some thoughts on my general theme opinions:
 ** Contrast dumping
 
 Calling ~myron-show-contrasts~ will show the contrast ratios of all the foregrounds against all the backgrounds.
+
+** Terminal usage
+
+Use these themes in a terminal supporting truecolors, and set the following before loading the themes:
+
+#+begin_src emacs-lisp
+(setq base16-theme-256-color-source 'colors)
+#+end_src
 
 ** Thanks/Previous inspo
 
