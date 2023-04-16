@@ -38,14 +38,14 @@
                 'ct-edit-hsv-v-dec
                 'ct-edit-hsv-v-dec
                 'ct-edit-lab-a-inc)
-              (fn (> (ct-name-distance <> base) 4))))))
+              (fn (> (ct-distance <> base) 4))))))
 
       (background>>
         (let ((base background>))
           (-> base
             (ct-iterate
               (-compose 'ct-edit-lab-a-inc 'ct-edit-lab-b-inc)
-              (fn (> (ct-name-distance <> base) 6))))))
+              (fn (> (ct-distance <> base) 6))))))
 
       (background+
         (-> primary

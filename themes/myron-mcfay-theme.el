@@ -35,13 +35,13 @@
       (background>
         (-> background
           (ct-iterate 'ct-edit-lab-l-dec
-            (fn (> (ct-name-distance <> background) 4)))
+            (fn (> (ct-distance <> background) 4)))
           (ct-edit-hsluv-h (ct-get-hsluv-h alt))))
 
       (background>>
         (-> background
           (ct-iterate 'ct-edit-lab-l-dec
-            (fn (> (ct-name-distance <> background) 7)))
+            (fn (> (ct-distance <> background) 7)))
           (ct-edit-hsluv-h (ct-get-hsluv-h primary))))
 
       (background+

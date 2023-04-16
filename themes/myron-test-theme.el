@@ -38,7 +38,7 @@
         (ct-iterate
           (-compose 'ct-edit-hsluv-l-dec 'ct-edit-lab-a-inc 'ct-edit-lab-b-inc)
           ;; 'ct-edit-lab-l-dec
-          (fn (> (ct-name-distance <> background) 3)))
+          (fn (> (ct-distance <> background) 3)))
         ;; (ct-edit-hsluv-h (ct-get-hsluv-h assumed))
         ))
 
@@ -47,7 +47,7 @@
         (ct-iterate
           (-compose 'ct-edit-hsluv-l-dec 'ct-edit-lab-a-inc 'ct-edit-lab-b-inc)
           ;; 'ct-edit-lab-l-dec
-          (fn (> (ct-name-distance <> background) 2)))
+          (fn (> (ct-distance <> background) 2)))
         ;; (ct-edit-hsluv-h (ct-get-hsluv-h assumed))
         ))
 

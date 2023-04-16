@@ -31,10 +31,10 @@
     ((background (ct-make-lab 94 -5 0))
 
       (background> (ct-iterate background 'ct-edit-hsluv-l-dec
-                     (fn (> (ct-name-distance <> background) 4))))
+                     (fn (> (ct-distance <> background) 4))))
 
       (background>> (ct-iterate background 'ct-edit-hsluv-l-dec
-                      (fn (> (ct-name-distance <> background) 7))))
+                      (fn (> (ct-distance <> background) 7))))
 
       (normal-parts (myron-storm-colors background))
       ((&hash :alt :assumed :primary :faded :foreground) normal-parts)
