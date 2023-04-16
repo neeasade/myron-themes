@@ -1,6 +1,6 @@
 #+html: <p align="center"><img align=right width=200px src="./discobolus.png" /></p>
 
-* Myron-Themes 🟠 🔴 🟡 🟤 🟢 🟣 🔵
+* Myron_Themes 🟠 🔴 🟡 🟤 🟢 🟣 🔵
 
 Yet more *ａｒｔｉｓａｎａｌ* light themes for [[https://emacs.sexy/][emacs]].
 
