@@ -1,6 +1,6 @@
 #+html: <p align="center"><img align=right width=200px src="./discobolus.png" /></p>
 
-* Myron_Themes 🟠 🔴 🟡 🟤 🟢 🟣 🔵
+* ~Myron Themes~ 🟠 🔴 🟡 🟤 🟢 🟣 🔵
 
 Yet more *ａｒｔｉｓａｎａｌ* light themes for [[https://emacs.sexy/][emacs]].
 
@@ -11,8 +11,8 @@ Yet more *ａｒｔｉｓａｎａｌ* light themes for [[https://emacs.sexy/][e
 
 ** Screenshots
 
-| mcfay [[https://i.imgur.com/Fk4VBkP.png]]    | struan [[https://i.imgur.com/xxCuyoT.png]] |
-| dogman   [[https://i.imgur.com/RlpnKZe.png]] | storm [[https://i.imgur.com/Nblkd03.png]]  |
+| *mcfay* [[https://i.imgur.com/Fk4VBkP.png]]    | *struan* [[https://i.imgur.com/xxCuyoT.png]] |
+| *dogman*   [[https://i.imgur.com/RlpnKZe.png]] | *storm* [[https://i.imgur.com/Nblkd03.png]]  |
 
 ** Installation
 
