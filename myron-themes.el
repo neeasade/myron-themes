@@ -232,8 +232,10 @@
 
            (parenthesis :foreground ,(myron-get :faded))
 
-           ;; magit fiddling is much harder than you would expect
            (magit-diff-context-highlight :background ,(myron-get :background :weak))
+
+           ;; magit fiddling is much harder than you would expect
+           ;; magit-diff-hunk-heading is more like a "sections" concept, with an active one.
            (magit-diff-hunk-heading-highlight :background
              ,(-> (myron-get :background :strong)
                 (ct-edit-hsluv-h (ct-get-hsluv-h (myron-get :strings)))
@@ -334,13 +336,17 @@
                     magit-diff-removed (cider-test-failure-face cider-test-error-face)
                     magit-diff-added cider-test-success-face
 
-                    magit-diff-removed smerge-upper
-                    magit-diff-added smerge-lower
                     default smerge-markers
 
-                    ;; todo?:
-                    ;; diff-refined-removed
-                    ;; diff-refined-added
+                    magit-diff-added (diff-added smerge-upper)
+                    magit-diff-removed (diff-removed smerge-lower)
+
+                    magit-diff-added-highlight (diff-refine-added smerge-refined-added)
+                    magit-diff-removed-highlight (diff-refine-removed smerge-refined-removed)
+
+                    ;; todo: this doesn't look the best/needs a revisit
+                    magit-diff-hunk-heading-highlight (diff-function diff-file-header)
+                    magit-diff-hunk-heading (diff-header diff-hunk-header)
                     )))))
 
       (new-theme
@@ -358,6 +364,7 @@
           original-theme
           theme-changes))
 
+      ;; todo: investigate this -- found that magit-diff-removed-highlight had a foreground set when I didn't expect it to have one
       (new-theme-experiment
         ;; idea: auto-conform foreground faces based on found background
         ;; this way we don't have to find where to adjust intensity further
