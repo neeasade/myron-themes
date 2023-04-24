@@ -58,56 +58,29 @@
 
 (defun myron-theme-to-base16 (&optional emphasis)
   "Turn myron-theme* into a base16 plist using EMPHASIS (default :normal)."
-  (-let [emphasis (or emphasis :normal)]
+  (-let* ((emphasis (or emphasis :normal))
+           (background-f (myron-get :background :focused))
+           ((&hash :alt :strings :assumed :primary :faded :foreground :background) (ht-get myron-theme* emphasis)))
+    ;; The comments on the sections here are from the base16 styling guidelines, not necessarily
+    ;; what the emacs base16 theme package follows (observations commented following ":").
+    ;; guidelines location: http://chriskempson.com/projects/base16/
     (list
-      ;; The comments on the sections here are from the base16 styling guidelines, not necessarily
-      ;; what the emacs base16 theme package follows.
-
-      ;; guidelines location: http://chriskempson.com/projects/base16/
-      ;; I've also noted some faces I care about
-
-      :base00 (myron-get :background emphasis) ;; Default Background
-
-      ;; ivy-current-match background, isearch match foreground, inactive modeline background
-      :base01 (myron-get :background :focused) ;; Lighter Background (Used for status bars)
-      ;; :base01 :background__ ;; Lighter Background (Used for status bars)
-
-      ;; region, active modeline background
-      :base02 (myron-get :background :focused) ;; Selection Background
-
-      :base03 (myron-get :faded emphasis)      ;; Comments, Invisibles, Line Highlighting
-      :base04 (myron-get :faded emphasis)      ;; Dark Foreground (Used for status bars)
-      :base05 (myron-get :foreground emphasis) ;; Default Foreground, Caret, Delimiters, Operators
-      :base06 (myron-get :faded emphasis)      ;; Light Foreground (Not often used)
-
-      ;; this is only used for company scrollbar background
-      :base07 (myron-get :background :strong) ;; Light Background (Not often used)
-      ;; :base07 (myron-get :background :weak) ;; Light Background (Not often used)
-
-      ;; org-todo, variables
-      ;; :base08 :accent2 ;; Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
-      :base08 (myron-get :alt emphasis) ;; Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted
-
-      ;; ivy-current-match foreground
-      :base09 (myron-get :foreground emphasis) ;; Integers, Boolean, Constants, XML Attributes, Markup Link Url
-
-      ;; types
-      ;; :base0A :accent1 ;; Classes, Markup Bold, Search Text Background
-      :base0A (myron-get :alt emphasis) ;; Classes, Markup Bold, Search Text Background
-
-      ;; strings
-      :base0B (myron-get :strings emphasis) ;; Strings, Inherited Class, Markup Code, Diff Inserted
-
-      ;; :base0C :foreground_  ;; Support, Regular Expressions, Escape Characters, Markup Quotes
-      :base0C (myron-get :assumed emphasis) ;; Support, Regular Expressions, Escape Characters, Markup Quotes
-
-      ;; prompt, function-name, search match foreground
-      :base0D (myron-get :primary emphasis) ;; Functions, Methods, Attribute IDs, Headings
-
-      ;; keyword-face, org-date
-      :base0E (myron-get :assumed emphasis) ;; Keywords, Storage, Selector, Markup Italic, Diff Changed
-
-      :base0F (myron-get :faded emphasis) ;; Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
+      :base00 background   ;; Default Background
+      :base01 background-f ;; search match, Lighter Background (Used for status bars)           : search bg
+      :base02 background-f ;; Selection Background
+      :base03 faded        ;; Comments, Invisibles, Line Highlighting
+      :base04 faded        ;; Dark Foreground (Used for status bars)                            : paren-face
+      :base05 foreground   ;; Default Foreground, Caret, Delimiters, Operators
+      :base06 faded        ;; Light Foreground (Not often used)
+      :base07 background   ;; Light Background (Not often used)                                 : nb. unused
+      :base08 alt          ;; Variables, XML Tags, Markup Link Text, Markup Lists, Diff Deleted : org-todo
+      :base09 foreground   ;; Integers, Boolean, Constants, XML Attributes, Markup Link Url
+      :base0A alt          ;; Types, Classes, Markup Bold, Search Text Background
+      :base0B strings      ;; Strings, Inherited Class, Markup Code, Diff Inserted
+      :base0C assumed      ;; Support, Regular Expressions, Escape Characters, Markup Quotes
+      :base0D primary      ;; Functions, Methods, Attribute IDs, Headings                       : search fg, prompt
+      :base0E assumed      ;; Keywords, Storage, Selector, Markup Italic, Diff Changed          : org-date, keyword
+      :base0F faded        ;; Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?> : used as fg in various smol places
       )))
 
 (defun myron--face-get-parent (face label theme-faces)
@@ -207,26 +180,16 @@
            (font-lock-comment-delimiter-face :foreground faded)
            (font-lock-comment-face :background nil)
 
-           (window-divider :foreground faded)
-           (vertical-border :foreground faded)
+           ((window-divider vertical-border) :foreground faded)
 
            ;; ｉｄｅｎｔｉｔｙ
            (font-lock-function-name-face :foreground primary)
            (font-lock-variable-name-face :foreground primary)
 
-           (org-level-1 :foreground foreground)
-           (org-level-2 :foreground foreground)
-           (org-level-3 :foreground foreground)
-           (org-level-4 :foreground foreground)
-           (org-level-5 :foreground foreground)
-           (org-level-6 :foreground foreground)
 
-           (whitespace-space :background nil)
-           (whitespace-tab :background nil)
-
-           (org-date :underline nil)
-           (flycheck-warning :underline nil)
-           (flycheck-info :underline nil)
+           ((outline-1 outline-2 outline-3 outline-4 outline-5) :foreground foreground)
+           ((whitespace-space whitespace-tab) :background nil)
+           ((org-date flycheck-warning flycheck-info) :underline nil)
 
            (secondary-selection :background ,(myron-get :background :strong))
 
@@ -246,18 +209,17 @@
                 (ct-edit-hsluv-h (ct-get-hsluv-h (myron-get :strings)))
                 (ct-edit-hsluv-s 5)))
 
-           ,@(-let*
-               ((green (ct-make-hsluv 120 70 (ct-get-hsluv-l (myron-get :background))))
-                 ;; a little oomf
-                 (red (ct-make-hsluv 0 70 (- (ct-get-hsluv-l (myron-get :background)) 5)))
-                 (light-delta (apply '- (-map 'ct-get-hsluv-l
-                                          (list
-                                            (myron-get :background :normal)
-                                            (myron-get :background :weak)))))
-                 (light-delta (* 0.7 light-delta))
-                 (dark-green (ct-edit-hsluv-l-dec green light-delta))
-                 (dark-red (ct-edit-hsluv-l-dec red light-delta))
-                 ((green red dark-green dark-red) (--map (ct-edit-hsluv-l-dec it 0.5) (list green red dark-green dark-red))))
+           ,@(-let* ((green (ct-make-hsluv 120 70 (ct-get-hsluv-l (myron-get :background))))
+                      ;; a little oomf
+                      (red (ct-make-hsluv 0 70 (- (ct-get-hsluv-l (myron-get :background)) 5)))
+                      (light-delta (apply '- (-map 'ct-get-hsluv-l
+                                               (list
+                                                 (myron-get :background :normal)
+                                                 (myron-get :background :weak)))))
+                      (light-delta (* 0.7 light-delta))
+                      (dark-green (ct-edit-hsluv-l-dec green light-delta))
+                      (dark-red (ct-edit-hsluv-l-dec red light-delta))
+                      ((green red dark-green dark-red) (--map (ct-edit-hsluv-l-dec it 0.5) (list green red dark-green dark-red))))
                `((magit-diff-added :background ,green)
                   (magit-diff-removed :background ,red)
                   (magit-diff-added-highlight :background ,dark-green)
@@ -276,8 +238,8 @@
                   (avy-lead-face-1 :strong :alt)
                   (avy-lead-face-2 :strong :strings)
 
-                  (eros-result-overlay-face :strong :foreground)
-                  (cider-result-overlay-face :strong :foreground)
+                  (eros-result-overlay-face :strong)
+                  (cider-result-overlay-face :strong)
 
                   (completions-common-part :normal :primary)
 
@@ -287,6 +249,8 @@
 
                   (lsp-ui-sideline-global :weak :alt)
                   (lsp-ui-sideline-current-symbol :weak :alt)
+
+                  (company-scrollbar-bg :strong :faded)
 
                   ;; all the org builtin stuff:
                   ;; this assumes sort of a soft alt,
@@ -306,8 +270,8 @@
                   (mode-line :strong)
 
                   (isearch :focused)
+                  (ivy-current-match :focused)
                   (lazy-highlight :strong)
-                  (ivy-match :focused)
 
                   (org-link :weak :alt)
                   (org-code :weak)
@@ -331,6 +295,8 @@
                  `(
                     ,@(myron--markup-map)
 
+                    magit-diff-removed (whitespace-line)
+
                     ;; make cider inline test faces similar to magit
                     ;; (abusing for consistency)
                     magit-diff-removed (cider-test-failure-face cider-test-error-face)
@@ -348,6 +314,13 @@
                     magit-diff-hunk-heading-highlight (diff-function diff-file-header)
                     magit-diff-hunk-heading (diff-header diff-hunk-header)
                     )))))
+
+      ;; allow multi-face conf
+      (theme-changes
+        (-mapcat (-lambda ((faces . kvs))
+                   (-map (lambda (face) `(,face ,@kvs))
+                     (-list faces)))
+          theme-changes))
 
       (new-theme
         ;; apply our individual changes to the original theme
