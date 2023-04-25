@@ -83,20 +83,6 @@
       :base0F faded        ;; Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?> : used as fg in various smol places
       )))
 
-(defun myron--face-get-parent (face label theme-faces)
-  ;; search up throughout parents of FACE (via :inherit) that firstly has a non-nil LABEL (or return nil)
-  ;; theme-faces looks like ((face <plist spec>) (face <plist-spec>)..)
-  (let* ((match (-first (lambda (theme-face)
-                          (eq (-first-item theme-face) face))
-                  theme-faces))
-          (face (car match))
-          (spec (cdr match)))
-    (if (plist-member spec label)
-      (plist-get spec label)
-      (if (plist-member spec :inherit)
-        (myron--face-get-parent (plist-get spec :inherit) label theme-faces)
-        nil))))
-
 (defun myron--face-derive-from (parent face)
   "Make FACE derive from PARENT."
   (->> `(:foreground nil
@@ -250,6 +236,8 @@
 
                   (company-scrollbar-bg :strong :faded)
 
+                  (magit-blame-heading :weak)
+
                   ;; all the org builtin stuff:
                   ;; this assumes sort of a soft alt,
                   ;; faded might be more appropriate,
@@ -314,11 +302,10 @@
                     )))))
 
       ;; allow multi-face conf
-      (theme-changes
-        (-mapcat (-lambda ((faces . kvs))
-                   (-map (lambda (face) `(,face ,@kvs))
-                     (-list faces)))
-          theme-changes))
+      (theme-changes (-mapcat (-lambda ((faces . kvs))
+                                (-map (lambda (face) `(,face ,@kvs))
+                                  (-list faces)))
+                       theme-changes))
 
       (new-theme
         ;; apply our individual changes to the original theme
@@ -332,40 +319,10 @@
                 state)
               (cons (list face key value) state)))
           original-theme
-          theme-changes))
-
-      (new-theme-experiment
-        ;; idea: auto-conform foreground faces based on found background
-        ;; this way we don't have to find where to adjust intensity further (24 hits found)
-        (-map
-          (-lambda ((face . spec))
-            (let*
-              ((background (myron--face-get-parent face :background new-theme))
-                (background (if (symbolp background)
-                              (plist-get theme-colors (intern (format ":%s" background)))
-                              background))
-                (background-symbol (--first (eq (myron-get :background it) background)
-                                     '(:normal :weak :strong :focused)))
-                (foreground (myron--face-get-parent face :foreground new-theme))
-                (foreground (if (symbolp foreground)
-                              (plist-get theme-colors (intern (format ":%s" foreground)))
-                              foreground))
-                (foreground-symbol (-first (lambda (foreground-type)
-                                             (-contains-p
-                                               (--map (myron-get foreground-type it)
-                                                 '(:normal :weak :strong :focused))
-                                               foreground))
-                                     '(:foreground :faded :primary :alt :assumed :strings))))
-              (if (and background-symbol foreground-symbol
-                    (not (string= foreground (myron-get foreground-symbol background-symbol))))
-                `(,face ,@(plist-put spec :foreground (myron-get foreground-symbol background-symbol)))
-                `(,face ,@spec))))
-          new-theme)))
+          theme-changes)))
 
     ;; original-theme
-    ;; new-theme
-    new-theme-experiment
-    ))
+    new-theme))
 
 (defun myron-evil-cursor-color (color)
   "Syncronize the the evil cursor COLOR across cursor states."
