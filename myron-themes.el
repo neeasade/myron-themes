@@ -186,7 +186,6 @@
            (font-lock-function-name-face :foreground primary)
            (font-lock-variable-name-face :foreground primary)
 
-
            ((outline-1 outline-2 outline-3 outline-4 outline-5) :foreground foreground)
            ((whitespace-space whitespace-tab) :background nil)
            ((org-date flycheck-warning flycheck-info) :underline nil)
@@ -242,7 +241,6 @@
                   (cider-result-overlay-face :strong)
 
                   (completions-common-part :normal :primary)
-
                   (comint-highlight-prompt :normal :assumed)
 
                   (tooltip :weak)
@@ -327,69 +325,41 @@
         (-reduce-from
           (-lambda (state (face key value))
             (if (-contains-p (-map #'-first-item state) face)
-              (-map
-                (lambda (entry)
-                  (if (eq (-first-item entry) face)
-                    `(,face ,@(plist-put (cdr entry) key value))
-                    entry))
+              (-map (lambda (entry)
+                      (if (eq (-first-item entry) face)
+                        `(,face ,@(plist-put (cdr entry) key value))
+                        entry))
                 state)
               (cons (list face key value) state)))
           original-theme
           theme-changes))
 
-      ;; todo: investigate this -- found that magit-diff-removed-highlight had a foreground set when I didn't expect it to have one
       (new-theme-experiment
         ;; idea: auto-conform foreground faces based on found background
-        ;; this way we don't have to find where to adjust intensity further
+        ;; this way we don't have to find where to adjust intensity further (24 hits found)
         (-map
-          (lambda (face-spec)
+          (-lambda ((face . spec))
             (let*
-              ((face (car face-spec))
-                (spec (cdr face-spec))
-
-                (background (myron--face-get-parent face :background new-theme))
+              ((background (myron--face-get-parent face :background new-theme))
+                (background (if (symbolp background)
+                              (plist-get theme-colors (intern (format ":%s" background)))
+                              background))
+                (background-symbol (--first (eq (myron-get :background it) background)
+                                     '(:normal :weak :strong :focused)))
                 (foreground (myron--face-get-parent face :foreground new-theme))
-
-                (background-color
-                  (if (symbolp background)
-                    (plist-get theme-colors (intern (format ":%s" (prin1-to-string background))))
-                    background))
-
-                (background-symbol
-                  (if background-color
-                    (plist-get
-                      (-flatten
-                        (-map
-                          (lambda (level)
-                            (list (intern (myron-get :background level)) level))
-                          '(:normal :weak :strong :focused)))
-                      (intern background-color))
-                    :normal))
-
-                (foreground-color
-                  (if (symbolp foreground)
-                    (plist-get theme-colors (intern (format ":%s" (prin1-to-string foreground))))
-                    foreground))
-
-                (foreground-symbol
-                  (if foreground-color
-                    (plist-get
-                      (-flatten
-                        (-map
-                          (lambda (kind)
-                            (list (intern (myron-get kind)) kind))
-                          '(:foreground :faded :primary :alt :assumed :strings)))
-                      (intern foreground-color))
-                    :foreground))
-
-                (new-foreground
-                  (when foreground-symbol
-                    (myron-get foreground-symbol background-symbol))))
-
-              (if (plist-member spec :background)
-                `(,face ,@(plist-put spec :foreground (or new-foreground (plist-get spec :foreground))))
-                ;; if no background was ever set, just return the OG:
-                face-spec)))
+                (foreground (if (symbolp foreground)
+                              (plist-get theme-colors (intern (format ":%s" foreground)))
+                              foreground))
+                (foreground-symbol (-first (lambda (foreground-type)
+                                             (-contains-p
+                                               (--map (myron-get foreground-type it)
+                                                 '(:normal :weak :strong :focused))
+                                               foreground))
+                                     '(:foreground :faded :primary :alt :assumed :strings))))
+              (if (and background-symbol foreground-symbol
+                    (not (string= foreground (myron-get foreground-symbol background-symbol))))
+                `(,face ,@(plist-put spec :foreground (myron-get foreground-symbol background-symbol)))
+                `(,face ,@spec))))
           new-theme)))
 
     ;; original-theme
