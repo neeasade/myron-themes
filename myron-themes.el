@@ -185,11 +185,14 @@
            ;; magit fiddling is much harder than you would expect
            ;; magit-diff-hunk-heading is more like a "sections" concept, with an active one.
            (magit-diff-hunk-heading-highlight :background
-             ,(-> (myron-get :background :strong)
-                (ct-edit-hsluv-h (ct-get-hsluv-h (myron-get :strings)))
-                (ct-edit-hsluv-s 5)))
+             ,(myron-get :background :focused)
+             ;; ,(-> (myron-get :background :strong)
+             ;;   (ct-edit-hsluv-h (ct-get-hsluv-h (myron-get :strings)))
+             ;;   (ct-edit-hsluv-s 5))
+             )
 
            (magit-diff-hunk-heading :background
+             ;; ,(myron-get :background :strong)
              ,(-> (myron-get :background :weak)
                 (ct-edit-hsluv-h (ct-get-hsluv-h (myron-get :strings)))
                 (ct-edit-hsluv-s 5)))
