@@ -344,6 +344,13 @@
     evil-insert-state-cursor `(,color bar)
     evil-visual-state-cursor `(,color box)))
 
+(defun myron-termcolors ()
+  "Export current myron theme to 16 colors"
+  ;; stealing default base16 export order for now
+  (--map (plist-get (myron-theme-to-base16) it)
+    '(:base00 :base08 :base0B :base0A :base0D :base0E :base0C :base05
+       :base03 :base09 :base01 :base02 :base04 :base06 :base0F :base07)))
+
 (defun myron-theme-define (theme-name create-fn cached-colors)
   "Implementation of `base16-theme-define` with myron face list"
   (setq myron-theme* (if myron-use-cache cached-colors (funcall create-fn)))
@@ -351,16 +358,9 @@
   (base16-theme-set-faces theme-name
     (append (myron-theme-to-base16) (ht-to-plist (ht-get myron-theme* :normal)))
     (myron-theme-make-faces))
-
   (myron-evil-cursor-color (myron-get :primary))
-
-  ;; Anything leftover that doesn't fall neatly into a face goes here.
   (custom-theme-set-variables theme-name
-    `(ansi-color-names-vector
-       ;; black, base08, base0B, base0A, base0D, magenta, cyan, white
-       ,(->> '(:base00 :base08 :base0B :base0A :base0D :base0E :base0D :base05)
-          (-map (-partial #'plist-get colors))
-          (apply 'vector)))))
+    `(ansi-color-names-vector ,(apply 'vector (-take 8 (myron-termcolors))))))
 
 ;;;###autoload
 (when (and (boundp 'custom-theme-load-path) load-file-name)
