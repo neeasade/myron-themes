@@ -11,8 +11,11 @@ Yet more *ａｒｔｉｓａｎａｌ* light themes for [[https://emacs.sexy/][e
 
 ** Screenshots
 
-| *mcfay* [[https://i.imgur.com/Fk4VBkP.png]]    | *struan* [[https://i.imgur.com/xxCuyoT.png]] |
-| *dogman*   [[https://i.imgur.com/RlpnKZe.png]] | *storm* [[https://i.imgur.com/Nblkd03.png]]  |
+| *mcfay*  [[https://i.imgur.com/Fk4VBkP.png]] |
+| *struan* [[https://i.imgur.com/xxCuyoT.png]] |
+| *dogman* [[https://i.imgur.com/RlpnKZe.png]] |
+
+There may be other themes in this repo, but these are the flagship themes.
 
 ** Installation
 
@@ -22,7 +25,7 @@ Install with [[https://github.com/raxod502/straight.el][straight.el]]:
 (straight-use-package '(myron-themes :host github :repo "neeasade/myron-themes" :files ("*.el" "themes/*.el")))
 #+end_src
 
-** Emphasis
+** Colors
 
 Myron colorschemes come flavored against different backgrounds, for different levels of emphasis. This can be used to ensure the same contrast level across different contexts. The schemes are stored in a nested hash table, with a helper to access them -- EG ~(myron-get :primary :strong)~ to get the primary foreground color meant to be used against the strong background (which you could get with ~(myron-get :background :strong)~). The available background keys are: ~:normal :weak :strong :focused~. For each of those, the following foregrounds are available:
 
