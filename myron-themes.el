@@ -192,11 +192,18 @@
              ;;   (ct-edit-hsluv-s 5))
              )
 
+           (magit-diff-hunk-heading :extend nil)
+           (magit-diff-hunk-heading-highlight :extend nil)
+
            (magit-diff-hunk-heading :background
-             ;; ,(myron-get :background :strong)
-             ,(-> (myron-get :background :weak)
-                (ct-edit-hsluv-h (ct-get-hsluv-h (myron-get :strings)))
-                (ct-edit-hsluv-s 5)))
+             ,(myron-get :background :strong)
+             ;; ,(-> (myron-get :background :weak)
+             ;;   (ct-edit-hsluv-h (ct-get-hsluv-h (myron-get :strings)))
+             ;;   (ct-edit-hsluv-s 5))
+             )
+
+           ;; todo: this appears to not be doing anything
+           ;; (magit-diff-file-heading :extend t)
 
            ,@(-let* ((green (ct-make-hsluv 120 70 (ct-get-hsluv-l (myron-get :background))))
                       ;; a little oomf
@@ -270,6 +277,14 @@
                   (org-block-begin-line :normal)
                   (org-block-end-line :normal)
 
+                  ;; todo: only fant this if we can get (:extend t) to work above
+                  ;; (magit-diff-file-heading :strong)
+
+                  (diff-header :strong)
+                  (diff-hunk-header :strong)
+                  (diff-function :strong)
+                  (diff-file-header :weak)
+
                   (show-paren-match :focused)
                   (show-paren-match-expression :focused)
 
@@ -298,12 +313,7 @@
                     magit-diff-removed (diff-removed smerge-lower)
 
                     magit-diff-added-highlight (diff-refine-added smerge-refined-added)
-                    magit-diff-removed-highlight (diff-refine-removed smerge-refined-removed)
-
-                    ;; todo: this doesn't look the best/needs a revisit
-                    magit-diff-hunk-heading-highlight (diff-function diff-file-header)
-                    magit-diff-hunk-heading (diff-header diff-hunk-header)
-                    )))))
+                    magit-diff-removed-highlight (diff-refine-removed smerge-refined-removed))))))
 
       ;; allow multi-face conf
       (theme-changes (-mapcat (-lambda ((faces . kvs))
