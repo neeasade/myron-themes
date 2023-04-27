@@ -148,7 +148,8 @@
 
      org-checkbox markdown-gfm-checkbox-face))
 
-(defun myron-theme-make-faces (theme-colors)
+(defun myron-theme-make-faces ()
+  "Make the myron-theme-faces from the current `myron-theme*' table "
   (let*
     (
       ;; steal the list that's hardcoded in base16-theme-define
@@ -337,19 +338,19 @@
   "Implementation of `base16-theme-define` with myron face list"
   (setq myron-theme* (if myron-use-cache cached-colors (funcall create-fn)))
 
-  (-let* ((colors (append (myron-theme-to-base16) (ht-to-plist (ht-get myron-theme* :normal))))
-           (faces (myron-theme-make-faces colors)))
+  (base16-theme-set-faces theme-name
+    (append (myron-theme-to-base16) (ht-to-plist (ht-get myron-theme* :normal)))
+    (myron-theme-make-faces))
 
-    (base16-theme-set-faces theme-name colors faces)
-    (myron-evil-cursor-color (plist-get colors :primary))
+  (myron-evil-cursor-color (myron-get :primary))
 
-    ;; Anything leftover that doesn't fall neatly into a face goes here.
-    (custom-theme-set-variables theme-name
-      `(ansi-color-names-vector
-         ;; black, base08, base0B, base0A, base0D, magenta, cyan, white
-         ,(->> '(:base00 :base08 :base0B :base0A :base0D :base0E :base0D :base05)
-            (-map (-partial #'plist-get colors))
-            (apply 'vector))))))
+  ;; Anything leftover that doesn't fall neatly into a face goes here.
+  (custom-theme-set-variables theme-name
+    `(ansi-color-names-vector
+       ;; black, base08, base0B, base0A, base0D, magenta, cyan, white
+       ,(->> '(:base00 :base08 :base0B :base0A :base0D :base0E :base0D :base05)
+          (-map (-partial #'plist-get colors))
+          (apply 'vector)))))
 
 ;;;###autoload
 (when (and (boundp 'custom-theme-load-path) load-file-name)
