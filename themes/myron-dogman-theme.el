@@ -60,10 +60,7 @@
         :strong (myron-dogman-colors background>>)))))
 
 (deftheme myron-dogman)
-(myron-theme-define
-  'myron-dogman
-  'myron-dogman-create
-  #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strong #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#026d00" :alt "#026d00" :faded "#006b47" :primary "#6d34e3" :assumed "#d144a7" :foreground "#064d51" :background "#92d9dd")) :weak #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#0e7900" :alt "#0e7900" :faded "#007753" :primary "#7940ef" :assumed "#e14db9" :foreground "#005953" :background "#92ede7")) :normal #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#1a8500" :alt "#1a8500" :faded "#00825e" :primary "#854cfb" :assumed "#f256c9" :foreground "#036458" :background "#9efff3")) :focused #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#0e7900" :alt "#0e7900" :faded "#007753" :primary "#7940ef" :assumed "#e14db9" :foreground "#524b6a" :background "#e0d9f8")))))
+(myron-theme-define 'myron-dogman)
 
 (myron-evil-cursor-color (myron-get :assumed))
 

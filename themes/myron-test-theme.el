@@ -26,38 +26,38 @@
              ;; what if strings and types were the same color
              (-select-by-indices '(0 4 3 3) colors))))))
 
-(-let*
-  (
-    (background (ct-make-hsluv 180 100 94))
-    ;; (background (ct-make-hsluv 180 100 90))
-    (normal-parts (myron-test-colors background))
-    ((&hash :alt :assumed :primary :faded :foreground) normal-parts)
+(defun myron-test-create ()
+  (-let*
+    (
+      (background (ct-make-hsluv 180 100 94))
+      ;; (background (ct-make-hsluv 180 100 90))
+      (normal-parts (myron-test-colors background))
+      ((&hash :alt :assumed :primary :faded :foreground) normal-parts)
 
-    (background>
-      (-> background
-        (ct-iterate
-          (-compose 'ct-edit-hsluv-l-dec 'ct-edit-lab-a-inc 'ct-edit-lab-b-inc)
-          ;; 'ct-edit-lab-l-dec
-          (fn (> (ct-distance <> background) 3)))
-        ;; (ct-edit-hsluv-h (ct-get-hsluv-h assumed))
-        ))
+      (background>
+        (-> background
+          (ct-iterate
+            (-compose 'ct-edit-hsluv-l-dec 'ct-edit-lab-a-inc 'ct-edit-lab-b-inc)
+            ;; 'ct-edit-lab-l-dec
+            (fn (> (ct-distance <> background) 3)))
+          ;; (ct-edit-hsluv-h (ct-get-hsluv-h assumed))
+          ))
 
-    (background>>
-      (-> background
-        (ct-iterate
-          (-compose 'ct-edit-hsluv-l-dec 'ct-edit-lab-a-inc 'ct-edit-lab-b-inc)
-          ;; 'ct-edit-lab-l-dec
-          (fn (> (ct-distance <> background) 2)))
-        ;; (ct-edit-hsluv-h (ct-get-hsluv-h assumed))
-        ))
+      (background>>
+        (-> background
+          (ct-iterate
+            (-compose 'ct-edit-hsluv-l-dec 'ct-edit-lab-a-inc 'ct-edit-lab-b-inc)
+            ;; 'ct-edit-lab-l-dec
+            (fn (> (ct-distance <> background) 2)))
+          ;; (ct-edit-hsluv-h (ct-get-hsluv-h assumed))
+          ))
 
-    (background+
-      (-> primary
-        (ct-edit-lch-c 20)
-        (ct-edit-hsluv-l
-          (ct-get-hsluv-l background>>)))))
+      (background+
+        (-> primary
+          (ct-edit-lch-c 20)
+          (ct-edit-hsluv-l
+            (ct-get-hsluv-l background>>)))))
 
-  (setq myron-theme*
     (ht<-plist
       (list
         :focused (myron-test-colors background+)
@@ -66,7 +66,9 @@
         :strong (myron-test-colors background>>)))))
 
 (deftheme myron-test)
-(myron-theme-define 'myron-test (lambda () myron-theme*) myron-theme*)
+(plist-put myron--cache 'myron-test (myron-test-create))
+
+(myron-theme-define 'myron-test)
 
 ;; (myron-evil-cursor-color (myron-get :assumed))
 

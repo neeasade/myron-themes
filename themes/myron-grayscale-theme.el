@@ -36,7 +36,7 @@
       (ht<-plist))))
 
 (deftheme myron-grayscale)
-(myron-theme-define 'myron-grayscale 'myron-grayscale-create (myron-grayscale-create))
+(myron-theme-define 'myron-grayscale)
 (myron-evil-cursor-color (myron-get :alt))
 
 (provide-theme 'myron-grayscale)
