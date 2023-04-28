@@ -17,7 +17,12 @@
     (ht<-plist)))
 
 (defun myron-grayscale-create ()
-  (-let* ((background "#f7f7f7"))
+  (-let*
+    ((background
+       "#e9e9e9"
+       ;; "#f7f7f7"
+       ;; "#e0e0e0"
+       ))
     (->> '(:focused 3
             :weak 4
             :strong 7)
