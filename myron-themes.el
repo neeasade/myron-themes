@@ -30,17 +30,18 @@
 
 ;; to generate:
 ;; (--mapcat (list (intern (format "myron-%s" it))
-;;             (funcall (intern (format "myron-%s-create" it))))
+;;             (myron--create-meta-colors (funcall (intern (format "myron-%s-create" it)))))
 ;;   '(struan mcfay storm dogman grayscale))
 
 (defcustom myron--cache
-  '(myron-struan #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:focused #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#667400" :alt "#916156" :assumed "#2a7783" :primary "#8f5d7f" :faded "#a35a29" :foreground "#544b45" :background "#e1c5c0")) :normal #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#667400" :alt "#916156" :assumed "#2a7783" :primary "#8f5d7f" :faded "#a35a29" :foreground "#544b45" :background "#f2e9e3")) :weak #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#5b6600" :alt "#845449" :assumed "#1d6a76" :primary "#825072" :faded "#a93b2f" :foreground "#483f3e" :background "#ded5d4")) :strong #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#545f00" :alt "#7d4d42" :assumed "#15626e" :primary "#7b496b" :faded "#a1276b" :foreground "#40373c" :background "#d2c9ce")))) myron-mcfay #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:focused #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#a6d0ed" :foreground "#0c3653" :faded "#335d7a" :primary "#ad0066" :assumed "#0055b8" :alt "#005f87" :strings "#006c00")) :normal #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#e8ebec" :foreground "#444748" :faded "#6a6d6e" :primary "#c6007f" :assumed "#0065c8" :alt "#006e96" :strings "#007c00")) :weak #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#d6d7d8" :foreground "#3a3b3c" :faded "#606162" :primary "#bb0074" :assumed "#005ec1" :alt "#006890" :strings "#007500")) :strong #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#cdcacb" :foreground "#353233" :faded "#5b5859" :primary "#ae0067" :assumed "#0055b8" :alt "#005f87" :strings "#006d00")))) myron-storm #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:normal #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#e3f0ed" :foreground "#697673" :faded "#7e8b88" :primary "#a356a4" :assumed "#108082" :strings "#0e8618" :alt "#a95e5b")) :weak #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#d0ddda" :foreground "#5d6a67" :faded "#717e7b" :primary "#954b96" :assumed "#087376" :strings "#077911" :alt "#9b534e")) :strong #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#c3d0cd" :foreground "#55625f" :faded "#687572" :primary "#8b418d" :assumed "#026a6f" :strings "#006f0a" :alt "#924942")) :focused #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#aee7af" :foreground "#3a733b" :faded "#4e874f" :primary "#02717e" :assumed "#007371" :strings "#007800" :alt "#a34c4d")))) myron-dogman #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strong #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#026d00" :alt "#026d00" :faded "#006b47" :primary "#6d34e3" :assumed "#d144a7" :foreground "#064d51" :background "#92d9dd")) :weak #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#0e7900" :alt "#0e7900" :faded "#007753" :primary "#7940ef" :assumed "#e14db9" :foreground "#005953" :background "#92ede7")) :normal #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#1a8500" :alt "#1a8500" :faded "#00825e" :primary "#854cfb" :assumed "#f256c9" :foreground "#036458" :background "#9efff3")) :focused #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#0e7900" :alt "#0e7900" :faded "#007753" :primary "#7940ef" :assumed "#e14db9" :foreground "#524b6a" :background "#e0d9f8")))) myron-grayscale #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strong #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#5d5d5d" :alt "#707070" :assumed "#4e4e4e" :primary "#5d5d5d" :faded "#707070" :foreground "#434343" :background "#cacaca")) :weak #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#656565" :alt "#797979" :assumed "#575757" :primary "#656565" :faded "#797979" :foreground "#4b4b4b" :background "#d7d7d7")) :focused #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#686868" :alt "#7c7c7c" :assumed "#595959" :primary "#686868" :faded "#7c7c7c" :foreground "#4e4e4e" :background "#dbdbdb")) :normal #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#717171" :alt "#858585" :assumed "#626262" :primary "#717171" :faded "#858585" :foreground "#565656" :background "#e9e9e9")))))
+  '(myron-struan #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:focused #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#667400" :alt "#916156" :assumed "#2a7783" :primary "#8f5d7f" :faded "#a35a29" :foreground "#544b45" :background "#e1c5c0")) :normal #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#667400" :alt "#916156" :assumed "#2a7783" :primary "#8f5d7f" :faded "#a35a29" :foreground "#544b45" :background "#f2e9e3")) :weak #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#5b6600" :alt "#845449" :assumed "#1d6a76" :primary "#825072" :faded "#a93b2f" :foreground "#483f3e" :background "#ded5d4")) :strong #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#545f00" :alt "#7d4d42" :assumed "#15626e" :primary "#7b496b" :faded "#a1276b" :foreground "#40373c" :background "#d2c9ce")) :meta #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:interactive-background-highlight "#cacbc5" :interactive-background "#d5d7d0" :diff-remove-highlight "#f0c0c8" :diff-add-highlight "#9aef7b" :diff-remove "#f4d2d7" :diff-add "#bbf8a9")))) myron-mcfay #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:focused #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#a6d0ed" :foreground "#0c3653" :faded "#335d7a" :primary "#ad0066" :assumed "#0055b8" :alt "#005f87" :strings "#006c00")) :normal #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#e8ebec" :foreground "#444748" :faded "#6a6d6e" :primary "#c6007f" :assumed "#0065c8" :alt "#006e96" :strings "#007c00")) :weak #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#d6d7d8" :foreground "#3a3b3c" :faded "#606162" :primary "#bb0074" :assumed "#005ec1" :alt "#006890" :strings "#007500")) :strong #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#cdcacb" :foreground "#353233" :faded "#5b5859" :primary "#ae0067" :assumed "#0055b8" :alt "#005f87" :strings "#006d00")) :meta #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:interactive-background-highlight "#c4ccc4" :interactive-background "#d0d8d0" :diff-remove-highlight "#f0c0c8" :diff-add-highlight "#9bef7b" :diff-remove "#f4d2d7" :diff-add "#bbf8a7")))) myron-storm #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:normal #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#e3f0ed" :foreground "#697673" :faded "#7e8b88" :primary "#a356a4" :assumed "#108082" :strings "#0e8618" :alt "#a95e5b")) :weak #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#d0ddda" :foreground "#5d6a67" :faded "#717e7b" :primary "#954b96" :assumed "#087376" :strings "#077911" :alt "#9b534e")) :strong #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#c3d0cd" :foreground "#55625f" :faded "#687572" :primary "#8b418d" :assumed "#026a6f" :strings "#006f0a" :alt "#924942")) :focused #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:background "#aee7af" :foreground "#3a733b" :faded "#4e874f" :primary "#02717e" :assumed "#007371" :strings "#007800" :alt "#a34c4d")) :meta #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:interactive-background-highlight "#c7cec7" :interactive-background "#d3dbd3" :diff-remove-highlight "#f0c4cb" :diff-add-highlight "#9bf37a" :diff-remove "#f4d5da" :diff-add "#c5f9b5")))) myron-dogman #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strong #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#026d00" :alt "#026d00" :faded "#006b47" :primary "#6d34e3" :assumed "#d144a7" :foreground "#064d51" :background "#92d9dd")) :weak #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#0e7900" :alt "#0e7900" :faded "#007753" :primary "#7940ef" :assumed "#e14db9" :foreground "#005953" :background "#92ede7")) :normal #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#1a8500" :alt "#1a8500" :faded "#00825e" :primary "#854cfb" :assumed "#f256c9" :foreground "#036458" :background "#9efff3")) :focused #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#0e7900" :alt "#0e7900" :faded "#007753" :primary "#7940ef" :assumed "#e14db9" :foreground "#524b6a" :background "#e0d9f8")) :meta #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:interactive-background-highlight "#c6cec6" :interactive-background "#d6ded6" :diff-remove-highlight "#f2c7ce" :diff-add-highlight "#9ef57d" :diff-remove "#f5d6db" :diff-add "#c7f9b7")))) myron-grayscale #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strong #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#5d5d5d" :alt "#707070" :assumed "#4e4e4e" :primary "#5d5d5d" :faded "#707070" :foreground "#434343" :background "#cacaca")) :weak #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#656565" :alt "#797979" :assumed "#575757" :primary "#656565" :faded "#797979" :foreground "#4b4b4b" :background "#d7d7d7")) :focused #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#686868" :alt "#7c7c7c" :assumed "#595959" :primary "#686868" :faded "#7c7c7c" :foreground "#4e4e4e" :background "#dbdbdb")) :normal #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:strings "#717171" :alt "#858585" :assumed "#626262" :primary "#717171" :faded "#858585" :foreground "#565656" :background "#e9e9e9")) :meta #s(hash-table size 65 test equal rehash-size 1.5 rehash-threshold 0.8125 data (:interactive-background-highlight "#c5caca" :interactive-background "#d2d8d8" :diff-remove-highlight "#efc0c8" :diff-add-highlight "#99ef78" :diff-remove "#f3d0d6" :diff-add "#b6f8a0")))))
   "Cache value for the themes. Internal use only."
   :type 'sexp
   :group 'myron)
 
 (defun myron-get (label &optional emphasis)
-  (ht-get* myron-theme* (or emphasis :normal) label))
+  (or (ht-get* myron-theme* (or emphasis :normal) label)
+    (when (not emphasis) (ht-get* myron-theme* :meta label))))
 
 (defun myron-set (label emphasis value)
   (ht-set! (ht-get myron-theme* emphasis) label value))
@@ -194,43 +195,18 @@
 
            (magit-diff-context-highlight :background ,(myron-get :background :weak))
 
-           ;; magit fiddling is much harder than you would expect
-           ;; magit-diff-hunk-heading is more like a "sections" concept, with an active one.
-           (magit-diff-hunk-heading-highlight :background
-             ,(myron-get :background :focused)
-             ;; ,(-> (myron-get :background :strong)
-             ;;   (ct-edit-hsluv-h (ct-get-hsluv-h (myron-get :strings)))
-             ;;   (ct-edit-hsluv-s 5))
-             )
-
-           (magit-diff-hunk-heading :extend nil)
-           (magit-diff-hunk-heading-highlight :extend nil)
-
-           (magit-diff-hunk-heading :background
-             ,(myron-get :background :strong)
-             ;; ,(-> (myron-get :background :weak)
-             ;;   (ct-edit-hsluv-h (ct-get-hsluv-h (myron-get :strings)))
-             ;;   (ct-edit-hsluv-s 5))
-             )
 
            ;; todo: this appears to not be doing anything
            ;; (magit-diff-file-heading :extend t)
 
-           ,@(-let* ((green (ct-make-hsluv 120 70 (ct-get-hsluv-l (myron-get :background))))
-                      ;; a little oomf
-                      (red (ct-make-hsluv 0 70 (- (ct-get-hsluv-l (myron-get :background)) 5)))
-                      (light-delta (apply '- (-map 'ct-get-hsluv-l
-                                               (list
-                                                 (myron-get :background :normal)
-                                                 (myron-get :background :weak)))))
-                      (light-delta (* 0.7 light-delta))
-                      (dark-green (ct-edit-hsluv-l-dec green light-delta))
-                      (dark-red (ct-edit-hsluv-l-dec red light-delta))
-                      ((green red dark-green dark-red) (--map (ct-edit-hsluv-l-dec it 0.5) (list green red dark-green dark-red))))
-               `((magit-diff-added :background ,green)
-                  (magit-diff-removed :background ,red)
-                  (magit-diff-added-highlight :background ,dark-green)
-                  (magit-diff-removed-highlight :background ,dark-red)))
+           ((magit-diff-hunk-heading magit-diff-hunk-heading-highlight) :extend nil)
+
+           (magit-diff-hunk-heading :background ,(myron-get :background :strong))
+           (magit-diff-hunk-heading-highlight :background ,(myron-get :background :focused))
+           (magit-diff-added :background ,(myron-get :diff-add))
+           (magit-diff-removed :background ,(myron-get :diff-remove))
+           (magit-diff-added-highlight :background ,(myron-get :diff-add-highlight))
+           (magit-diff-removed-highlight :background ,(myron-get :diff-remove-highlight))
 
            ,@(-mapcat
                (-lambda ((face back-label fore-label))
@@ -288,7 +264,7 @@
                   (org-block-begin-line :normal)
                   (org-block-end-line :normal)
 
-                  ;; todo: only fant this if we can get (:extend t) to work above
+                  ;; todo: only want this if we can get (:extend t) to work above
                   ;; (magit-diff-file-heading :strong)
 
                   (diff-header :strong)
@@ -362,11 +338,40 @@
     '(:base00 :base08 :base0B :base0A :base0D :base0E :base0C :base05
        :base03 :base09 :base01 :base02 :base04 :base06 :base0F :base07)))
 
+(defun myron--create-meta-colors (colors)
+  (ht-set! colors
+    :meta
+    (-let* (((bg bg-weak bg-strong) (--map (ht-get* colors it :background) '(:normal :weak :strong)))
+             (color-strings (ht-get* colors :normal :strings))
+             (green (ct-make-hsluv 120 70 (ct-get-hsluv-l bg)))
+             ;; a little oomf
+             (red (ct-make-hsluv 0 70 (- (ct-get-hsluv-l bg) 5)))
+             (light-delta (apply '- (-map 'ct-get-hsluv-l (list bg bg-weak))))
+             (light-delta (* 0.7 light-delta))
+             (dark-green (ct-edit-hsluv-l-dec green light-delta))
+             (dark-red (ct-edit-hsluv-l-dec red light-delta))
+             ((green red dark-green dark-red) (--map (ct-edit-hsluv-l-dec it 0.5)
+                                                (list green red dark-green dark-red))))
+      (ht<-plist
+        `(:diff-add ,green
+           :diff-remove ,red
+           :diff-add-highlight ,dark-green
+           :diff-remove-highlight ,dark-red
+           :interactive-background ,(-> bg-weak
+                                      (ct-edit-hsluv-h (ct-get-hsluv-h color-strings))
+                                      (ct-edit-hsluv-s 5))
+           :interactive-background-highlight ,(-> bg-strong
+                                                (ct-edit-hsluv-h (ct-get-hsluv-h color-strings))
+                                                (ct-edit-hsluv-s 5))))))
+  colors)
+
 (defun myron-theme-define (theme-name)
   "Implementation of `base16-theme-define` with myron face list"
-  (setq myron-theme* (if myron-use-cache
-                       (plist-get myron--cache theme-name)
-                       (funcall (intern (format  "%s-create" theme-name)))))
+  (setq myron-theme*
+    (if myron-use-cache
+      (plist-get myron--cache theme-name)
+      (myron--create-meta-colors
+        (funcall (intern (format "%s-create" theme-name))))))
 
   (base16-theme-set-faces theme-name
     (append (myron-theme-to-base16) (ht-to-plist (ht-get myron-theme* :normal)))
