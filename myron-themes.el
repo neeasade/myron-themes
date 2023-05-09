@@ -191,7 +191,10 @@
 
            (secondary-selection :background ,(myron-get :background :strong))
 
-           (parenthesis :foreground ,(myron-get :faded))
+           (parenthesis :foreground faded)
+
+           ((orderless-match-face-0 orderless-match-face-1 orderless-match-face-2 orderless-match-face-3)
+             :foreground alt)
 
            (magit-diff-context-highlight :background ,(myron-get :background :weak))
 
