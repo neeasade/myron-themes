@@ -193,6 +193,11 @@
 
            (parenthesis :foreground faded)
 
+           (prescient-primary-highlight :foreground alt)
+
+           ;; maybe this should be assumed or primary
+           (prescient-secondary-highlight :foreground strings)
+
            ((orderless-match-face-0 orderless-match-face-1 orderless-match-face-2 orderless-match-face-3)
              :foreground alt)
 
@@ -236,6 +241,9 @@
                   (lsp-ui-sideline-current-symbol :weak :alt)
 
                   (company-scrollbar-bg :strong :faded)
+
+                  (corfu-default :weak)
+                  (corfu-current :focused)
 
                   (magit-blame-heading :weak)
 
