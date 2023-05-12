@@ -195,17 +195,25 @@
 
            (prescient-primary-highlight :foreground alt)
 
-           ;; maybe this should be assumed or primary
-           (prescient-secondary-highlight :foreground strings)
+           (completions-common-part :foreground alt)
+
+           ;; todo: not applying?
+           (completions-common-part :background nil)
 
            ((orderless-match-face-0 orderless-match-face-1 orderless-match-face-2 orderless-match-face-3)
              :foreground alt)
 
-           (magit-diff-context-highlight :background ,(myron-get :background :weak))
+           ;; maybe this should be assumed or primary
+           (prescient-secondary-highlight :foreground strings)
 
+           (magit-diff-context-highlight :background ,(myron-get :background :weak))
 
            ;; todo: this appears to not be doing anything
            ;; (magit-diff-file-heading :extend t)
+
+           (corfu-bar :background faded)
+           (company-tooltip-scrollbar-thumb :background faded)
+           (company-tooltip-scrollbar-track :background ,(myron-get :background :weak))
 
            ((magit-diff-hunk-heading magit-diff-hunk-heading-highlight) :extend nil)
 
@@ -239,8 +247,6 @@
 
                   (lsp-ui-sideline-global :weak :alt)
                   (lsp-ui-sideline-current-symbol :weak :alt)
-
-                  (company-scrollbar-bg :strong :faded)
 
                   (corfu-default :weak)
                   (corfu-current :focused)
