@@ -95,17 +95,6 @@
       :base0F faded        ;; Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?> : used as fg in various smol places
       )))
 
-(defun myron--face-derive-from (parent face)
-  "Make FACE derive from PARENT."
-  (->> `(:foreground nil
-          :background nil
-          :underline nil
-          :height unspecified
-          :inherit ,parent
-          :box unspecified)
-    (-partition 2)
-    (-map (-partial 'cons face))))
-
 (defun myron--get-function-sexp (sym)
   "Get SYM as a quoted list, using helpful.el."
   (read
@@ -194,17 +183,15 @@
            (parenthesis :foreground faded)
 
            (prescient-primary-highlight :foreground alt)
-
-           (completions-common-part :foreground alt)
-
-           ;; todo: not applying?
-           (completions-common-part :background nil)
+           ;; maybe this should be assumed or primary
+           (prescient-secondary-highlight :foreground strings)
 
            ((orderless-match-face-0 orderless-match-face-1 orderless-match-face-2 orderless-match-face-3)
              :foreground alt)
 
-           ;; maybe this should be assumed or primary
-           (prescient-secondary-highlight :foreground strings)
+           (completions-common-part
+             :foreground alt
+             :background nil) ; not applying?
 
            (magit-diff-context-highlight :background ,(myron-get :background :weak))
 
@@ -224,13 +211,11 @@
            (magit-diff-added-highlight :background ,(myron-get :diff-add-highlight))
            (magit-diff-removed-highlight :background ,(myron-get :diff-remove-highlight))
 
-           ,@(-mapcat
+           ,@(-map
                (-lambda ((face back-label fore-label))
-                 (->> `(:inverse-video nil
+                 (->> `(,face :inverse-video nil
                          :background ,(myron-get :background back-label)
-                         :foreground ,(myron-get (or fore-label :foreground) back-label))
-                   (-partition 2)
-                   (-map (-partial 'cons face))))
+                         :foreground ,(myron-get (or fore-label :foreground) back-label))))
                `(
                   (avy-lead-face :strong :primary)
                   (avy-lead-face-0 :strong :assumed)
@@ -296,9 +281,11 @@
                   (line-number-current-line :focused)))
 
            ;; inheritors
-           ,@(-mapcat
+           ,@(-map
                (-lambda ((parent children))
-                 (-mapcat (-partial #'myron--face-derive-from parent)
+                 (--mapcat (apply 'list it :inherit parent
+                             (--mapcat (list it 'unspecified)
+                               '(:foreground :background :underline :box :height)))
                    (-list children)))
                (-partition 2
                  `(
@@ -319,11 +306,15 @@
                     magit-diff-added-highlight (diff-refine-added smerge-refined-added)
                     magit-diff-removed-highlight (diff-refine-removed smerge-refined-removed))))))
 
-      ;; allow multi-face conf
-      (theme-changes (-mapcat (-lambda ((faces . kvs))
-                                (-map (lambda (face) `(,face ,@kvs))
-                                  (-list faces)))
-                       theme-changes))
+      ;; allow multi-face, multi-attr conf
+      (theme-changes
+        (->> theme-changes
+          (-mapcat (-lambda ((faces . kvs))
+                     (-map (lambda (face) `(,face ,@kvs))
+                       (-list faces))))
+          (-mapcat (-lambda ((face . kvs))
+                     (-map (lambda (kv) `(,face ,@kv))
+                       (-partition 2 kvs))))))
 
       (new-theme
         ;; apply our individual changes to the original theme
