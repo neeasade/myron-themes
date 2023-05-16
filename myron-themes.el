@@ -277,11 +277,11 @@
                   (line-number :weak :faded)))
 
            ;; inheritors
-           ,@(-map
+           ,@(-mapcat
                (-lambda ((parent children))
-                 (--mapcat (apply 'list it :inherit parent
-                             (--mapcat (list it 'unspecified)
-                               '(:foreground :background :underline :box :height)))
+                 (--map (apply 'list it :inherit parent
+                          (--mapcat (list it 'unspecified)
+                            '(:foreground :background :underline :box :height)))
                    (-list children)))
                (-partition 2
                  `(
