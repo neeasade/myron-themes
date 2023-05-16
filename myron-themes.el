@@ -216,7 +216,12 @@
                  (->> `(,face :inverse-video nil
                          :background ,(myron-get :background back-label)
                          :foreground ,(myron-get (or fore-label :foreground) back-label))))
-               `(
+               `(;; focus bois
+                  ,@(--map (list it :focused)
+                      '(show-paren-match show-paren-match-expression
+                         line-number-current-line
+                         corfu-current ivy-current-match isearch))
+
                   (avy-lead-face :strong :primary)
                   (avy-lead-face-0 :strong :assumed)
                   (avy-lead-face-1 :strong :alt)
@@ -232,9 +237,6 @@
 
                   (lsp-ui-sideline-global :weak :alt)
                   (lsp-ui-sideline-current-symbol :weak :alt)
-
-                  (corfu-default :weak)
-                  (corfu-current :focused)
 
                   (magit-blame-heading :weak)
 
@@ -255,8 +257,6 @@
                   (mode-line-inactive :weak)
                   (mode-line :strong)
 
-                  (isearch :focused)
-                  (ivy-current-match :focused)
                   (lazy-highlight :strong)
 
                   (org-link :weak :alt)
@@ -274,11 +274,7 @@
                   (diff-function :strong)
                   (diff-file-header :weak)
 
-                  (show-paren-match :focused)
-                  (show-paren-match-expression :focused)
-
-                  (line-number :weak :faded)
-                  (line-number-current-line :focused)))
+                  (line-number :weak :faded)))
 
            ;; inheritors
            ,@(-map
@@ -291,11 +287,13 @@
                  `(
                     ,@(myron--markup-map)
 
+                    tooltip (corfu-default)
+
                     magit-diff-removed (whitespace-line)
 
                     ;; make cider inline test faces similar to magit
                     ;; (abusing for consistency)
-                    magit-diff-removed (cider-test-failure-face cider-test-error-face)
+                    magit-diff-removed (cider-test-failure-face cider-test-error-face show-paren-mismatch)
                     magit-diff-added cider-test-success-face
 
                     default smerge-markers
