@@ -3,7 +3,7 @@
 ;; SPDX-License-Identifier: MIT
 ;; Author: neeasade <neeasade@gmail.com>
 ;; URL: https://github.com/neeasade/myron-themes
-;; Package-Requires: ((emacs "26.1") (ct "0.2") (fn "0.1.2") (helpful "0.19") (s "1.12.0") (ht "2.3") (base16-theme "3.0"))
+;; Package-Requires: ((emacs "26.1") (ct "0.2") (fn "0.1.2") (helpful "0.19") (ht "2.3") (base16-theme "3.0"))
 ;; Version: 0.1
 
 ;;; Commentary:
@@ -16,7 +16,6 @@
 (require 'helpful)
 (require 'ht)
 (require 'fn)
-(require 's)
 
 (defgroup myron nil
   "Myron color themes for EMACS."
@@ -65,7 +64,8 @@
         `(,(format "Against background %s %s" bg-level bg-color)
            ,@(myron-show-contrast-against bg-level)
            "------")))
-    (s-join "\n")
+    (--map (concat it "\n"))
+    (apply 'concat)
     (message)))
 
 (defun myron-theme-to-base16 (&optional emphasis)
