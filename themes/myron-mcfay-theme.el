@@ -10,14 +10,14 @@
                (ct-make-hsluv 270 75 43.596)
                (ct-rotation-lch it -45)
                (-select-by-indices '(7 1 2 4) it)
-               (-map (fn (ct-edit-hsluv-l <> 43.596)) it)
-               (-map (fn (ct-tint-ratio <> background 4.3)) it))))
+               (-map (lambda (c) (ct-edit-hsluv-l c 43.596)) it)
+               (-map (lambda (c) (ct-contrast-min c background 4.3)) it))))
 
     (ht
       (:background background)
 
-      (:foreground (ct-tint-ratio background background 7.7))
-      (:faded (ct-tint-ratio background background 4.3))
+      (:foreground (ct-contrast-min background background 7.7))
+      (:faded (ct-contrast-min background background 4.3))
 
       (:primary (nth 0 colors))
       (:assumed (nth 1 colors))
@@ -34,14 +34,14 @@
 
       (background>
         (-> background
-          (ct-iterate 'ct-edit-lab-l-dec
-            (fn (> (ct-distance <> background) 4)))
+          (ct-aiterate 'ct-edit-lab-l-dec
+            (> (ct-distance C background) 4))
           (ct-edit-hsluv-h (ct-get-hsluv-h alt))))
 
       (background>>
         (-> background
-          (ct-iterate 'ct-edit-lab-l-dec
-            (fn (> (ct-distance <> background) 7)))
+          (ct-aiterate 'ct-edit-lab-l-dec
+            (> (ct-distance C background) 7))
           (ct-edit-hsluv-h (ct-get-hsluv-h primary))))
 
       (background+

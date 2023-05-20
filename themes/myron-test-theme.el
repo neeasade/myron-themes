@@ -33,24 +33,8 @@
       ;; (background (ct-make-hsluv 180 100 90))
       (normal-parts (myron-test-colors background))
       ((&hash :alt :assumed :primary :faded :foreground) normal-parts)
-
-      (background>
-        (-> background
-          (ct-iterate
-            (-compose 'ct-edit-hsluv-l-dec 'ct-edit-lab-a-inc 'ct-edit-lab-b-inc)
-            ;; 'ct-edit-lab-l-dec
-            (fn (> (ct-distance <> background) 3)))
-          ;; (ct-edit-hsluv-h (ct-get-hsluv-h assumed))
-          ))
-
-      (background>>
-        (-> background
-          (ct-iterate
-            (-compose 'ct-edit-hsluv-l-dec 'ct-edit-lab-a-inc 'ct-edit-lab-b-inc)
-            ;; 'ct-edit-lab-l-dec
-            (fn (> (ct-distance <> background) 2)))
-          ;; (ct-edit-hsluv-h (ct-get-hsluv-h assumed))
-          ))
+      (background> background)
+      (background>> background)
 
       (background+
         (-> primary

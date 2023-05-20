@@ -3,7 +3,7 @@
 ;; SPDX-License-Identifier: MIT
 ;; Author: neeasade <neeasade@gmail.com>
 ;; URL: https://github.com/neeasade/myron-themes
-;; Package-Requires: ((emacs "26.1") (ct "0.2") (fn "0.1.2") (helpful "0.19") (ht "2.3") (base16-theme "3.0"))
+;; Package-Requires: ((emacs "26.1") (ct "0.2") (helpful "0.19") (ht "2.3") (base16-theme "3.0"))
 ;; Version: 0.1
 
 ;;; Commentary:
@@ -15,7 +15,6 @@
 (require 'ct)
 (require 'helpful)
 (require 'ht)
-(require 'fn)
 
 (defgroup myron nil
   "Myron color themes for EMACS."
@@ -190,7 +189,7 @@
              :foreground alt)
 
            (completions-common-part
-             :foreground alt
+             :foreground ,(myron-get :alt :weak) ; weak for corfu popup
              :background nil) ; not applying?
 
            (magit-diff-context-highlight :background ,(myron-get :background :weak))

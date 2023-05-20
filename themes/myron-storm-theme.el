@@ -10,8 +10,8 @@
          (return (ht)))
 
     (ht-set return :background bg)
-    (ht-set return :foreground (ct-tint-ratio bg bg fg-ratio))
-    (ht-set return :faded (ct-tint-ratio bg bg (- fg-ratio 1)))
+    (ht-set return :foreground (ct-contrast-min bg bg fg-ratio))
+    (ht-set return :faded (ct-contrast-min bg bg (- fg-ratio 1)))
 
     (->> (ct-rotation-hsluv bg 60)
       (-map (lambda (c)
@@ -30,11 +30,11 @@
   (-let*
     ((background (ct-make-lab 94 -5 0))
 
-      (background> (ct-iterate background 'ct-edit-hsluv-l-dec
-                     (fn (> (ct-distance <> background) 4))))
+      (background> (ct-aiterate background 'ct-edit-hsluv-l-dec
+                     (> (ct-distance C background) 4)))
 
-      (background>> (ct-iterate background 'ct-edit-hsluv-l-dec
-                      (fn (> (ct-distance <> background) 7))))
+      (background>> (ct-aiterate background 'ct-edit-hsluv-l-dec
+                      (> (ct-distance C background) 7)))
 
       (normal-parts (myron-storm-colors background))
       ((&hash :alt :assumed :primary :faded :foreground) normal-parts)

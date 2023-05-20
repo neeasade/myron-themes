@@ -7,15 +7,15 @@
   "get the foreground colors against a specific background"
   (let* ((colors (->> (ct-rotation-hsluv (ct-make-hsluv 265 60 40) 60)
                    (-select-by-indices '(1 5 2 3))
-                   (-map (fn (ct-edit-hsluv-l <> 80)))
-                   (-map (fn (ct-tint-ratio <> background 4.3)))))
+                   (-map (lambda (c) (ct-edit-hsluv-l c 80)))
+                   (-map (lambda (c) (ct-contrast-min c background 4.3)))))
 
-          (foreground (ct-tint-ratio background background 7))
+          (foreground (ct-contrast-min background background 7))
 
           (faded
-            (ct-tint-ratio
+            (ct-contrast-min
               (ct-edit-hsl
-                (ct-tint-ratio background background 5.5)
+                (ct-contrast-min background background 5.5)
                 ;; (nth 2 colors)
                 (lambda (h s l) (list h 80 70)))
               background 4.3)))
@@ -29,7 +29,7 @@
                  :strings (-> (nth 3 colors)
                             (ct-edit-lch-l (-partial '+ 10))
                             (ct-edit-lch-c 100)
-                            (ct-tint-ratio background 4.3))))))
+                            (ct-contrast-min background 4.3))))))
 
 (defun myron-struan-create ()
   (-let*
@@ -39,14 +39,14 @@
 
       (background>
         (-> background
-          (ct-iterate 'ct-edit-lab-l-dec
-            (fn (> (ct-distance <> background) 4)))
+          (ct-aiterate 'ct-edit-lab-l-dec
+            (> (ct-distance C background) 4))
           (ct-edit-hsluv-h (ct-get-hsluv-h alt))))
 
       (background>>
         (-> background
-          (ct-iterate 'ct-edit-lab-l-dec
-            (fn (> (ct-distance <> background) 7)))
+          (ct-aiterate 'ct-edit-lab-l-dec
+            (> (ct-distance C background) 7))
           (ct-edit-hsluv-h (ct-get-hsluv-h primary))))
 
       (background+

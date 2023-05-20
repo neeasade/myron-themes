@@ -26,26 +26,21 @@
 (defun myron-dogman-create ()
   (-let*
     ((background (ct-make-hsluv 180 100 94))
+      ;; (background "#fdf6e3")
       ;; (background (ct-make-hsluv 180 100 90))
       (normal-parts (myron-dogman-colors background))
       ((&hash :alt :assumed :primary :faded :foreground) normal-parts)
 
-      (background>
-        (let ((base background))
-          (-> base
-            (ct-iterate
-              (-compose
-                'ct-edit-hsv-v-dec
-                'ct-edit-hsv-v-dec
-                'ct-edit-lab-a-inc)
-              (fn (> (ct-distance <> base) 4))))))
+      (background> (ct-aiterate background
+                     (-compose
+                       'ct-edit-hsv-v-dec
+                       'ct-edit-hsv-v-dec
+                       'ct-edit-lab-a-inc)
+                     (> (ct-distance C background) 4)))
 
-      (background>>
-        (let ((base background>))
-          (-> base
-            (ct-iterate
-              (-compose 'ct-edit-lab-a-inc 'ct-edit-lab-b-inc)
-              (fn (> (ct-distance <> base) 6))))))
+      (background>> (ct-aiterate background>
+                      (-compose 'ct-edit-lab-a-inc 'ct-edit-lab-b-inc)
+                      (> (ct-distance C background>) 6)))
 
       (background+
         (-> primary
