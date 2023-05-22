@@ -37,8 +37,8 @@
     (->> (list :focused (-> background
                           (myron-cdist 3 'ct-edit-lab-l-dec)
                           (ct-edit-hsluv-h hue))
-           :weak (myron-cdist 2 background 'ct-edit-lab-l-inc)
-           :strong (myron-cdist 4 background 'ct-edit-lab-l-dec))
+           :weak (myron-cdist background 2 'ct-edit-lab-l-inc)
+           :strong (myron-cdist background 4 'ct-edit-lab-l-dec))
       (-partition 2)
       (append `((:normal ,background)))
       (-mapcat (-lambda ((label bg)) (list label (myron-kobo-colors bg hue))))
