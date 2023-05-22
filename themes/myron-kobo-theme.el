@@ -34,11 +34,19 @@
        ;; 5.566905771576383
        )
       (hue 90))
-    (->> (list :focused (-> background
-                          (myron-cdist 3 'ct-edit-lab-l-dec)
-                          (ct-edit-hsluv-h hue))
-           :weak (myron-cdist background 2 'ct-edit-lab-l-inc)
-           :strong (myron-cdist background 4 'ct-edit-lab-l-dec))
+    (->> (list
+           ;; the unique thing about this theme - a *lighter* weak bg
+           :weak (myron-cdist background 1.5 'ct-edit-lab-l-inc)
+
+           ;; torn on whether or not to give focus bg a flare
+           ;; syncing strong+focused works b/c in practice, focus selection on a strong bg is not used
+           :strong (myron-cdist background 3 'ct-edit-lab-l-dec)
+           :focused (myron-cdist background 2 'ct-edit-lab-l-dec)
+           ;; (-> background
+           ;;   (ct-edit-hsluv-h hue)
+           ;;   (ct-edit-hsluv-s 10)
+           ;;   (myron-cdist 1.5 'ct-edit-lab-l-dec))
+           )
       (-partition 2)
       (append `((:normal ,background)))
       (-mapcat (-lambda ((label bg)) (list label (myron-kobo-colors bg hue))))
@@ -46,6 +54,7 @@
 
 (deftheme myron-kobo)
 (myron-theme-define 'myron-kobo)
+(myron-evil-cursor-color (myron-get :faded))
 
 (provide-theme 'myron-kobo)
 (provide 'myron-kobo-theme)
