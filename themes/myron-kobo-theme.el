@@ -34,7 +34,7 @@
        ;; 5.566905771576383
        )
       (hue 90))
-    (->> '(:focused 3
+    (->> '(:focused 7
             :weak 4
             :strong 7)
       (-partition 2)
@@ -48,8 +48,7 @@
                     (> (ct-distance C C0) distance))))))
       (append `((:normal ,background)))
       (-mapcat (-lambda ((label bg)) (list label (myron-kobo-colors bg hue))))
-      (ht<-plist))
-    ))
+      (ht<-plist))))
 
 (deftheme myron-kobo)
 (myron-theme-define 'myron-kobo)

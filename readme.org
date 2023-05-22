@@ -47,6 +47,10 @@ Some thoughts on my general theme opinions:
 - I generally lean higher contrast
 - note: I'm colorblind
 
+Downsides of this theme scheme:
+
+- The focus bg has to be distinct on weak bg, which is usually darker than the default fg -- meaning that "light" region/focus bg's are not possible (because you lose distinction in dropdowns)
+
 ** Contrast dumping
 
 Calling ~myron-show-contrasts~ will show the contrast ratios of all the foregrounds against all the backgrounds.
