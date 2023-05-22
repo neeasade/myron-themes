@@ -34,18 +34,12 @@
        ;; 5.566905771576383
        )
       (hue 90))
-    (->> '(:focused 7
-            :weak 4
-            :strong 7)
+    (->> (list :focused (-> background
+                          (myron-cdist 3 'ct-edit-lab-l-dec)
+                          (ct-edit-hsluv-h hue))
+           :weak (myron-cdist 2 background 'ct-edit-lab-l-inc)
+           :strong (myron-cdist 4 background 'ct-edit-lab-l-dec))
       (-partition 2)
-      (-map (-lambda ((label distance))
-              (list label
-                (if (eq label :focused)
-                  (-> background
-                    (ct-aiterate 'ct-edit-lab-l-dec (> (ct-distance C C0) distance))
-                    (ct-edit-hsluv-h hue))
-                  (ct-aiterate background 'ct-edit-lab-l-dec
-                    (> (ct-distance C C0) distance))))))
       (append `((:normal ,background)))
       (-mapcat (-lambda ((label bg)) (list label (myron-kobo-colors bg hue))))
       (ht<-plist))))

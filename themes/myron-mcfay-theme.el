@@ -34,14 +34,12 @@
 
       (background>
         (-> background
-          (ct-aiterate 'ct-edit-lab-l-dec
-            (> (ct-distance C background) 4))
+          (myron-cdist 4 'ct-edit-lab-l-dec)
           (ct-edit-hsluv-h (ct-get-hsluv-h alt))))
 
       (background>>
         (-> background
-          (ct-aiterate 'ct-edit-lab-l-dec
-            (> (ct-distance C background) 7))
+          (myron-cdist 7 'ct-edit-lab-l-dec)
           (ct-edit-hsluv-h (ct-get-hsluv-h primary))))
 
       (background+

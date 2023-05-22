@@ -31,16 +31,14 @@
       (normal-parts (myron-dogman-colors background))
       ((&hash :alt :assumed :primary :faded :foreground) normal-parts)
 
-      (background> (ct-aiterate background
+      (background> (myron-cdist background 4
                      (-compose
                        'ct-edit-hsv-v-dec
                        'ct-edit-hsv-v-dec
-                       'ct-edit-lab-a-inc)
-                     (> (ct-distance C background) 4)))
+                       'ct-edit-lab-a-inc)))
 
-      (background>> (ct-aiterate background>
-                      (-compose 'ct-edit-lab-a-inc 'ct-edit-lab-b-inc)
-                      (> (ct-distance C background>) 6)))
+      (background>> (myron-cdist background> 6
+                      (-compose 'ct-edit-lab-a-inc 'ct-edit-lab-b-inc)))
 
       (background+
         (-> primary

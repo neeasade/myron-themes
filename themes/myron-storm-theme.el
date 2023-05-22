@@ -30,11 +30,9 @@
   (-let*
     ((background (ct-make-lab 94 -5 0))
 
-      (background> (ct-aiterate background 'ct-edit-hsluv-l-dec
-                     (> (ct-distance C background) 4)))
+      (background> (myron-cdist background 5 'ct-edit-hsluv-l-dec))
 
-      (background>> (ct-aiterate background 'ct-edit-hsluv-l-dec
-                      (> (ct-distance C background) 7)))
+      (background>> (myron-cdist background 7 'ct-edit-hsluv-l-dec))
 
       (normal-parts (myron-storm-colors background))
       ((&hash :alt :assumed :primary :faded :foreground) normal-parts)

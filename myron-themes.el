@@ -44,6 +44,11 @@
 (defun myron-set (label emphasis value)
   (ht-set! (ht-get myron-theme* emphasis) label value))
 
+(defmacro myron-cdist (color distance transform)
+  ;; cdist = change distance. do a change until distance is reached
+  `(ct-aiterate ,color ,transform
+     (> (ct-distance C C0) ,distance)))
+
 (defun myron-show-contrast-against (bg-level)
   "Show contrast levels of fg colors in myron-theme* against BG-LEVEL."
   (-map (lambda (fg-label)
