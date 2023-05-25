@@ -53,7 +53,8 @@
       (ht<-plist))))
 
 (deftheme myron-kobo)
-(myron-theme-define 'myron-kobo)
+(myron-theme-define 'myron-kobo
+  (lambda () '((font-lock-type-face :foreground foreground))))
 (myron-evil-cursor-color (myron-get :faded))
 
 (provide-theme 'myron-kobo)

@@ -153,7 +153,7 @@
 
      org-checkbox markdown-gfm-checkbox-face))
 
-(defun myron-theme-make-faces ()
+(defun myron-theme-make-faces (&optional theme-overrides)
   "Make the myron-theme-faces from the current `myron-theme*' table "
   (let*
     (
@@ -193,9 +193,7 @@
            ((orderless-match-face-0 orderless-match-face-1 orderless-match-face-2 orderless-match-face-3)
              :foreground alt)
 
-           (completions-common-part
-             :foreground ,(myron-get :alt :weak) ; weak for corfu popup
-             :background nil) ; not applying?
+           (completions-common-part :foreground ,(myron-get :alt :weak)) ; weak for corfu popup
 
            (magit-diff-context-highlight :background ,(myron-get :background :weak))
 
@@ -234,7 +232,6 @@
                   (eros-result-overlay-face :strong)
                   (cider-result-overlay-face :strong)
 
-                  (completions-common-part :normal :primary)
                   (comint-highlight-prompt :normal :assumed)
 
                   (tooltip :weak)
@@ -306,7 +303,9 @@
                     magit-diff-removed (diff-removed smerge-lower)
 
                     magit-diff-added-highlight (diff-refine-added smerge-refined-added)
-                    magit-diff-removed-highlight (diff-refine-removed smerge-refined-removed))))))
+                    magit-diff-removed-highlight (diff-refine-removed smerge-refined-removed))))
+
+           ,@(when theme-overrides (funcall theme-overrides))))
 
       ;; allow multi-face, multi-attr conf
       (theme-changes
@@ -375,7 +374,7 @@
                                                 (ct-edit-hsluv-s 5))))))
   colors)
 
-(defun myron-theme-define (theme-name)
+(defun myron-theme-define (theme-name &optional theme-overrides)
   "Implementation of `base16-theme-define` with myron face list"
   (setq myron-theme*
     (if myron-use-cache
@@ -385,7 +384,7 @@
 
   (base16-theme-set-faces theme-name
     (append (myron-theme-to-base16) (ht-to-plist (ht-get myron-theme* :normal)))
-    (myron-theme-make-faces))
+    (myron-theme-make-faces theme-overrides))
   (myron-evil-cursor-color (myron-get :primary))
   (custom-theme-set-variables theme-name
     `(ansi-color-names-vector ,(apply 'vector (-take 8 (myron-termcolors))))))
