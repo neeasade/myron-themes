@@ -41,7 +41,7 @@
            ;; torn on whether or not to give focus bg a flare
            ;; syncing strong+focused works b/c in practice, focus selection on a strong bg is not used
            :strong (myron-cdist background 3 'ct-edit-lab-l-dec)
-           :focused (myron-cdist background 2 'ct-edit-lab-l-dec)
+           :focused (myron-cdist background 2.5 'ct-edit-lab-l-dec)
            ;; (-> background
            ;;   (ct-edit-hsluv-h hue)
            ;;   (ct-edit-hsluv-s 10)
