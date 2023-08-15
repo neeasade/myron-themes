@@ -290,20 +290,27 @@
 
                     tooltip (corfu-default)
 
-                    magit-diff-removed (whitespace-line)
-
-                    ;; make cider inline test faces similar to magit
-                    ;; (abusing for consistency)
-                    magit-diff-removed (cider-test-failure-face cider-test-error-face show-paren-mismatch)
-                    magit-diff-added cider-test-success-face
-
+                    ;; diff consistency:
                     default smerge-markers
 
                     magit-diff-added (diff-added smerge-upper)
                     magit-diff-removed (diff-removed smerge-lower)
 
                     magit-diff-added-highlight (diff-refine-added smerge-refined-added)
-                    magit-diff-removed-highlight (diff-refine-removed smerge-refined-removed))))
+                    magit-diff-removed-highlight (diff-refine-removed smerge-refined-removed)
+
+                    ;; abuse diff colors in other contexts for consistency:
+
+                    ;; success:
+                    magit-diff-added cider-test-success-face
+
+                    ;; failure:
+                    magit-diff-removed (whitespace-line)
+                    magit-diff-removed-highlight (cider-error-overlay-face
+                                                   cider-test-error-face
+                                                   cider-test-failure-face
+                                                   error
+                                                   show-paren-mismatch))))
 
            ,@(when theme-overrides (funcall theme-overrides))))
 
