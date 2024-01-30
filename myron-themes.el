@@ -343,6 +343,10 @@
 
 (defun myron-evil-cursor-color (color)
   "Syncronize the the evil cursor COLOR across cursor states."
+  (unless window-system
+    (when (fboundp 'etcc--evil-set-cursor-color)
+      (etcc--evil-set-cursor-color color)))
+
   (setq evil-normal-state-cursor `(,color box)
     evil-insert-state-cursor `(,color bar)
     evil-visual-state-cursor `(,color box)))
