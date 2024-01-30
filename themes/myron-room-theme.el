@@ -16,36 +16,47 @@
     (-partition 2)
     (-mapcat (-lambda ((label contrast))
                (list label
-                 (if (-contains-p '(:primary :alt :strings) label)
-                   (-> background
-                     (ct-contrast-min background contrast)
-                     (ct-edit-hsluv-h hue)
-                     ;; (ct-edit-hsluv-s 100)
-                     (ct-edit-lch-c 100)
-                     )
-                   (ct-contrast-min background background contrast)))))
+                 (cond
+                   ((eq :strings label)
+                     (-> (ct-contrast-min background background contrast)
+                       (ct-edit-hsluv-h hue)
+                       (ct-edit-lch-c 100)
+                       (ct-complement)))
+                   ((-contains-p '(:primary :alt :strings) label)
+                     (-> (ct-contrast-min background background contrast)
+                       (ct-edit-hsluv-h hue)
+                       ;; (ct-edit-hsluv-s 100)
+                       (ct-edit-lch-c 100)))
+                   (t (ct-contrast-min background background contrast))))))
     ;; (-mapcat (-lambda ((label contrast))
     ;;            (list label (ct-contrast-min background background contrast))))
-    (ht<-plist)))
+    (ht<-plist)
+    ))
 
 (defun myron-room-create ()
   (-let*
-    ((background "#f7f7f7")
+    (;; maybe a darker bg
+      (background "#f0f0f0")
 
       (hue (ct-get-hsluv-h "#ebe5f4"))
-      ;; (hue 90)
-      )
 
-    ;; todo: consider making focused inverted (inspo: moe-light)
-    (->> '(:focused 3
-            :weak 4
-            :strong 7)
-      (-partition 2)
-      (-map (-lambda ((label distance))
-              (list label (myron-cdist background distance 'ct-edit-lab-l-dec))))
-      (append `((:normal ,background)))
-      (-mapcat (-lambda ((label bg)) (list label (myron-room-colors bg hue))))
-      (ht<-plist))))
+      ((background> background>>) (->> '(:weak 4
+                                          :strong 7)
+                                    (-partition 2)
+                                    (-map (-lambda ((label distance))
+                                            (myron-cdist background distance 'ct-edit-lab-l-dec)))))
+      (background+ (-> (ht-get (myron-room-colors background hue) :alt)
+                     ;; (ct-edit-lch-h 40)
+                     (ct-complement)
+                     (ct-edit-lch-c 100)
+                     (ct-edit-hsluv-l (ct-get-hsluv-l background>))
+                     )))
+    (ht<-plist
+      (list
+        :focused (myron-room-colors background+ hue)
+        :normal (myron-room-colors background hue)
+        :weak (myron-room-colors background> hue)
+        :strong (myron-room-colors background>> hue)))))
 
 (deftheme myron-room)
 (myron-theme-define 'myron-room)
