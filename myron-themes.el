@@ -214,10 +214,15 @@
                          line-number-current-line
                          corfu-current ivy-current-match isearch))
 
-                  (avy-lead-face :strong :primary)
-                  (avy-lead-face-0 :strong :assumed)
-                  (avy-lead-face-1 :strong :alt)
-                  (avy-lead-face-2 :strong :strings)
+                  ;; (avy-lead-face :strong :primary)
+                  ;; (avy-lead-face-0 :strong :assumed)
+                  ;; (avy-lead-face-1 :strong :alt)
+                  ;; (avy-lead-face-2 :strong :strings)
+
+                  (avy-lead-face :focused :assumed)
+                  (avy-lead-face-0 :focused :assumed)
+                  (avy-lead-face-1 :focused :assumed)
+                  (avy-lead-face-2 :focused :assumed)
 
                   (eros-result-overlay-face :strong)
                   (cider-result-overlay-face :strong)
