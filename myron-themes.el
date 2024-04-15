@@ -157,10 +157,10 @@
       ;; note individual changes
       (theme-changes
         `(
-           (fringe :background nil)
+           (fringe :background unspecified)
 
            (font-lock-comment-delimiter-face :foreground faded)
-           (font-lock-comment-face :background nil)
+           (font-lock-comment-face :background unspecified)
 
            ((window-divider vertical-border) :foreground faded)
 
@@ -169,8 +169,8 @@
            (font-lock-variable-name-face :foreground primary)
 
            ((outline-1 outline-2 outline-3 outline-4 outline-5) :foreground foreground)
-           ((whitespace-space whitespace-tab) :background nil)
-           ((org-date flycheck-warning flycheck-info) :underline nil)
+           ((whitespace-space whitespace-tab) :background unspecified)
+           ((org-date flycheck-warning flycheck-info) :underline unspecified)
 
            (secondary-selection :background ,(myron-get :background :strong))
 
@@ -194,7 +194,7 @@
            (company-tooltip-scrollbar-thumb :background faded)
            (company-tooltip-scrollbar-track :background ,(myron-get :background :weak))
 
-           ((magit-diff-hunk-heading magit-diff-hunk-heading-highlight) :extend nil)
+           ((magit-diff-hunk-heading magit-diff-hunk-heading-highlight) :extend unspecified)
 
            (magit-diff-hunk-heading :background ,(myron-get :background :strong))
            (magit-diff-hunk-heading-highlight :background ,(myron-get :background :focused))
