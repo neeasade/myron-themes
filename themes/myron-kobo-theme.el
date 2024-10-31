@@ -15,13 +15,10 @@
           :primary 4)
     (-partition 2)
     (-mapcat (-lambda ((label contrast))
-               (list label
+               (let ((color (ct-contrast-min background background contrast)))
                  (if (-contains-p '(:primary :alt :strings) label)
-                   (-> background
-                     (ct-contrast-min background contrast)
-                     (ct-edit-hsluv-h hue)
-                     (ct-edit-hsluv-s 100))
-                   (ct-contrast-min background background contrast)))))
+                   (list label (ct-aedit-hsluv color (list hue 100 l)))
+                   (list label color)))))
     (ht<-plist)))
 
 (defun myron-kobo-create ()

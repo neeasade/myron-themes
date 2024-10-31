@@ -19,7 +19,6 @@
                 (-compose 'ct-edit-hsluv-l-dec 'ct-edit-hsluv-s-inc)
                 (lambda (step) (> (ct-contrast-ratio step bg) fg-ratio)))))
       (-select-by-indices '(2 1 0 4))
-      ;; (myron-take '(3 2 1 0))
       (-interleave '(:primary :assumed :strings :alt))
       (-partition 2)
       (-map (-lambda ((k v)) (ht-set return k v))))

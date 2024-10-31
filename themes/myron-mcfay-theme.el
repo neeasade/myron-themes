@@ -32,21 +32,17 @@
       (normal-parts (myron-mcfay-colors background))
       ((&hash :alt :assumed :primary :faded :foreground) normal-parts)
 
-      (background>
-        (-> background
-          (myron-cdist 4 'ct-edit-lab-l-dec)
-          (ct-edit-hsluv-h (ct-get-hsluv-h alt))))
+      (background> (-> background
+                     (myron-cdist 4 'ct-edit-lab-l-dec)
+                     (ct-steal 'hsluv-h alt)))
 
-      (background>>
-        (-> background
-          (myron-cdist 7 'ct-edit-lab-l-dec)
-          (ct-edit-hsluv-h (ct-get-hsluv-h primary))))
+      (background>> (-> background
+                      (myron-cdist 7 'ct-edit-lab-l-dec)
+                      (ct-steal 'hsluv-h primary)))
 
-      (background+
-        (-> alt
-          (ct-edit-lch-c 20)
-          (ct-edit-hsluv-l
-            (ct-get-hsluv-l background>>)))))
+      (background+ (-> alt
+                     (ct-edit-lch-c 20)
+                     (ct-steal 'hsluv-l background>>))))
 
     (ht
       (:focused (myron-mcfay-colors background+))

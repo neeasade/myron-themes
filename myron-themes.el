@@ -3,7 +3,7 @@
 ;; SPDX-License-Identifier: MIT
 ;; Author: neeasade <neeasade@gmail.com>
 ;; URL: https://github.com/neeasade/myron-themes
-;; Package-Requires: ((emacs "26.1") (ct "0.2") (helpful "0.19") (ht "2.3") (base16-theme "3.0"))
+;; Package-Requires: ((emacs "26.1") (ct "0.3") (helpful "0.19") (ht "2.3") (base16-theme "3.0"))
 ;; Version: 0.1
 
 ;;; Commentary:
@@ -189,7 +189,6 @@
 
            ;; todo: this appears to not be doing anything
            ;; (magit-diff-file-heading :extend t)
-
            (corfu-bar :background faded)
            (company-tooltip-scrollbar-thumb :background faded)
            (company-tooltip-scrollbar-track :background ,(myron-get :background :weak))

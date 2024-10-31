@@ -43,7 +43,7 @@
       (background+
         (-> primary
           (ct-edit-lch-c 80)
-          (ct-edit-hsluv-l (ct-get-hsluv-l background>)))))
+          (ct-steal 'hsluv-l background>))))
 
     (ht<-plist
       (list

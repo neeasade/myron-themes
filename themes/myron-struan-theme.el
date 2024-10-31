@@ -12,13 +12,11 @@
 
           (foreground (ct-contrast-min background background 7))
 
-          (faded
-            (ct-contrast-min
-              (ct-edit-hsl
-                (ct-contrast-min background background 5.5)
-                ;; (nth 2 colors)
-                (lambda (h s l) (list h 80 70)))
-              background 4.3)))
+          (faded (ct-contrast-min (ct-aedit-hsl
+                                    ;; (nth 2 colors)
+                                    (ct-contrast-min background background 5.5)
+                                    (list h 80 70))
+                   background 4.3)))
 
     (ht<-plist (list :background background
                  :foreground foreground
@@ -27,8 +25,7 @@
                  :assumed (nth 1 colors)
                  :alt (nth 2 colors)
                  :strings (-> (nth 3 colors)
-                            (ct-edit-lch-l (-partial '+ 10))
-                            (ct-edit-lch-c 100)
+                            (ct-aedit-lch (list (+ l 10) 100 h))
                             (ct-contrast-min background 4.3))))))
 
 (defun myron-struan-create ()
@@ -40,24 +37,24 @@
       (background>
         (-> background
           (myron-cdist 4 'ct-edit-lab-l-dec)
-          (ct-edit-hsluv-h (ct-get-hsluv-h alt))))
+          (ct-steal 'hsluv-h alt)))
 
       (background>>
         (-> background
           (myron-cdist 7 'ct-edit-lab-l-dec)
-          (ct-edit-hsluv-h (ct-get-hsluv-h primary))))
+          (ct-steal 'hsluv-h primary)))
 
       (background+
         (-> alt
           (ct-edit-lch-c 25)
-          (ct-edit-hsluv-l
-            (ct-get-hsluv-l background>>)))))
+          (ct-steal 'hsluv-l background>>))))
 
     (ht
-      (:focused (ht-merge normal-parts (ht (:background background+))))
-      (:normal normal-parts)
-      (:weak (myron-struan-colors background>))
-      (:strong (myron-struan-colors background>>)))))
+      (:normal  normal-parts)
+      (:weak    (myron-struan-colors background>))
+      (:strong  (myron-struan-colors background>>))
+      (:focused (ht-merge normal-parts (ht (:background background+)))))))
+
 
 (deftheme myron-struan)
 (myron-theme-define 'myron-struan)
