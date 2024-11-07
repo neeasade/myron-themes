@@ -23,7 +23,8 @@
   :prefix "myron-")
 
 (defcustom myron-use-cache t
-  "Using the cache means you get the colors as authored -- turning it off means compute them on your machine."
+  "Using the cache means you get the colors as authored -- turning it off means
+compute them on your machine."
   :type 'boolean
   :group 'myron)
 
@@ -357,6 +358,7 @@
     :meta
     (-let* (((bg bg-weak bg-strong) (--map (ht-get* colors it :background) '(:normal :weak :strong)))
              (color-strings (ht-get* colors :normal :strings))
+             (strings-hue (ct-get-hsluv-h (ht-get* colors :normal :strings)))
              (green (ct-make-hsluv 120 70 (ct-get-hsluv-l bg)))
              ;; a little oomf
              (red (ct-make-hsluv 0 70 (- (ct-get-hsluv-l bg) 5)))
@@ -371,12 +373,8 @@
            :diff-remove ,red
            :diff-add-highlight ,dark-green
            :diff-remove-highlight ,dark-red
-           :interactive-background ,(-> bg-weak
-                                      (ct-edit-hsluv-h (ct-get-hsluv-h color-strings))
-                                      (ct-edit-hsluv-s 5))
-           :interactive-background-highlight ,(-> bg-strong
-                                                (ct-edit-hsluv-h (ct-get-hsluv-h color-strings))
-                                                (ct-edit-hsluv-s 5))))))
+           :interactive-background (ct-aedit-hsluv bg-weak (strings-hue 5 l))
+           :interactive-background-highlight (ct-aedit-hsluv bg-strong (strings-hue 5 l))))))
   colors)
 
 (defun myron-theme-define (theme-name &optional theme-overrides)

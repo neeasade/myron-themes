@@ -13,7 +13,7 @@
     (ht-set return :foreground (ct-contrast-min bg bg fg-ratio))
     (ht-set return :faded (ct-contrast-min bg bg (- fg-ratio 1)))
 
-    (->> (ct-rotation-hsluv bg 60)
+    (->> (ct-rotation-hsluv 6 bg)
       (-map (lambda (c)
               (ct-iterate c
                 (-compose 'ct-edit-hsluv-l-dec 'ct-edit-hsluv-s-inc)
@@ -27,12 +27,9 @@
 
 (defun myron-storm-create ()
   (-let*
-    ((background (ct-make-lab 94 -5 0))
-
-      (background> (myron-cdist background 5 'ct-edit-hsluv-l-dec))
-
+    ((background    (ct-make-lab 94 -5 0))
+      (background>  (myron-cdist background 5 'ct-edit-hsluv-l-dec))
       (background>> (myron-cdist background 7 'ct-edit-hsluv-l-dec))
-
       (normal-parts (myron-storm-colors background))
       ((&hash :alt :assumed :primary :faded :foreground) normal-parts)
 

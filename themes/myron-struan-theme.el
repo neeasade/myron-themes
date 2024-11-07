@@ -5,13 +5,13 @@
 
 (defun myron-struan-colors (background)
   "get the foreground colors against a specific background"
-  (let* ((colors (->> (ct-rotation-hsluv (ct-make-hsluv 265 60 40) 60)
+  (let* ((colors (->> (ct-make-hsluv 265 60 40)
+                   (ct-rotation-hsluv 6)
                    (-select-by-indices '(1 5 2 3))
                    (-map (lambda (c) (ct-edit-hsluv-l c 80)))
                    (-map (lambda (c) (ct-contrast-min c background 4.3)))))
 
           (foreground (ct-contrast-min background background 7))
-
           (faded (ct-contrast-min (ct-aedit-hsl
                                     ;; (nth 2 colors)
                                     (ct-contrast-min background background 5.5)

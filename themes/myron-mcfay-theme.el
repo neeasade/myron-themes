@@ -5,23 +5,20 @@
 
 (defun myron-mcfay-colors (background)
   "get the foreground colors against a specific background"
-  (let*
-    ((colors (-->
-               (ct-make-hsluv 270 75 43.596)
-               (ct-rotation-lch it -45)
-               (-select-by-indices '(7 1 2 4) it)
-               (-map (lambda (c) (ct-edit-hsluv-l c 43.596)) it)
-               (-map (lambda (c) (ct-contrast-min c background 4.3)) it))))
+  (let* ((colors (->> (ct-make-hsluv 270 75 43.596)
+                   (ct-rotation-lch -8)
+                   (-select-by-indices '(7 1 2 4))
+                   (-map (lambda (c) (ct-edit-hsluv-l c 43.596)))
+                   (-map (lambda (c) (ct-contrast-min c background 4.3))))))
 
     (ht
       (:background background)
-
       (:foreground (ct-contrast-min background background 7.7))
       (:faded (ct-contrast-min background background 4.3))
 
       (:primary (nth 0 colors))
       (:assumed (nth 1 colors))
-      (:alt (nth 2 colors))
+      (:alt     (nth 2 colors))
       (:strings (ct-edit-lch-c (nth 3 colors) 100)))))
 
 (defun myron-mcfay-create ()
