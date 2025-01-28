@@ -258,7 +258,7 @@ compute them on your machine."
                   (org-link :weak :alt)
                   (org-code :weak)
 
-                  (org-block :weak)
+                  (org-block :normal)
                   (org-block-begin-line :normal)
                   (org-block-end-line :normal)
 
@@ -373,8 +373,8 @@ compute them on your machine."
            :diff-remove ,red
            :diff-add-highlight ,dark-green
            :diff-remove-highlight ,dark-red
-           :interactive-background (ct-aedit-hsluv bg-weak (strings-hue 5 l))
-           :interactive-background-highlight (ct-aedit-hsluv bg-strong (strings-hue 5 l))))))
+           :interactive-background ,(ct-aedit-hsluv bg-weak (list strings-hue 5 l))
+           :interactive-background-highlight ,(ct-aedit-hsluv bg-strong (list strings-hue 5 l))))))
   colors)
 
 (defun myron-theme-define (theme-name &optional theme-overrides)
