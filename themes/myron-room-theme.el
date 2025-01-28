@@ -10,7 +10,8 @@
           :foreground 6
           :faded 3
           :primary 4
-          :assumed 5
+          ;; todo: something with assumed color
+          :assumed 6
           :alt 3
           :strings 4)
     (-partition 2)
@@ -22,7 +23,7 @@
                        (ct-edit-hsluv-h hue)
                        (ct-edit-lch-c 100)
                        (ct-complement)))
-                   ((-contains-p '(:primary :alt :strings) label)
+                   ((-contains-p '(:primary :alt) label)
                      (-> (ct-contrast-min background background contrast)
                        (ct-edit-hsluv-h hue)
                        ;; (ct-edit-hsluv-s 100)
@@ -30,8 +31,7 @@
                    (t (ct-contrast-min background background contrast))))))
     ;; (-mapcat (-lambda ((label contrast))
     ;;            (list label (ct-contrast-min background background contrast))))
-    (ht<-plist)
-    ))
+    (ht<-plist)))
 
 (defun myron-room-create ()
   (-let*
@@ -49,14 +49,13 @@
                      ;; (ct-edit-lch-h 40)
                      (ct-complement)
                      (ct-edit-lch-c 100)
-                     (ct-edit-hsluv-l (ct-get-hsluv-l background>))
-                     )))
+                     (ct-steal 'hsluv-l background>))))
     (ht<-plist
       (list
-        :focused (myron-room-colors background+ hue)
-        :normal (myron-room-colors background hue)
-        :weak (myron-room-colors background> hue)
-        :strong (myron-room-colors background>> hue)))))
+        :focused (myron-room-colors background+  hue)
+        :normal  (myron-room-colors background   hue)
+        :weak    (myron-room-colors background>  hue)
+        :strong  (myron-room-colors background>> hue)))))
 
 (deftheme myron-room)
 (myron-theme-define 'myron-room)
