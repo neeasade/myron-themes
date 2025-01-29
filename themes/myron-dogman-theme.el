@@ -6,7 +6,7 @@
 (require 'myron-themes)
 
 (defun myron-dogman-colors (background)
-  "get the foreground colors against a specific background"
+  "Get the dogman foreground colors against a specific BACKGROUND."
   (let* ((colors (->> (ct-make-hsl 240 80 43.596)
                    (ct-rotation-hsv 5)
                    (--map (ct-contrast-clamp it background 4.1)))))
@@ -24,17 +24,18 @@
              (-select-by-indices '(0 4 3 3) colors))))))
 
 (defun myron-dogman-create ()
+  "Create the colors for the dogman theme."
   (-let* ((background (ct-make-hsluv 180 100 94))
            ;; (background "#fdf6e3")
            ;; (background (ct-make-hsluv 180 100 90))
 
-           (background> (myron-cdist background 4
+           (background> (ct-change background 4
                           (-compose
                             'ct-edit-hsv-v-dec
                             'ct-edit-hsv-v-dec
                             'ct-edit-lab-a-inc)))
 
-           (background>> (myron-cdist background> 6
+           (background>> (ct-change background> 6
                            (-compose
                              'ct-edit-lab-a-inc
                              'ct-edit-lab-b-inc)))
@@ -52,9 +53,9 @@
         :strong  (myron-dogman-colors background>>)))))
 
 (deftheme myron-dogman)
-(myron-theme-define 'myron-dogman)
+(myron-themes--define 'myron-dogman)
 
-(myron-evil-cursor-color (myron-get :assumed))
+(myron-themes-evil-cursor-color (myron-themes-get :assumed))
 
 (provide-theme 'myron-dogman)
 (provide 'myron-dogman-theme)

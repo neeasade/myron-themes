@@ -1,9 +1,9 @@
-;;; myron-themes.el --- color themes for emacs -*- coding: utf-8; lexical-binding: t -*-
-;; Copyright (C) 2022 neeasade
+;;; myron-themes.el --- A collection of light color themes -*- coding: utf-8; lexical-binding: t -*-
+;; Copyright (C) 2025 neeasade
 ;; SPDX-License-Identifier: MIT
 ;; Author: neeasade <neeasade@gmail.com>
 ;; URL: https://github.com/neeasade/myron-themes
-;; Package-Requires: ((emacs "26.1") (ct "0.3") (helpful "0.19") (ht "2.3") (base16-theme "3.0"))
+;; Package-Requires: ((emacs "25.1") (ct "0.3") (helpful "0.19") (ht "2.3") (base16-theme "3.0"))
 ;; Version: 0.1
 
 ;;; Commentary:
@@ -15,45 +15,41 @@
 (require 'ct)
 (require 'helpful)
 (require 'ht)
-(require 'myron-cache)
+(require 'myron-themes-cache)
 
-(defgroup myron nil
+(defvar myron-themes-colors nil "The color values for the loaded myron theme.")
+
+(defgroup myron-themes nil
   "Myron color themes for EMACS."
-  :group 'myron
-  :prefix "myron-")
+  :group 'myron-themes
+  :prefix "myron-themes")
 
-(defcustom myron-use-cache t
-  "Using the cache means you get the colors as authored -- turning it off means
-compute them on your machine."
+(defcustom myron-themes-use-cache t
+  "A toggle to use the colors as authored.
+
+To compute the colors on your machine, set to nil."
   :type 'boolean
   :group 'myron)
 
-(defun myron-get (label &optional emphasis)
-  (or (ht-get* myron-theme* (or emphasis :normal) label)
-    (when (not emphasis) (ht-get* myron-theme* :meta label))))
+(defun myron-themes-get (label &optional background-emphasis)
+  "Get the color value of LABEL on some BACKGROUND-EMPHASIS."
+  (or (ht-get* myron-themes-colors (or background-emphasis :normal) label)
+    (when (not background-emphasis) (ht-get* myron-themes-colors :meta label))))
 
-(defun myron-set (label emphasis value)
-  (ht-set! (ht-get myron-theme* emphasis) label value))
-
-(defmacro myron-cdist (color distance transform)
-  ;; cdist = change distance. do a change until distance is reached
-  `(ct-aiterate ,color ,transform
-     (> (ct-distance C C0) ,distance)))
-
-(defun myron-show-contrast-against (bg-level)
-  "Show contrast levels of fg colors in myron-theme* against BG-LEVEL."
+(defun myron-themes--show-contrast-against (bg-level)
+  "Show contrast levels of fg colors in myron-themes-colors against BG-LEVEL."
   (-map (lambda (fg-label)
-          (-let* ((foreground (myron-get fg-label bg-level))
-                   (background (myron-get :background bg-level))
+          (-let* ((foreground (myron-themes-get fg-label bg-level))
+                   (background (myron-themes-get :background bg-level))
                    (contrast-ratio (ct-contrast-ratio foreground background)))
             (format "%s %s %s" contrast-ratio foreground fg-label)))
     '(:foreground :faded :primary :assumed :alt :strings)))
 
-(defun myron-show-contrasts ()
+(defun myron-themes-show-contrasts ()
   "Message the contrast ratios of colors of different background emphasis levels."
   (interactive)
   (->> '(:normal :weak :strong :focused)
-    (-map (-juxt 'identity (-partial 'myron-get :background)))
+    (-map (-juxt 'identity (-partial 'myron-themes-get :background)))
     (-mapcat
       (-lambda ((bg-level bg-color))
         `(,(format "Against background %s %s" bg-level bg-color)
@@ -63,11 +59,11 @@ compute them on your machine."
     (apply 'concat)
     (message)))
 
-(defun myron-theme-to-base16 (&optional emphasis)
-  "Turn myron-theme* into a base16 plist using EMPHASIS (default :normal)."
+(defun myron-themes-to-base16 (&optional emphasis)
+  "Return `myron-themes-colors' colors as a base16 plist using EMPHASIS."
   (-let* ((emphasis (or emphasis :normal))
-           (background-f (myron-get :background :focused))
-           ((&hash :alt :strings :assumed :primary :faded :foreground :background) (ht-get myron-theme* emphasis)))
+           (background-f (myron-themes-get :background :focused))
+           ((&hash :alt :strings :assumed :primary :faded :foreground :background) (ht-get myron-themes-colors emphasis)))
     ;; The comments on the sections here are from the base16 styling guidelines, not necessarily
     ;; what the emacs base16 theme package follows (observations commented following ":").
     ;; guidelines location: http://chriskempson.com/projects/base16/
@@ -90,13 +86,12 @@ compute them on your machine."
       :base0F faded        ;; Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?> : used as fg in various smol places
       )))
 
-(defun myron--get-function-sexp (sym)
+(defun myron-themes--get-function-sexp (sym)
   "Get SYM as a quoted list, using helpful.el."
-  (read
-    (seq-let (buffer point _) (helpful--definition sym t)
-      (helpful--source sym t buffer point))))
+  (read (seq-let (buffer point _) (helpful--definition sym t)
+          (helpful--source sym t buffer point))))
 
-(defun myron--markup-map ()
+(defun myron-themes--markup-map ()
   "List of org faces to markup-faces for non-org modes."
   '(
      ;; HEADINGS
@@ -144,13 +139,15 @@ compute them on your machine."
 
      org-checkbox markdown-gfm-checkbox-face))
 
-(defun myron-theme-make-faces (&optional theme-overrides)
-  "Make the myron-theme-faces from the current `myron-theme*' table "
+(defun myron-themes--make-faces (&optional theme-overrides)
+  "Make the face->color map for the current theme.
+
+Optionally transform colors with a THEME-OVERRIDES function."
   (let*
     (
       ;; steal the list that's hardcoded in base16-theme-define
       ;; cf https://github.com/belak/base16-emacs/blob/93b1513a9994355492314e809cdbfb0d21f1e30d/base16-theme.el#L186
-      (original-theme (->> (myron--get-function-sexp 'base16-theme-define)
+      (original-theme (->> (myron-themes--get-function-sexp 'base16-theme-define)
                         (nth 4)
                         (nth 3)
                         (-second-item)))
@@ -173,7 +170,7 @@ compute them on your machine."
            ((whitespace-space whitespace-tab) :background unspecified)
            ((org-date flycheck-warning flycheck-info) :underline unspecified)
 
-           (secondary-selection :background ,(myron-get :background :strong))
+           (secondary-selection :background ,(myron-themes-get :background :strong))
 
            (parenthesis :foreground faded)
 
@@ -184,45 +181,41 @@ compute them on your machine."
            ((orderless-match-face-0 orderless-match-face-1 orderless-match-face-2 orderless-match-face-3)
              :foreground alt)
 
-           (completions-common-part :foreground ,(myron-get :alt :weak)) ; weak for corfu popup
+           (completions-common-part :foreground ,(myron-themes-get :alt :weak)) ; weak for corfu popup
 
-           (magit-diff-context-highlight :background ,(myron-get :background :weak))
+           (magit-diff-context-highlight :background ,(myron-themes-get :background :weak))
 
            ;; todo: this appears to not be doing anything
            ;; (magit-diff-file-heading :extend t)
            (corfu-bar :background faded)
            (company-tooltip-scrollbar-thumb :background faded)
-           (company-tooltip-scrollbar-track :background ,(myron-get :background :weak))
+           (company-tooltip-scrollbar-track :background ,(myron-themes-get :background :weak))
 
            ((magit-diff-hunk-heading magit-diff-hunk-heading-highlight) :extend unspecified)
 
-           (magit-diff-hunk-heading :background ,(myron-get :background :strong))
-           (magit-diff-hunk-heading-highlight :background ,(myron-get :background :focused))
-           (magit-diff-added :background ,(myron-get :diff-add))
-           (magit-diff-removed :background ,(myron-get :diff-remove))
-           (magit-diff-added-highlight :background ,(myron-get :diff-add-highlight))
-           (magit-diff-removed-highlight :background ,(myron-get :diff-remove-highlight))
+           (magit-diff-hunk-heading :background ,(myron-themes-get :background :strong))
+           (magit-diff-hunk-heading-highlight :background ,(myron-themes-get :background :focused))
+           (magit-diff-added :background ,(myron-themes-get :diff-add))
+           (magit-diff-removed :background ,(myron-themes-get :diff-remove))
+           (magit-diff-added-highlight :background ,(myron-themes-get :diff-add-highlight))
+           (magit-diff-removed-highlight :background ,(myron-themes-get :diff-remove-highlight))
 
            ,@(-map
                (-lambda ((face back-label fore-label))
                  (->> `(,face :inverse-video nil
-                         :background ,(myron-get :background back-label)
-                         :foreground ,(myron-get (or fore-label :foreground) back-label))))
-               `(;; focus bois
-                  ,@(--map (list it :focused)
-                      '(show-paren-match show-paren-match-expression
-                         line-number-current-line
-                         corfu-current ivy-current-match isearch))
-
+                         :background ,(myron-themes-get :background back-label)
+                         :foreground ,(myron-themes-get (or fore-label :foreground) back-label))))
+               `(
                   ;; (avy-lead-face :strong :primary)
                   ;; (avy-lead-face-0 :strong :assumed)
                   ;; (avy-lead-face-1 :strong :alt)
                   ;; (avy-lead-face-2 :strong :strings)
 
-                  (avy-lead-face :focused :assumed)
-                  (avy-lead-face-0 :focused :assumed)
-                  (avy-lead-face-1 :focused :assumed)
-                  (avy-lead-face-2 :focused :assumed)
+                  ;; maybe button? a button-active notion?
+                  (avy-lead-face :strong :assumed)
+                  (avy-lead-face-0 :strong :assumed)
+                  (avy-lead-face-1 :strong :assumed)
+                  (avy-lead-face-2 :strong :assumed)
 
                   (eros-result-overlay-face :strong)
                   (cider-result-overlay-face :strong)
@@ -235,6 +228,12 @@ compute them on your machine."
                   (lsp-ui-sideline-current-symbol :weak :alt)
 
                   (magit-blame-heading :weak)
+
+                  ;; focus bois
+                  ,@(--map (list it :focused)
+                      '(show-paren-match show-paren-match-expression
+                         line-number-current-line
+                         corfu-current ivy-current-match isearch))
 
                   ;; all the org builtin stuff:
                   ;; this assumes sort of a soft alt,
@@ -281,7 +280,7 @@ compute them on your machine."
                    (-list children)))
                (-partition 2
                  `(
-                    ,@(myron--markup-map)
+                    ,@(myron-themes--markup-map)
 
                     tooltip (corfu-default)
 
@@ -336,7 +335,7 @@ compute them on your machine."
     ;; original-theme
     new-theme))
 
-(defun myron-evil-cursor-color (color)
+(defun myron-themes-evil-cursor-color (color)
   "Syncronize the the evil cursor COLOR across cursor states."
   (unless window-system
     (when (fboundp 'etcc--evil-set-cursor-color)
@@ -346,19 +345,20 @@ compute them on your machine."
     evil-insert-state-cursor `(,color bar)
     evil-visual-state-cursor `(,color box)))
 
-(defun myron-termcolors ()
-  "Export current myron theme to 16 colors"
+(defun myron-themes-termcolors ()
+  "Export current myron theme to a list of terminal colors."
   ;; stealing default base16 export order for now
-  (--map (plist-get (myron-theme-to-base16) it)
+  (--map (plist-get (myron-themes-to-base16) it)
     '(:base00 :base08 :base0B :base0A :base0D :base0E :base0C :base05
        :base03 :base09 :base01 :base02 :base04 :base06 :base0F :base07)))
 
-(defun myron--create-meta-colors (colors)
+(defun myron-themes--create-meta-colors (colors)
+  "Add the meta colors to COLORS."
   (ht-set! colors
     :meta
-    (-let* (((bg bg-weak bg-strong) (--map (ht-get* colors it :background) '(:normal :weak :strong)))
-             (color-strings (ht-get* colors :normal :strings))
-             (strings-hue (ct-get-hsluv-h (ht-get* colors :normal :strings)))
+    (-let* (((bg bg-weak _) (--map (ht-get* colors it :background) '(:normal :weak :strong)))
+             ;; (color-strings (ht-get* colors :normal :strings))
+             ;; (strings-hue (ct-get-hsluv-h (ht-get* colors :normal :strings)))
              (green (ct-make-hsluv 120 70 (ct-get-hsluv-l bg)))
              ;; a little oomf
              (red (ct-make-hsluv 0 70 (- (ct-get-hsluv-l bg) 5)))
@@ -373,24 +373,25 @@ compute them on your machine."
            :diff-remove ,red
            :diff-add-highlight ,dark-green
            :diff-remove-highlight ,dark-red
-           :interactive-background ,(ct-aedit-hsluv bg-weak (list strings-hue 5 l))
-           :interactive-background-highlight ,(ct-aedit-hsluv bg-strong (list strings-hue 5 l))))))
+           ;; :interactive-background ,(ct-aedit-hsluv bg-weak (list strings-hue 5 l))
+           ;; :interactive-background-highlight ,(ct-aedit-hsluv bg-strong (list strings-hue 5 l))
+           ))))
   colors)
 
-(defun myron-theme-define (theme-name &optional theme-overrides)
-  "Implementation of `base16-theme-define` with myron face list"
-  (setq myron-theme*
-    (if myron-use-cache
-      (plist-get myron--cache theme-name)
-      (myron--create-meta-colors
-        (funcall (intern (format "%s-create" theme-name))))))
+(defun myron-themes--define (theme-name &optional theme-overrides)
+  "Define theme THEME-NAME, optionally change faces with function THEME-OVERRIDES."
+  (setq myron-themes-colors (if myron-use-cache
+                              (plist-get myron-themes-cache theme-name)
+                              (myron-themes--create-meta-colors
+                                (funcall (intern (format "%s-create" theme-name))))))
 
   (base16-theme-set-faces theme-name
-    (append (myron-theme-to-base16) (ht-to-plist (ht-get myron-theme* :normal)))
-    (myron-theme-make-faces theme-overrides))
-  (myron-evil-cursor-color (myron-get :primary))
+    (append (myron-themes-to-base16) (ht-to-plist (ht-get myron-themes-colors :normal)))
+    (myron-themes--make-faces theme-overrides))
+
+  (myron-themes-evil-cursor-color (myron-themes-get :primary))
   (custom-theme-set-variables theme-name
-    `(ansi-color-names-vector ,(apply 'vector (-take 8 (myron-termcolors))))))
+    `(ansi-color-names-vector ,(apply 'vector (-take 8 (myron-themes-termcolors))))))
 
 ;;;###autoload
 (when (and (boundp 'custom-theme-load-path) load-file-name)

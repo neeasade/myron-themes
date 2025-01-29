@@ -44,7 +44,7 @@
                                           :strong 7)
                                     (-partition 2)
                                     (-map (-lambda ((label distance))
-                                            (myron-cdist background distance 'ct-edit-lab-l-dec)))))
+                                            (ct-change background distance 'ct-edit-lab-l-dec)))))
       (background+ (-> (ht-get (myron-room-colors background hue) :alt)
                      ;; (ct-edit-lch-h 40)
                      (ct-complement)
@@ -58,8 +58,8 @@
         :strong  (myron-room-colors background>> hue)))))
 
 (deftheme myron-room)
-(myron-theme-define 'myron-room)
-(myron-evil-cursor-color (myron-get :alt))
+(myron-themes--define 'myron-room)
+(myron-themes-evil-cursor-color (myron-themes-get :alt))
 
 (provide-theme 'myron-room)
 (provide 'myron-room-theme)

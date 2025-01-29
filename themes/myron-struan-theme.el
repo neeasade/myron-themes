@@ -36,12 +36,12 @@
 
       (background>
         (-> background
-          (myron-cdist 4 'ct-edit-lab-l-dec)
+          (ct-change 4 'ct-edit-lab-l-dec)
           (ct-steal 'hsluv-h alt)))
 
       (background>>
         (-> background
-          (myron-cdist 7 'ct-edit-lab-l-dec)
+          (ct-change 7 'ct-edit-lab-l-dec)
           (ct-steal 'hsluv-h primary)))
 
       (background+
@@ -57,7 +57,7 @@
 
 
 (deftheme myron-struan)
-(myron-theme-define 'myron-struan)
+(myron-themes--define 'myron-struan)
 
 (provide-theme 'myron-struan)
 (provide 'myron-struan-theme)

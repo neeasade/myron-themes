@@ -1,7 +1,6 @@
 ;; -*- lexical-binding: t; -*-
 ;; authored during a storm
 ;; lower contrast
-;; todo: revisit assumed color in this theme
 
 (require 'myron-themes)
 
@@ -18,6 +17,7 @@
               (ct-iterate c
                 (-compose 'ct-edit-hsluv-l-dec 'ct-edit-hsluv-s-inc)
                 (lambda (step) (> (ct-contrast-ratio step bg) fg-ratio)))))
+      ;; todo: revisit assumed color
       (-select-by-indices '(2 1 0 4))
       (-interleave '(:primary :assumed :strings :alt))
       (-partition 2)
@@ -28,8 +28,8 @@
 (defun myron-storm-create ()
   (-let*
     ((background    (ct-make-lab 94 -5 0))
-      (background>  (myron-cdist background 5 'ct-edit-hsluv-l-dec))
-      (background>> (myron-cdist background 7 'ct-edit-hsluv-l-dec))
+      (background>  (ct-change background 5 'ct-edit-hsluv-l-dec))
+      (background>> (ct-change background 7 'ct-edit-hsluv-l-dec))
       (normal-parts (myron-storm-colors background))
       ((&hash :alt :assumed :primary :faded :foreground) normal-parts)
 
@@ -42,7 +42,7 @@
       (:focused (myron-storm-colors background+)))))
 
 (deftheme myron-storm)
-(myron-theme-define 'myron-storm)
+(myron-themes--define 'myron-storm)
 
 (provide-theme 'myron-storm)
 (provide 'myron-storm-theme)

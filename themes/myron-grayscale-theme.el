@@ -1,4 +1,5 @@
 ;; -*- lexical-binding: t; -*-
+;; inspo: base16-grayscale
 
 (require 'myron-themes)
 
@@ -29,14 +30,14 @@
             :strong 7)
       (-partition 2)
       (-map (-lambda ((label distance))
-              (list label (myron-cdist background distance 'ct-edit-lab-l-dec))))
+              (list label (ct-change background distance 'ct-edit-lab-l-dec))))
       (append `((:normal ,background)))
       (-mapcat (-lambda ((label bg)) (list label (myron-grayscale-colors bg))))
       (ht<-plist))))
 
 (deftheme myron-grayscale)
-(myron-theme-define 'myron-grayscale)
-(myron-evil-cursor-color (myron-get :alt))
+(myron-themes--define 'myron-grayscale)
+(myron-themes-evil-cursor-color (myron-themes-get :alt))
 
 (provide-theme 'myron-grayscale)
 (provide 'myron-grayscale-theme)
