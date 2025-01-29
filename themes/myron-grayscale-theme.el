@@ -20,7 +20,8 @@
   (-let*
     ((background
        ;; "#e9e9e9"
-       "#f7f7f7"
+       "#f3f3f3"
+       ;; "#f7f7f7"
        ;; "#e0e0e0"
        ))
     (->> '(:focused 3
