@@ -4,7 +4,7 @@
 (require 'myron-themes)
 
 (defun myron-mcfay-colors (background)
-  "Get the foreground colors against a specific background"
+  "Get the mcfay foreground colors against a specific BACKGROUND."
   (let* ((colors (->> (ct-make-hsluv 270 75 43.596)
                    (ct-rotation-lch -8)
                    (-select-by-indices '(7 1 2 4))
@@ -21,6 +21,7 @@
       (:strings (ct-edit-lch-c (nth 3 colors) 100)))))
 
 (defun myron-mcfay-create ()
+  "Create the colors for the mcfay theme."
   (-let*
     (
       ;; /slightly/ cool

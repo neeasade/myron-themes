@@ -5,6 +5,7 @@
 (require 'myron-themes)
 
 (defun myron-storm-colors (bg)
+  "Get the storm foreground colors against a specific BG."
   (let ((fg-ratio 4)
          (return (ht)))
 
@@ -26,6 +27,7 @@
     return))
 
 (defun myron-storm-create ()
+  "Create the colors for the storm theme."
   (-let*
     ((background    (ct-make-lab 94 -5 0))
       (background>  (ct-change background 5 'ct-edit-hsluv-l-dec))

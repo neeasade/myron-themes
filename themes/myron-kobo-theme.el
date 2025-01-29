@@ -22,7 +22,7 @@
     (ht<-plist)))
 
 (defun myron-kobo-create ()
-
+  "Create the colors for the kobo theme."
   (-let*
     ((background
        ;; to get this bg I took a pic of my kobo with my phone camera

@@ -4,7 +4,7 @@
 (require 'myron-themes)
 
 (defun myron-grayscale-colors (background)
-  "get the foreground colors against a specific background"
+  "Get the grayscale foreground colors against a specific BACKGROUND."
   (->> '(:background 0
           :foreground 6
           :faded 3
@@ -18,6 +18,7 @@
     (ht<-plist)))
 
 (defun myron-grayscale-create ()
+  "Create the colors for the grayscale theme."
   (-let*
     ((background
        ;; "#e9e9e9"

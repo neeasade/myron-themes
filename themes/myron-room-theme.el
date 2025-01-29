@@ -5,7 +5,7 @@
 (require 'myron-themes)
 
 (defun myron-room-colors (background hue)
-  "get the foreground colors against a specific background"
+  "Get the room foreground colors against a specific BACKGROUND."
   (->> '(:background 0
           :foreground 6
           :faded 3
@@ -34,6 +34,7 @@
     (ht<-plist)))
 
 (defun myron-room-create ()
+  "Create the colors for the room theme."
   (-let*
     (;; maybe a darker bg
       (background "#f0f0f0")

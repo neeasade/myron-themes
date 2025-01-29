@@ -4,7 +4,7 @@
 (require 'myron-themes)
 
 (defun myron-struan-colors (background)
-  "get the foreground colors against a specific background"
+  "Get the struan foreground colors against a specific BACKGROUND."
   (let* ((colors (->> (ct-make-hsluv 265 60 40)
                    (ct-rotation-hsluv 6)
                    (-select-by-indices '(1 5 2 3))
@@ -29,6 +29,7 @@
                             (ct-contrast-min background 4.3))))))
 
 (defun myron-struan-create ()
+  "Create the colors for the struan theme."
   (-let*
     ((background (ct-make-lab 93 2 4))
       (normal-parts (myron-struan-colors background))
