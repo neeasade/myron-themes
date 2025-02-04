@@ -380,7 +380,7 @@ Optionally transform colors with a THEME-OVERRIDES function."
 
 (defun myron-themes--define (theme-name &optional theme-overrides)
   "Define theme THEME-NAME, optionally change faces with function THEME-OVERRIDES."
-  (setq myron-themes-colors (if myron-use-cache
+  (setq myron-themes-colors (if myron-themes-use-cache
                               (plist-get myron-themes-cache theme-name)
                               (myron-themes--create-meta-colors
                                 (funcall (intern (format "%s-create" theme-name))))))
