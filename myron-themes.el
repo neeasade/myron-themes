@@ -53,7 +53,7 @@ To compute the colors on your machine, set to nil."
     (-mapcat
       (-lambda ((bg-level bg-color))
         `(,(format "Against background %s %s" bg-level bg-color)
-           ,@(myron-show-contrast-against bg-level)
+           ,@(myron-themes--show-contrast-against bg-level)
            "------")))
     (--map (concat it "\n"))
     (apply 'concat)
@@ -152,9 +152,14 @@ Optionally transform colors with a THEME-OVERRIDES function."
                         (nth 3)
                         (-second-item)))
 
+      ;; todo: consider it might be more natural to create normal_faded,
+      ;; strong_background aliases instead of calling myron-themes-get througout
+      ;; this section (eg consistency with theme-overrides)
+
       ;; note individual changes
       (theme-changes
         `(
+           (cursor :background alt)
            (fringe :background unspecified)
 
            (font-lock-comment-delimiter-face :foreground faded)
@@ -306,7 +311,7 @@ Optionally transform colors with a THEME-OVERRIDES function."
                                                    error
                                                    show-paren-mismatch))))
 
-           ,@(when theme-overrides (funcall theme-overrides))))
+           ,@theme-overrides))
 
       ;; allow multi-face, multi-attr conf
       (theme-changes
@@ -335,15 +340,7 @@ Optionally transform colors with a THEME-OVERRIDES function."
     ;; original-theme
     new-theme))
 
-(defun myron-themes-evil-cursor-color (color)
-  "Syncronize the the evil cursor COLOR across cursor states."
-  (unless window-system
-    (when (fboundp 'etcc--evil-set-cursor-color)
-      (etcc--evil-set-cursor-color color)))
 
-  (setq evil-normal-state-cursor `(,color box)
-    evil-insert-state-cursor `(,color bar)
-    evil-visual-state-cursor `(,color box)))
 
 (defun myron-themes-termcolors ()
   "Export current myron theme to a list of terminal colors."
@@ -353,7 +350,8 @@ Optionally transform colors with a THEME-OVERRIDES function."
        :base03 :base09 :base01 :base02 :base04 :base06 :base0F :base07)))
 
 (defun myron-themes--create-meta-colors (colors)
-  "Add the meta colors to COLORS."
+  "Add the meta color table to COLORS."
+
   (ht-set! colors
     :meta
     (-let* (((bg bg-weak _) (--map (ht-get* colors it :background) '(:normal :weak :strong)))

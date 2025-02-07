@@ -60,7 +60,6 @@
 
 (deftheme myron-room)
 (myron-themes--define 'myron-room)
-(myron-themes-evil-cursor-color (myron-themes-get :alt))
 
 (provide-theme 'myron-room)
 (provide 'myron-room-theme)

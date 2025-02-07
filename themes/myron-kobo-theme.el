@@ -23,16 +23,16 @@
 
 (defun myron-kobo-create ()
   "Create the colors for the kobo theme."
-  (-let*
-    ((background
-       ;; to get this bg I took a pic of my kobo with my phone camera
-       "#d7d2cf"
-       ;; bg fg from camshot of kobo on phone
-       ;; (ct-contrast-ratio "#d7d2cf" "#4c4d5a")
-       ;; 5.566905771576383
-       )
-      (hue 90))
+  ;; to get this bg I took a pic of my kobo with my phone camera
+  (-let* ((background "#d7d2cf"
+            ;; bg fg from camshot of kobo on phone
+            ;; (ct-contrast-ratio "#d7d2cf" "#4c4d5a")
+            ;; 5.566905771576383
+            )
+           (hue 90))
     (->> (list
+           :normal background
+
            ;; the unique thing about this theme - a *lighter* weak bg
            :weak (ct-change background 1.5 'ct-edit-lab-l-inc)
 
@@ -40,20 +40,21 @@
            ;; syncing strong+focused works b/c in practice, focus selection on a strong bg is not used
            :strong (ct-change background 3 'ct-edit-lab-l-dec)
            :focused (ct-change background 2.5 'ct-edit-lab-l-dec)
+
            ;; (-> background
            ;;   (ct-edit-hsluv-h hue)
            ;;   (ct-edit-hsluv-s 10)
            ;;   (ct-change 1.5 'ct-edit-lab-l-dec))
            )
       (-partition 2)
-      (append `((:normal ,background)))
       (-mapcat (-lambda ((label bg)) (list label (myron-kobo-colors bg hue))))
       (ht<-plist))))
 
 (deftheme myron-kobo)
+
 (myron-themes--define 'myron-kobo
-  (lambda () '((font-lock-type-face :foreground foreground))))
-(myron-themes-evil-cursor-color (myron-themes-get :faded))
+  '((font-lock-type-face :foreground foreground)
+     (cursor :background faded)))
 
 (provide-theme 'myron-kobo)
 (provide 'myron-kobo-theme)

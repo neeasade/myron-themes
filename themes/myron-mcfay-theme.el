@@ -49,7 +49,6 @@
 
 (deftheme myron-mcfay)
 (myron-themes--define 'myron-mcfay)
-(myron-themes-evil-cursor-color (myron-themes-get :alt))
 
 (provide-theme 'myron-mcfay)
 (provide 'myron-mcfay-theme)

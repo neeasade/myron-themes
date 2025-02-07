@@ -38,7 +38,6 @@
 
 (deftheme myron-grayscale)
 (myron-themes--define 'myron-grayscale)
-(myron-themes-evil-cursor-color (myron-themes-get :alt))
 
 (provide-theme 'myron-grayscale)
 (provide 'myron-grayscale-theme)
