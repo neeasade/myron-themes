@@ -48,7 +48,8 @@
       (:strong (myron-mcfay-colors background>>)))))
 
 (deftheme myron-mcfay)
-(myron-themes--define 'myron-mcfay)
+(myron-themes--define 'myron-mcfay
+  '((cursor :background alt)))
 
 (provide-theme 'myron-mcfay)
 (provide 'myron-mcfay-theme)

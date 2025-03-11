@@ -53,9 +53,8 @@
         :strong  (myron-dogman-colors background>>)))))
 
 (deftheme myron-dogman)
-(myron-themes--define 'myron-dogman)
-
-(myron-themes-evil-cursor-color (myron-themes-get :assumed))
+(myron-themes--define 'myron-dogman
+  '((cursor :background assumed)))
 
 (provide-theme 'myron-dogman)
 (provide 'myron-dogman-theme)

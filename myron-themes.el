@@ -159,7 +159,7 @@ Optionally transform colors with a THEME-OVERRIDES function."
       ;; note individual changes
       (theme-changes
         `(
-           (cursor :background alt)
+           (cursor :background primary)
            (fringe :background unspecified)
 
            (font-lock-comment-delimiter-face :foreground faded)
@@ -387,7 +387,6 @@ Optionally transform colors with a THEME-OVERRIDES function."
     (append (myron-themes-to-base16) (ht-to-plist (ht-get myron-themes-colors :normal)))
     (myron-themes--make-faces theme-overrides))
 
-  (myron-themes-evil-cursor-color (myron-themes-get :primary))
   (custom-theme-set-variables theme-name
     `(ansi-color-names-vector ,(apply 'vector (-take 8 (myron-themes-termcolors))))))
 

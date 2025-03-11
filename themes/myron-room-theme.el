@@ -59,7 +59,8 @@
         :strong  (myron-room-colors background>> hue)))))
 
 (deftheme myron-room)
-(myron-themes--define 'myron-room)
+(myron-themes--define 'myron-room
+  '((cursor :background alt)))
 
 (provide-theme 'myron-room)
 (provide 'myron-room-theme)
