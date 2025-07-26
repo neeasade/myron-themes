@@ -196,6 +196,8 @@ Optionally transform colors with a THEME-OVERRIDES function."
            (company-tooltip-scrollbar-thumb :background faded)
            (company-tooltip-scrollbar-track :background ,(myron-themes-get :background :weak))
 
+           (completions-annotations :foreground faded)
+
            ((magit-diff-hunk-heading magit-diff-hunk-heading-highlight) :extend unspecified)
 
            (magit-diff-hunk-heading :background ,(myron-themes-get :background :strong))
