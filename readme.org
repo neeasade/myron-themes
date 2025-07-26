@@ -11,11 +11,11 @@ Yet more *ａｒｔｉｓａｎａｌ* light themes for [[https://emacs.sexy/][e
 
 ** Screenshots
 
+See [[https://notes.neeasade.net/tarps.html][here]] for a code preview of all themes. Some flagship themes below:
+
 | *mcfay*  [[https://i.imgur.com/Fk4VBkP.png]] |
 | *struan* [[https://i.imgur.com/xxCuyoT.png]] |
 | *dogman* [[https://i.imgur.com/RlpnKZe.png]] |
-
-There may be other themes in this repo, but these are the flagship themes.
 
 ** Installation
 
