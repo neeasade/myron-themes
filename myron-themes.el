@@ -375,7 +375,9 @@ Optionally transform colors with a THEME-OVERRIDES function."
            :diff-remove-highlight ,dark-red
            ;; :interactive-background ,(ct-aedit-hsluv bg-weak (list strings-hue 5 l))
            ;; :interactive-background-highlight ,(ct-aedit-hsluv bg-strong (list strings-hue 5 l))
-           ))))
+
+           ;; todo: instead of percent, perhaps this should be based on a distance of some sort
+           :subtle ,(ct-lessen (ht-get* colors :normal :background) 3)))))
   colors)
 
 (defun myron-themes--define (theme-name &optional theme-overrides)
