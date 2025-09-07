@@ -42,13 +42,13 @@ To compute the colors on your machine, set to nil."
           (-let* ((foreground (myron-themes-get fg-label bg-level))
                    (background (myron-themes-get :background bg-level))
                    (contrast-ratio (ct-contrast-ratio foreground background)))
-            (format "%s %s %s" contrast-ratio foreground fg-label)))
+            (format "%s %.1f %s" foreground contrast-ratio fg-label)))
     '(:foreground :faded :primary :assumed :alt :strings)))
 
 (defun myron-themes-show-contrasts ()
   "Message the contrast ratios of colors of different background emphasis levels."
   (interactive)
-  (->> '(:normal :weak :strong :focused)
+  (->> '(:focused :strong :weak :normal)
     (-map (-juxt 'identity (-partial 'myron-themes-get :background)))
     (-mapcat
       (-lambda ((bg-level bg-color))
