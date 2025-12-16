@@ -170,6 +170,8 @@ Optionally transform colors with a THEME-OVERRIDES function."
            ;; ｉｄｅｎｔｉｔｙ
            (font-lock-function-name-face :foreground primary)
            (font-lock-variable-name-face :foreground primary)
+           (terraform--resource-name-face :foreground primary)
+           (terraform--resource-type-face :foreground alt)
 
            ((outline-1 outline-2 outline-3 outline-4 outline-5) :foreground foreground)
            ((whitespace-space whitespace-tab) :background unspecified)
@@ -207,6 +209,10 @@ Optionally transform colors with a THEME-OVERRIDES function."
            (magit-diff-added-highlight :background ,(myron-themes-get :diff-add-highlight))
            (magit-diff-removed-highlight :background ,(myron-themes-get :diff-remove-highlight))
 
+           (tab-bar :background nil)
+           ((tab-bar-tab-inactive tab-bar-tab-group-inactive) :background (myron-themes-get :background :weak))
+           ((tab-bar-inactive tab-bar-group-inactive) :foreground faded)
+
            ,@(-map
                (-lambda ((face back-label fore-label))
                  (->> `(,face :inverse-video nil
@@ -238,9 +244,12 @@ Optionally transform colors with a THEME-OVERRIDES function."
 
                   ;; focus bois
                   ,@(--map (list it :focused)
-                      '(show-paren-match show-paren-match-expression
+                      '(corfu-current
+                         isearch
+                         ivy-current-match
                          line-number-current-line
-                         corfu-current ivy-current-match isearch))
+                         show-paren-match-expression
+                         show-paren-match))
 
                   ;; all the org builtin stuff:
                   ;; this assumes sort of a soft alt,
@@ -271,6 +280,7 @@ Optionally transform colors with a THEME-OVERRIDES function."
                   ;; todo: only want this if we can get (:extend t) to work above
                   ;; (magit-diff-file-heading :strong)
 
+                  (tab-bar-tab :strong)
                   (diff-header :strong)
                   (diff-hunk-header :strong)
                   (diff-function :strong)
