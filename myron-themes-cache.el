@@ -20,8 +20,8 @@
 				:assumed "#e14db9" :foreground "#524b6a" :background "#e0d9f8"))
 	:meta
 	#s(hash-table test equal data
-		      (:diff-remove-highlight "#f2c7ce" :diff-add-highlight "#9ef57d" :diff-remove
-					      "#f5d6db" :diff-add "#c7f9b7"))))
+		      (:subtle "#95f6ea" :diff-remove-highlight "#f2c7ce" :diff-add-highlight
+			       "#9ef57d" :diff-remove "#f5d6db" :diff-add "#c7f9b7"))))
     myron-grayscale
     #s(hash-table test equal data
        (:strong
@@ -42,8 +42,8 @@
 				:faded "#8c8c8c" :foreground "#5c5c5c" :background "#f3f3f3"))
 	:meta
 	#s(hash-table test equal data
-		      (:diff-remove-highlight "#f2cbd1" :diff-add-highlight "#abf68d" :diff-remove
-					      "#f6dce0" :diff-add "#d8face"))))
+		      (:subtle "#eaeaea" :diff-remove-highlight "#f2cbd1" :diff-add-highlight
+			       "#abf68d" :diff-remove "#f6dce0" :diff-add "#d8face"))))
     myron-kobo
     #s(hash-table test equal data
        (:focused
@@ -64,8 +64,8 @@
 				:assumed "#524d4a" :foreground "#524d4a" :background "#d7d2cf"))
 	:meta
 	#s(hash-table test equal data
-		      (:diff-remove-highlight "#efbac3" :diff-add-highlight "#95ea74" :diff-remove
-					      "#eeb4be" :diff-add "#92e572"))))
+		      (:subtle "#cec9c6" :diff-remove-highlight "#efbac3" :diff-add-highlight
+			       "#95ea74" :diff-remove "#eeb4be" :diff-add "#92e572"))))
     myron-mcfay
     #s(hash-table test equal data
        (:focused
@@ -86,8 +86,8 @@
 				   "#ae0067" :assumed "#0055b8" :alt "#005f87" :strings "#006d00"))
 	:meta
 	#s(hash-table test equal data
-		      (:diff-remove-highlight "#f0c0c8" :diff-add-highlight "#9bef7b" :diff-remove
-					      "#f4d2d7" :diff-add "#bbf8a7"))))
+		      (:subtle "#dfe2e3" :diff-remove-highlight "#f0c0c8" :diff-add-highlight
+			       "#9bef7b" :diff-remove "#f4d2d7" :diff-add "#bbf8a7"))))
     myron-room
     #s(hash-table test equal data
        (:strong
@@ -108,8 +108,8 @@
 				:faded "#9e7368" :foreground "#6e4338" :background "#fed3c8"))
 	:meta
 	#s(hash-table test equal data
-		      (:diff-remove-highlight "#f1c8ce" :diff-add-highlight "#a3f483" :diff-remove
-					      "#f5d9dd" :diff-add "#cff9c2"))))
+		      (:subtle "#e7e7e7" :diff-remove-highlight "#f1c8ce" :diff-add-highlight
+			       "#a3f483" :diff-remove "#f5d9dd" :diff-add "#cff9c2"))))
     myron-storm
     #s(hash-table test equal data
        (:normal
@@ -130,8 +130,8 @@
 				   "#a74908" :assumed "#a74446" :strings "#a138a1" :alt "#00716d"))
 	:meta
 	#s(hash-table test equal data
-		      (:diff-remove-highlight "#efc0c8" :diff-add-highlight "#99f078" :diff-remove
-					      "#f4d5da" :diff-add "#c5f9b5"))))
+		      (:subtle "#dae7e4" :diff-remove-highlight "#efc0c8" :diff-add-highlight
+			       "#99f078" :diff-remove "#f4d5da" :diff-add "#c5f9b5"))))
     myron-struan
     #s(hash-table test equal data
        (:normal
@@ -152,7 +152,7 @@
 				:faded "#a35a29" :foreground "#544b45" :background "#e1c5c0"))
 	:meta
 	#s(hash-table test equal data
-		      (:diff-remove-highlight "#f0c0c8" :diff-add-highlight "#9aef7b" :diff-remove
-					      "#f4d2d7" :diff-add "#bbf8a9")))))
+		      (:subtle "#e9e0da" :diff-remove-highlight "#f0c0c8" :diff-add-highlight
+			       "#9aef7b" :diff-remove "#f4d2d7" :diff-add "#bbf8a9")))))
   "Cache value for the themes. Internal use only.")
 (provide 'myron-themes-cache)
