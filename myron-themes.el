@@ -210,7 +210,7 @@ Optionally transform colors with a THEME-OVERRIDES function."
            (magit-diff-removed-highlight :background ,(myron-themes-get :diff-remove-highlight))
 
            (tab-bar :background nil)
-           ((tab-bar-tab-inactive tab-bar-tab-group-inactive) :background (myron-themes-get :background :weak))
+           ((tab-bar-tab-inactive tab-bar-tab-group-inactive) :background ,(myron-themes-get :background :weak))
            ((tab-bar-inactive tab-bar-group-inactive) :foreground faded)
 
            ,@(-map
