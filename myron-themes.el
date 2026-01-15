@@ -162,6 +162,8 @@ Optionally transform colors with a THEME-OVERRIDES function."
            (cursor :background primary)
            (fringe :background unspecified)
 
+           (mmm-default-submode-face :background unspecified)
+
            (font-lock-comment-delimiter-face :foreground faded)
            (font-lock-comment-face :background unspecified)
 
@@ -209,7 +211,7 @@ Optionally transform colors with a THEME-OVERRIDES function."
            (magit-diff-added-highlight :background ,(myron-themes-get :diff-add-highlight))
            (magit-diff-removed-highlight :background ,(myron-themes-get :diff-remove-highlight))
 
-           (tab-bar :background nil)
+           (tab-bar :background unspecified)
            ((tab-bar-tab-inactive tab-bar-tab-group-inactive) :background ,(myron-themes-get :background :weak))
            ((tab-bar-inactive tab-bar-group-inactive) :foreground faded)
 
