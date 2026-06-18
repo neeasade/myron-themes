@@ -352,9 +352,11 @@ Optionally transform colors with a THEME-OVERRIDES function."
           theme-changes)))
 
     ;; original-theme
-    new-theme))
 
-
+    (->> new-theme
+      ;; remove gnus-group faces, for some reason they are causing a circular face inheritance dep on my emacs 31
+      (-remove (-lambda ((face . _))
+                 (string-prefix-p "gnus-group" (prin1-to-string face) nil))))))
 
 (defun myron-themes-termcolors ()
   "Export current myron theme to a list of terminal colors."
