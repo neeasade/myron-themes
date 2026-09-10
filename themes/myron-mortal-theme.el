@@ -25,38 +25,33 @@
   ;;        )))
   ;;
   (-let* (
-           ;; applied below
-           (contrast-boost 0.2)
-           (og-hue (ct-get-hct-h background))
 
-           ;; (list
-           ;;   (+ og-hue 180)
-           ;;   ;; this range is useless for me
-           ;;   ;; ...
-           ;;   (+ og-hue 120 -30)
-           ;;   (+ og-hue 120 120))
+           (hue (ct-get-hct-h background))
 
            ;; c is complement, a is original
            ;; ｔｅｔｒａｄｉｃ
-           ((a b c d) (-iota 4 og-hue 90))
+           ((a b c d) (-iota 4 hue 90))
 
            ;; to consider:
-           ;; (pair-offset 45)
+           ;; (o 30)
+           ;; ;; pairs: ac and bd
            ;; ((a b c d)
            ;;   (list
-           ;;     og-hue
-           ;;     (+ pair-offset og-hue)
-           ;;     (+ 180 og-hue)
-           ;;     (+ 180 pair-offset og-hue)))
+           ;;     hue
+           ;;     (+ hue o)
+           ;;     (+ hue 180)
+           ;;     (+ hue o 180)))
+
+           (contrast-boost 0)
            )
     ;; (prn a b c d)
     (->> (list
-           ;; contrast, c level, hue
+           ;; contrast, chroma, hue
            :foreground  5   6    a
-           :faded       3   1    a
+           :faded       3   60   a
            :assumed     4   40   c
            :strings     4   80   b
-           :alt         3.3 100  d ; *pop*
+           :alt         3   70  d
            :primary     5   100  c
            )
 
@@ -91,7 +86,10 @@
            (b>> (ct-edit-hct-t-dec seed 12))
 
            (b> (ct-edit-hct-t-dec seed 5))
-           (b>> (ct-edit-hct-t-dec seed 10))
+           (b>> (ct-edit-hct-t-dec seed 9))
+
+           (b> (ct-aedit-hct seed  (list h (* 1.5 c) (- tt 5))))
+           (b>> (ct-aedit-hct seed (list h (* 2 c)   (- tt 8))))
 
            (b+ (-> b>
                  (ct-edit-hct-c 100)
@@ -109,6 +107,11 @@
 (myron-themes--define 'myron-mortal
   ;; ehh
   ;; '((font-lock-comment-face :slant italic))
+  `(
+     ;; (consult-preview-match :foreground "#ffffff")
+     ((orderless-match-face-0 orderless-match-face-1 orderless-match-face-2 orderless-match-face-3)
+       :foreground ,(myron-themes-get :alt :focused))
+     )
   )
 
 ;; (myron-themes-evil-cursor-color (myron-themes-get :assumed))
