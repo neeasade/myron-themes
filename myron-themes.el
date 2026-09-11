@@ -188,7 +188,11 @@ Optionally transform colors with a THEME-OVERRIDES function."
            (prescient-secondary-highlight :foreground strings)
 
            ((orderless-match-face-0 orderless-match-face-1 orderless-match-face-2 orderless-match-face-3)
-             :foreground alt)
+             :foreground alt
+             ;; this would be more correct, but many of the themes were written with
+             ;; normal alt assumption
+             ;; ,(myron-themes-get :alt :focused)
+             )
 
            (completions-common-part :foreground ,(myron-themes-get :alt :weak)) ; weak for corfu popup
 
