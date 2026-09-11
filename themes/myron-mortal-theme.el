@@ -7,7 +7,7 @@
 (defun myron-mortal-colors (background &optional print?)
   "Get the mortal foreground colors against a specific BACKGROUND."
   (-let* (
-           (hue (ct-get-hct-h background))
+           (og-hue (ct-get-hct-h background))
 
            ;; c is complement, a is original
            ;; ｔｅｔｒａｄｉｃ
@@ -18,11 +18,13 @@
            ;; pairs: ac and bd
            ((a b c d)
              (list
-               hue
-               (+ hue o)
-               (+ hue 180)
-               (+ hue o 180)))
-           (contrast-boost .6))
+               og-hue
+               (+ og-hue o)
+               (+ og-hue 180)
+               (+ og-hue o 180)))
+           (contrast-boost .6)
+           ;; (contrast-boost 1)
+           )
 
     (when print?
       ;; visualize
@@ -35,39 +37,39 @@
                     (ct-edit-hct-c 50)))))))
 
 
-    (->> (list
-           ;; contrast chroma hue
-           :assumed     4    40   a
-           :foreground  5    6    c
-           :primary     4.5  100  c
+    ;; todo: there's a problem here.
+    ;; we've been complecting "highlighting" and "types"
+    ;; maybe "types" can be "highlighting" with less chroma
+    ;; we need a meta -> highlight color for character matching, can't get away with it here
 
-           ;; todo: there's a problem here.
-           ;; we complect "highlighting" and "types"
-           ;; maybe "types" can be "highlighting" with less chroma
-           ;; we need a meta -> highlight color for character matching, can't get away with it here
-           :alt         3    45  b
+
+    ;; okay what if we ignore the first hue. we h8 that shit anyway
+    ;; "#ffc6b6"
+    ;; "#dfd758"
+    ;; "#57e4ff"
+    ;; "#d3cdff"
+
+    (->> (list
+           ;; contrast hue chroma
+           :foreground  4.0  a 7
+           :assumed     4.0  c 40
+
+           :primary     4.0  b 10
+           :alt         3.0  a 90
+
+           :faded       2.5  a 40
+           :strings     3.0  d 50
 
            ;; highlight value
            ;; :alt         3    80  b
-
-           :faded       2.5    14   d
-           :strings     3    100   d
            )
       (-partition 4)
-      (-mapcat (-lambda ((label contrast chroma hue))
+      (-mapcat (-lambda ((label contrast hue chroma))
                  (list label
-                   ;; intuition: darken a smidge, fuck with it, then contrast it
                    (-> background
-                     (ct-edit-hct-t-dec 10)
-                     (ct-edit-hct (lambda (h c tt)
-                                    (list hue
-                                      ;; (* c-mult c)
-                                      chroma
-                                      ;; c
-                                      tt)))
-                     ;; (myron-mortal-min background (+ contrast-boost contrast))
+                     ;; important to contrast first and then apply chroma, else we nuke it
                      (ct-contrast-min background (+ contrast-boost contrast) 'hct-t)
-                     ))))
+                     (ct-edit-hct (lambda (_ _ tone) (list hue chroma tone)))))))
       (-concat (list :background background))
       (ht<-plist))))
 
@@ -80,7 +82,7 @@
 
            (b (ct-edit-hct-t-inc seed 2))
 
-           (b (ct-edit-hct-t-inc seed 1.5))
+           (b (ct-edit-hct-t-inc seed 1.6))
 
            ;; (b> (ct-edit-hct-t-dec seed 6))
            ;; (b>> (ct-edit-hct-t-dec seed 12))
@@ -92,8 +94,8 @@
            (b>> (ct-aedit-hct seed (list h (* 2 c)   (- tt 8))))
 
            (b+ (-> b>
-                 (ct-edit-hct-c 90)
                  (ct-complement-hct)
+                 (ct-edit-hct-c 25)
                  ;; (ct-aedit-hct-h (+ 180 60 h))
                  )))
 
@@ -110,17 +112,16 @@
   ;; '((font-lock-comment-face :slant italic))
   `(
      ;; todo: might not need to tweak org-link with type/highlight separation
-     (org-link :foreground
-
-       ;; ,(myron-themes-get :alt :focused)
-       ,(myron-themes-get :strings :weak)
-       )
+     ;; (org-link :foreground
+     ;;   ;; ,(myron-themes-get :alt :focused)
+     ;;   ,(myron-themes-get :strings :weak)
+     ;;   )
      ;; (consult-preview-match :foreground "#ffffff")
      ((orderless-match-face-0 orderless-match-face-1 orderless-match-face-2 orderless-match-face-3)
        :foreground
-       ,(->
-          (myron-themes-get :alt)
-          (ct-edit-hct-c 80)))))
+       ,(-> (myron-themes-get :strings)
+          (ct-edit-hct-c 60)))
+     ))
 
 ;; (myron-themes-evil-cursor-color (myron-themes-get :assumed))
 
