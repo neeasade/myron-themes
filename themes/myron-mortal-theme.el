@@ -19,7 +19,7 @@
                (+ og-hue o)
                (+ og-hue 180)
                (+ og-hue o 180)))
-           (contrast-boost .6))
+           (contrast-boost 1))
 
     (when print?
       ;; visualize
@@ -77,7 +77,7 @@
     (ht<-plist
       (list
         :focused (myron-mortal-colors b+)
-        :normal  (myron-mortal-colors b t)
+        :normal  (myron-mortal-colors b)
         :weak    (myron-mortal-colors b>)
         :strong  (myron-mortal-colors b>>)))))
 
