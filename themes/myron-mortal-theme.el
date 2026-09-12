@@ -54,8 +54,8 @@
            :foreground  4.0  a 7
            :assumed     4.0  c 40
 
-           :primary     4.0  b 10
-           :alt         3.0  a 90
+           :alt     3.5  b 20
+           :primary  3.0  a 100
 
            :faded       2.5  a 40
            :strings     3.0  d 50
@@ -95,9 +95,7 @@
 
            (b+ (-> b>
                  (ct-complement-hct)
-                 (ct-edit-hct-c 25)
-                 ;; (ct-aedit-hct-h (+ 180 60 h))
-                 )))
+                 (ct-edit-hct-c 25))))
 
     (ht<-plist
       (list
@@ -120,8 +118,7 @@
      ((orderless-match-face-0 orderless-match-face-1 orderless-match-face-2 orderless-match-face-3)
        :foreground
        ,(-> (myron-themes-get :strings)
-          (ct-edit-hct-c 60)))
-     ))
+          (ct-edit-hct-c 55)))))
 
 ;; (myron-themes-evil-cursor-color (myron-themes-get :assumed))
 
