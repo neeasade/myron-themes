@@ -19,7 +19,7 @@
                (+ og-hue o)
                (+ og-hue 180)
                (+ og-hue o 180)))
-           (contrast-boost 1))
+           (contrast-boost 0.7))
 
     (when print?
       ;; visualize
