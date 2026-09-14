@@ -92,8 +92,8 @@
      ;; we need a meta -> highlight color for character matching, can't get away with it here
      ((orderless-match-face-0 orderless-match-face-1 orderless-match-face-2 orderless-match-face-3)
        :foreground
-       ,(-> (myron-themes-get :strings)
-          (ct-edit-hct-c 55)))))
+       ;; heavy - but can't use myron-get-color here because myron-themes-define is what sets it
+       ,(ct-edit-hct-c (ht-get* (myron-mortal-create) :normal :strings) 55))))
 
 (provide-theme 'myron-mortal)
 
