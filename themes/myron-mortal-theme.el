@@ -58,24 +58,41 @@
   "Create the colors for the mortal theme."
   (-let* (
            ;; (ct-rotation-hct 12 "#fbe6e1")
-           (seed "#fbe6e1")
+           (seed
+             ;; original
+             "#fbe6e1"
+
+             ;; saving nice seeds
+             ;; "#e4eceb"
+             ;; "#eae9f2"
+             ;; "#e7ece1"
+             ;; "#f8e6ea"
+             )
 
            ;; the seed origin. uncomment to randomize, but results vary (often bad)
-           ;; (seed (ns/random-list (ct-rotation-hct 12 "#fbe6e1")))
+           ;; (seed (ns/random-list (ct-rotation-hct 48 "#fbe6e1")))
+
+           ;; "cool" backgrounds
+           ;; (seed (->> (ct-rotation-hct 48 "#fbe6e1")
+           ;;         (--remove (< (ct-warmth it) 0))
+           ;;         (ns/random-list)))
 
            ;; (b seed)
            ;; (b (ct-edit-hct-t-inc seed 2))
 
-           (b (ct-edit-hct-t-inc seed 1.6))
-           (b> (ct-aedit-hct seed  (list h (* 1.5 c) (- tt 5))))
-           (b>> (ct-aedit-hct seed (list h (* 2 c)   (- tt 8))))
-           (b+ (-> b>
-                 (ct-complement-hct)
-                 (ct-edit-hct-c 25)
-                 ;; this clamp allows tampering with b value for future me
-                 (ct-contrast-min b 1.1863))))
+           (b   (ct-edit-hct-t-inc seed 1.6))
+           (b>  (ct-aedit-hct seed (list h (* c 1.5) (- tt 5))))
+           (b>> (ct-aedit-hct seed (list h (* c 2)   (- tt 8))))
+           (b+  (-> b>
+                  (ct-complement-hct)
+                  (ct-edit-hct-c 25)
+                  ;; for (seed "#e4eceb")
+                  (ct-edit-hct-t-inc 7)  ;
+                  ;; this clamp allows tampering with b value for future me
+                  (ct-contrast-min b 1.1863))))
     (ht<-plist
       (list
+        :mortal-seed seed
         :focused (myron-mortal-colors b+)
         :normal  (myron-mortal-colors b)
         :weak    (myron-mortal-colors b>)
