@@ -87,7 +87,7 @@
                   (ct-complement-hct)
                   (ct-edit-hct-c 25)
                   ;; for (seed "#e4eceb")
-                  (ct-edit-hct-t-inc 7)  ;
+                  ;; (ct-edit-hct-t-inc 7)  ;
                   ;; this clamp allows tampering with b value for future me
                   (ct-contrast-min b 1.1863))))
     (ht<-plist
