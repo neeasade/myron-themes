@@ -4,7 +4,7 @@
 
 (require 'myron-themes)
 
-(defun myron-kobo-colors (background hue)
+(defun myron-kobo-colors (background hue saturation)
   "Get the kobo foreground colors against a specific BACKGROUND."
   (->> '(:background 0
           :foreground 5.5
@@ -17,7 +17,7 @@
     (-mapcat (-lambda ((label contrast))
                (let ((color (ct-contrast-min background background contrast)))
                  (if (-contains-p '(:primary :alt :strings) label)
-                   (list label (ct-aedit-hsluv color (list hue 100 l)))
+                   (list label (ct-aedit-hsluv color (list hue saturation l)))
                    (list label color)))))
     (ht<-plist)))
 
@@ -29,7 +29,10 @@
             ;; (ct-contrast-ratio "#d7d2cf" "#4c4d5a")
             ;; 5.566905771576383
             )
-           (hue 90))
+           ((hue saturation)
+             '(90 100)    ; default
+             ;; '(0 100)
+             ))
     (->> (list
            :normal background
 
@@ -47,7 +50,7 @@
            ;;   (ct-change 1.5 'ct-edit-lab-l-dec))
            )
       (-partition 2)
-      (-mapcat (-lambda ((label bg)) (list label (myron-kobo-colors bg hue))))
+      (-mapcat (-lambda ((label bg)) (list label (myron-kobo-colors bg hue saturation))))
       (ht<-plist))))
 
 (deftheme myron-kobo)
