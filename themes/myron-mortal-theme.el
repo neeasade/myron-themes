@@ -98,11 +98,11 @@
            (b+  (-> b>
                   (ct-complement-hct)
                   (ct-edit-hct-c 25)
-
                   ((lambda (c)
-                     (if (string= seed "#fbe6e1") c
-                       ;; better default for alt-seeds
-                       (ct-edit-hct-t-inc c 7))))
+                     (pcase seed
+                       ("#fbe6e1" c)    ; nominal
+                       ("#d2cecb" (ct-edit-hct-t-inc c 10)) ; myron-kobo
+                       (_ (ct-edit-hct-t-inc c 7))))) ; default
 
                   ;; this clamp allows tampering with b value for future me
                   (ct-contrast-min b 1.1863))))
