@@ -11,15 +11,16 @@
            ;; c is complement, a is original
            ;; ((a b c d) (-iota 4 hue 90))
 
+           ((_ offset) (myron-mortal-seed))
+
            ;; ｔｅｔｒａｄｉｃ
-           (o 60)
            ((a b c d)
              ;; pairs: ac and bd
              (list
                og-hue
-               (+ og-hue o)
+               (+ og-hue offset)
                (+ og-hue 180)
-               (+ og-hue o 180)))
+               (+ og-hue offset 180)))
            (contrast-boost 0.7)
            ;; (contrast-boost 1.2)
            )
@@ -39,13 +40,13 @@
     ;; "#57e4ff"
     ;; "#d3cdff"
     (->> (list
-           ;; contrast hue chroma
-           :foreground  4.5  a 7
-           :assumed     4.0  c 40
-           :alt         3.5  b 20
-           :primary     3.0  a 100
-           :faded       2.5  b 25       ; this was initially 'a', wanted to spread abcd further
-           :strings     3.0  d 50
+           ;;           contrast hue chroma
+           :foreground  4.5      a   7
+           :assumed     4.0      c   40
+           :alt         3.5      b   20
+           :primary     3.0      a   100
+           :faded       2.5      b   25      ; this was initially 'a', wanted to spread abcd further
+           :strings     3.0      d   50
            )
       (-partition 4)
       (-mapcat (-lambda ((label contrast hue chroma))
@@ -61,36 +62,17 @@
   "Create the colors for the mortal theme."
   (-let* (
            ;; (ct-rotation-hct 12 "#fbe6e1")
-           (seed
-             ;; original, colors tailored for this specifically
-             "#fbe6e1"
+           ((seed offset) (myron-mortal-seed))
 
-             ;; ------
-             ;; "#e4eceb"
-             ;; "#eae9f2"
-             ;; "#e7ece1"
-             ;; "#f8e6ea"
-
-             ;; seeds derived from other themes
-             ;; "#eeeeee" ; myron-grayscale
-             ;; "#d2cecb" ; myron-kobo
-
-             )
-
-           ;; the seed origin. uncomment to randomize, but results vary (often bad)
-           ;; (seed (ns/random-list (ct-rotation-hct 48 "#fbe6e1")))
+           ;; a new edit
 
            ;; "cool" backgrounds
            ;; (seed (->> (ct-rotation-hct 48 "#fbe6e1")
            ;;         (--remove (< (ct-warmth it) 0))
            ;;         (ns/random-list)))
 
-           ;; (seed (or mortal-oneshot-seed seed))
-
            ;; (b seed)
            ;; (b (ct-edit-hct-t-inc seed 2))
-
-           ;; (seed (or (when (buon) ns/mortal-override-seed) seed))
 
            (b   (ct-edit-hct-t-inc seed 1.6))
            (b>  (ct-aedit-hct seed (list h (* c 1.5) (- tt 5))))
@@ -100,19 +82,54 @@
                   (ct-edit-hct-c 25)
                   ((lambda (c)
                      (pcase seed
-                       ("#fbe6e1" c)    ; nominal
+                       ("#fbe6e1" c)                        ; nominal
                        ("#d2cecb" (ct-edit-hct-t-inc c 10)) ; myron-kobo
-                       (_ (ct-edit-hct-t-inc c 7))))) ; default
+                       (_ (ct-edit-hct-t-inc c 7)))))       ; default
 
                   ;; this clamp allows tampering with b value for future me
                   (ct-contrast-min b 1.1863))))
     (ht<-plist
       (list
-        :mortal-seed seed
+        :mortal (list seed offset)
         :focused (myron-mortal-colors b+)
         :normal  (myron-mortal-colors b)
         :weak    (myron-mortal-colors b>)
         :strong  (myron-mortal-colors b>>)))))
+
+(defun myron-mortal-random ()
+  (list
+    (ns/random-list (ct-rotation-hct 48 "#fbe6e1"))
+    (ns/random-list (range -180 185 5))))
+
+(comment
+  ;; nice with angle offset 60
+  ;; "#e4eceb"
+  ;; "#eae9f2"
+  ;; "#e7ece1"
+  ;; "#f8e6ea"
+
+  ;; seeds derived from other themes
+  ;; simply took their bg and hct-t-dec 1.6
+  ;; "#eeeeee" ; myron-grayscale
+  ;; "#d2cecb" ; myron-kobo
+  ;; "#ebebeb" ; myron-room
+  ;; "#ede4df" ; myron-struan
+  ;; "#e3e6e7" ; myron-mcfay
+  ;; "#99faee" ; myron-dogman
+  )
+
+(defun myron-mortal-seed ()
+  ;; return the seed color and offset for color pairs
+  (-take-last 2
+    `(
+       ;; original authoring, tailored for these specifically
+       "#fbe6e1" 60
+
+       "#e4ece8" -40
+
+       ;; ,@(myron-mortal-random)
+       )))
+
 
 (deftheme myron-mortal)
 
@@ -123,6 +140,7 @@
      ;; we've been complecting "highlighting" and "types"
      ;; maybe "types" can be "highlighting" with less chroma
      ;; we need a meta -> highlight color for character matching, can't get away with it here
+
      ((orderless-match-face-0 orderless-match-face-1 orderless-match-face-2 orderless-match-face-3)
        :foreground
        ;; heavy - but can't use myron-get-color here because myron-themes-define is what sets it
