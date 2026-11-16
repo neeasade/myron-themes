@@ -120,15 +120,21 @@
 
 (defun myron-mortal-seed ()
   ;; return the seed color and offset for color pairs
-  (-take-last 2
-    `(
-       ;; original authoring, tailored for these specifically
-       "#fbe6e1" 60
 
-       "#e4ece8" -40
+  (->> `(
+          ;; original authoring, tailored for these specifically
+          "#fbe6e1" 60
 
-       ;; ,@(myron-mortal-random)
-       )))
+          "#e4ece8" -40
+
+          > ,@(myron-mortal-random)
+
+          > "#f9e6e9" 125
+          )
+
+    (-partition-in-steps 3 1)
+    (--last (eq (first it) '>))
+    (-drop 1)))
 
 
 (deftheme myron-mortal)
