@@ -26,14 +26,8 @@
            )
 
     (when print?
-      ;; visualize
-      (->> (list a b c d)
-        (-map (lambda (hue)
-                (message
-                  (-> background
-                    (ct-edit-hct-t-dec 10)
-                    (ct-edit-hct-h hue)
-                    (ct-edit-hct-c 50)))))))
+      (--map (message (ct-aedit-hct background (list it 50 (- t 10))))
+        (list a b c d)))
 
     ;; "#ffc6b6"
     ;; "#dfd758"
@@ -62,6 +56,7 @@
   "Create the colors for the mortal theme."
   (-let* (
            ;; (ct-rotation-hct 12 "#fbe6e1")
+
            ((seed offset) (myron-mortal-seed))
 
            ;; a new edit
@@ -75,10 +70,11 @@
            ;; (b (ct-edit-hct-t-inc seed 2))
 
            (b   (ct-edit-hct-t-inc seed 1.6))
-           (b>  (ct-aedit-hct seed (list h (* c 1.5) (- tt 5))))
-           (b>> (ct-aedit-hct seed (list h (* c 2)   (- tt 8))))
+           (b>  (ct-aedit-hct seed (list h (* c 1.5) (- t 5))))
+           (b>> (ct-aedit-hct seed (list h (* c 2)   (- t 8))))
            (b+  (-> b>
-                  (ct-complement-hct)
+                  (ct-aedit-hct-c (- c offset)) ; tweaking
+                  ;; (ct-complement-hct)
                   (ct-edit-hct-c 25)
                   ((lambda (c)
                      (pcase seed
@@ -86,7 +82,7 @@
                        ("#d2cecb" (ct-edit-hct-t-inc c 10)) ; myron-kobo
                        (_ (ct-edit-hct-t-inc c 7)))))       ; default
 
-                  ;; this clamp allows tampering with b value for future me
+                  ;; this clamp allows tampering with background value for future me
                   (ct-contrast-min b 1.1863))))
     (ht<-plist
       (list
@@ -129,13 +125,15 @@
 
           > ,@(myron-mortal-random)
 
-          > "#f9e6e9" 125
-          )
+          > "#f8e6ea" 60  ; nb: included b+ tweak: (ct-aedit-hct-c (- c offset))
+
+          "#f9e6e9" 125
+
+          "#fbe6df" -55)
 
     (-partition-in-steps 3 1)
     (--last (eq (first it) '>))
     (-drop 1)))
-
 
 (deftheme myron-mortal)
 
